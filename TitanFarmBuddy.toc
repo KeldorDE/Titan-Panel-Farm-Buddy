@@ -7,4 +7,7 @@
 ## Version: 1.0.0.70200
 ## X-Child-Of: Titan
 
+locale\Localization.lua
+locale\Localization.DE.lua
+
 TitanFarmBuddy.xml
