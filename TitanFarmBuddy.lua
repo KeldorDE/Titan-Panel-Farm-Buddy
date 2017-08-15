@@ -14,7 +14,8 @@ local ADDON_AUTHOR = GetAddOnMetadata('TitanFarmBuddy', 'Author')
 local defaults = {
 	char = {
 		Item = '',
-		Goal = 0
+		Goal = 0,
+		GoalNotification = 0
 	}
 };
 local options = {
@@ -39,28 +40,68 @@ local options = {
 		},
 		item_count = {
 			type     = 'input',
-			name     = L['Item to Count'],
+			name     = L['Item to Track'],
 			desc     = L['The name of the item to track'],
 			get      = 'GetItem',
 			set      = 'SetItem',
-		  usage    = L['Enter the name of an item or CTRL + Click an item from your inventory.'],
-			width    = full,
+			usage    = L['Enter the name of an item or CTRL + Click an item from your inventory.'],
+			width    = 'double',
 			order    = 30,
 		},
 		space_1 = {
-		   type     = 'description',
-		   name     = '',
-		   order    = 40,
+			type     = 'description',
+			name     = '',
+			order    = 40,
 		},
 		goal = {
-		   type     = 'input',
-		   name     = L['Goal Quantity'],
-		   desc     = L['The goal quantity for the tracked item.'],
-		   get      = 'GetGoal',
-		   set      = 'SetGoal',
-		   usage    = L['An number for your farming goal.'],
-		   width    = full,
-		   order    = 70,
+			type     = 'input',
+			name     = L['Quantity for Alert'],
+			desc     = L['The goal quantity for the tracked item to show a finish notification.'],
+			get      = 'GetGoal',
+			set      = 'SetGoal',
+			usage    = L['An number for your farming goal.'],
+			width    = 'double',
+			order    = 50,
+		},
+		space_2 = {
+			type     = 'description',
+			name     = '',
+			order    = 60,
+		},
+		item_notification_status = {
+			type	 = 'toggle',
+			name     = L['Notification if quantity has reached'],
+			desc     = L['Shows a notification if the item quantity has reached.'],
+			get	     = 'GetNotificationStatus',
+			set	     = 'SetNotificationStatus',
+			width	 = 'full',
+			order	 = 70,
+		},
+		header_actions = {
+			type	 = 'header',
+			name	 = L['Actions'],
+			order	 = 80,
+		},
+		item_reset = {
+			type	 = 'execute',
+			name     = L['Reset'],
+			desc     = L['Resets the tracked item.'],
+			func	 = 'ResetConfig',
+			width    = 'double',
+			order	 = 90,
+		},
+		space_3 = {
+			type     = "description",
+			name     = "",
+			order    = 100,
+		},
+		item_test_alert = {
+			type	 = 'execute',
+			name     = L['Test Notification'],
+			desc     = L['Triggers a test for the finish notification.'],
+			func	 = 'TestNotification',
+			width    = 'double',
+			order	 = 110,
 		}
 	}
 }
@@ -87,11 +128,10 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		category = 'Information',
 		version = TITAN_VERSION,
 		menuText = ADDON_NAME .. ' (' .. ADDON_VERSION .. ')',
-		buttonTextFunction = 'TitanPanelFamBuddyButton_GetButtonText',
+		buttonTextFunction = 'TitanPanelFarmBuddyButton_GetButtonText',
 		tooltipTitle = ADDON_NAME,
-		tooltipTextFunction = 'TitanPanelFamBuddyButton_GetTooltipText',
-		-- TODO: Default icon, possible to replace it with the tracked item icon?
-		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', -- self.registry.icon ?
+		tooltipTextFunction = 'TitanPanelFarmBuddyButton_GetTooltipText',
+		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
 		iconWidth = 16,
 		controlVariables = {
 			ShowIcon = true,
@@ -116,9 +156,18 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
 
-	-- TODO: Get tracked item icon (http://wowprogramming.com/docs/api/GetItemIcon)
+	local itemName, itemLink = GetItemInfo(self.db.char.Item)
 
-	return 'FarmBuddy'
+	TitanFarmBuddy:print(self.db.char.Item)
+
+	local iconFileDataID = GetItemIcon(itemLink)
+	local label = "|T" .. iconFileDataID .. ":16:16:0:-2|t"
+
+	return label .. ' 10 ' .. itemName
+end
+
+function TitanPanelFarmBuddyButton_OnClick(self, button)
+
 end
 
 -- **************************************************************************
@@ -187,3 +236,21 @@ end
 function TitanFarmBuddy:GetGoal()
    return tostring(self.db.char.Goal)
 end
+
+function TitanFarmBuddy:ResetConfig()
+	self.db.char.Item = ''
+	self.db.char.Goal = ''
+end
+
+function TitanFarmBuddy:TestNotification()
+	TitanFarmBuddy:print('Test Test');
+end
+
+function TitanFarmBuddy:SetNotificationStatus(info, input)
+	self.db.char.GoalNotification = input
+end
+
+function TitanFarmBuddy:GetNotificationStatus()
+	return self.db.char.GoalNotification
+end
+
