@@ -5,11 +5,11 @@
 -- **************************************************************************
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
-local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon('TitanFarmBuddy')
 local TITAN_FARM_BUDDY_ID = 'FarmBuddy'
+local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, "AceConsole-3.0")
 local ADDON_NAME = 'Titan Farm Buddy'
-local ADDON_VERSION = GetAddOnMetadata('TitanItemCount', 'Version')
-local ADDON_AUTHOR = GetAddOnMetadata('TitanItemCount', 'Author')
+local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version')
+local ADDON_AUTHOR = GetAddOnMetadata('TitanFarmBuddy', 'Author')
 
 local defaults = {
 	char = {
@@ -19,7 +19,7 @@ local defaults = {
 };
 local options = {
 	name = ADDON_NAME,
-	handler = TitanItemCount,
+	handler = TitanFarmBuddy,
 	type = 'group',
 	args = {
 		info_version = {
@@ -29,7 +29,7 @@ local options = {
 		},
 		info_author = {
 			type		= 'description',
-			name		= L['Author'] . ': ' .. ADDON_AUTHOR,
+			name		= L['Author'] .. ': ' .. ADDON_AUTHOR,
 			order		= 10,
 		},
 		header_general = {
@@ -41,9 +41,9 @@ local options = {
 			type     = 'input',
 			name     = L['Item to Count'],
 			desc     = L['The name of the item to track'],
-			get      = function() return TitanFarmBuddy.db.char.Item end,
+			get      = 'GetItem',
 			set      = 'SetItem',
-		  usage    = L['Enter the name of an item or CTRL + Click an item from your inventory'],
+		  usage    = L['Enter the name of an item or CTRL + Click an item from your inventory.'],
 			width    = full,
 			order    = 30,
 		},
@@ -55,16 +55,27 @@ local options = {
 		goal = {
 		   type     = 'input',
 		   name     = L['Goal Quantity'],
-		   desc     = L['The goal quantity for the tracked item'],
-		   get      = function() return tostring(TitanFarmBuddy.db.char.Goal) end,
+		   desc     = L['The goal quantity for the tracked item.'],
+		   get      = 'GetGoal',
 		   set      = 'SetGoal',
-		   usage    = L['0 to disable goal or an number for your goal'],
+		   usage    = L['An number for your farming goal.'],
 		   width    = full,
 		   order    = 70,
 		}
 	}
 }
 
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:OnInitialize()
+-- DESC : Is called by AceAddon when the addon is first loaded
+-- **************************************************************************
+function TitanFarmBuddy:OnInitialize()
+
+	self.db = LibStub('AceDB-3.0'):New('TitanFarmBuddyDB', defaults, true)
+
+    LibStub("AceConfig-3.0"):RegisterOptionsTable(ADDON_NAME, options);
+    LibStub("AceConfigDialog-3.0"):AddToBlizOptions(ADDON_NAME);
+end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnLoad()
@@ -80,7 +91,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		tooltipTitle = ADDON_NAME,
 		tooltipTextFunction = 'TitanPanelFamBuddyButton_GetTooltipText',
 		-- TODO: Default icon, possible to replace it with the tracked item icon?
-		icon = 'Interface\\Icons\\INV_ENG_CRATE', -- self.registry.icon ?
+		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', -- self.registry.icon ?
 		iconWidth = 16,
 		controlVariables = {
 			ShowIcon = true,
@@ -95,8 +106,6 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		}
 	}
 
-	self.db = LibStub('AceDB-3.0'):New('TitanFarmBuddyDB', defaults, true)
-
 	self:RegisterEvent('PLAYER_ENTERING_WORLD')
 	self:RegisterEvent('PLAYER_LEAVING_WORLD')
 end
@@ -104,7 +113,6 @@ end
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_GetButtonText(id)
 -- DESC : Calculate the item count of the tracked farm item and displays it.
--- VARS : id = button ID
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
 
@@ -146,13 +154,36 @@ function TitanPanelLocationButton_OnHide()
 	-- TODO: Implement this function
 end
 
-
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetItem()
+-- DESC : Sets the item
+-- **************************************************************************
 function TitanFarmBuddy:SetItem(info, input)
-   TitanFarmBuddy.db.char.Item = input
+   self.db.char.Item = input
    TitanPanelButton_UpdateButton(ID)
 end
 
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetItem()
+-- DESC : Gets the item
+-- **************************************************************************
+function TitanFarmBuddy:GetItem()
+   return self.db.char.Item
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetGoal()
+-- DESC : Sets the item goal
+-- **************************************************************************
 function TitanFarmBuddy:SetGoal(info, input)
-   TitanFarmBuddy.db.char.Goal = tonumber(input)
+   self.db.char.Goal = tonumber(input)
    TitanPanelButton_UpdateButton(ID)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetGoal()
+-- DESC : Gets the item goal
+-- **************************************************************************
+function TitanFarmBuddy:GetGoal()
+   return tostring(self.db.char.Goal)
 end
