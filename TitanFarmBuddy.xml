@@ -1,0 +1,30 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script file="TitanFarmBuddy.lua"/>
+	<Frame parent="UIParent">
+		<Frames>
+			<Button name="TitanPanelFarmBuddyButton" inherits="TitanPanelComboTemplate" frameStrata="FULLSCREEN" toplevel="true">
+				<Scripts>
+					<OnLoad>
+							TitanPanelFarmBuddyButton_OnLoad(self);
+							TitanPanelButton_OnLoad(self);
+					</OnLoad>
+					<OnShow>
+							TitanPanelFarmBuddyButton_OnShow();
+							TitanPanelButton_OnShow(self);
+					</OnShow>
+					<OnHide>
+						TitanPanelFarmBuddyButton_OnHide();
+					</OnHide>
+					<OnEvent>
+							TitanPanelFarmBuddyButton_OnEvent(self, event, ...);
+					</OnEvent>
+					<OnClick>
+							TitanPanelFarmBuddyButton_OnClick(self, button);
+							TitanPanelButton_OnClick(self, button);
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+	</Frame>
+</Ui>
