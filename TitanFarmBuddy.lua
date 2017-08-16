@@ -14,9 +14,10 @@ local DEFAULTS = {
 		Item = '',
 		Goal = '',
 		GoalNotification = 0,
-		ShowItemName = 1
+		TrackBank = 0
 	}
 };
+local OPTION_ORDER = 0
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
@@ -41,104 +42,155 @@ function TitanFarmBuddy:GetConfigOption()
 		type = 'group',
 		args = {
 			info_version = {
-				type		= 'description',
-				name		= L['Version'] .. ': ' .. ADDON_VERSION,
-				order		= 0,
+				type = 'description',
+				name = L['FARM_BUDDY_VERSION'] .. ': ' .. ADDON_VERSION,
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			info_author = {
-				type		= 'description',
-				name		= L['Author'] .. ': ' .. GetAddOnMetadata('TitanFarmBuddy', 'Author'),
-				order		= 10,
+				type = 'description',
+				name = L['FARM_BUDDY_AUTHOR'] .. ': ' .. GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			header_general = {
-				type		= 'header',
-				name		= L['General Options'],
-				order		= 20,
+				type = 'header',
+				name = L['FARM_BUDDY_GENERAL_OPTIONS'],
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_count = {
-				type     = 'input',
-				name     = L['Item to Track'],
-				desc     = L['The name of the item to track'],
-				get      = 'GetItem',
-				set      = 'SetItem',
+				type = 'input',
+				name = L['FARM_BUDDY_ITEM_TO_TRACK'],
+				desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
+				get = 'GetItem',
+				set = 'SetItem',
 				validate = 'ValidateItem',
-				usage    = L['Enter the name of an item or CTRL + Click an item from your inventory.'],
-				width    = 'double',
-				order    = 30,
+				usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			space_1 = {
-				type     = 'description',
-				name     = '',
-				order    = 40,
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			goal = {
-				type     = 'input',
-				name     = L['Quantity for Alert'],
-				desc     = L['The goal quantity for the tracked item to show a finish notification.'],
-				get      = 'GetGoal',
-				set      = 'SetGoal',
-				usage    = L['An number for your farming goal.'],
-				width    = 'double',
-				order    = 50,
+				type = 'input',
+				name = L['FARM_BUDDY_ALERT_COUNT'],
+				desc = L['FARM_BUDDY_ALERT_COUNT_DESC'],
+				get = 'GetGoal',
+				set = 'SetGoal',
+				usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			space_2 = {
-				type     = 'description',
-				name     = '',
-				order    = 60,
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			item_show_item_icon = {
+				type = 'toggle',
+				name = L['FARM_BUDDY_SHOW_ICON'],
+				desc = L['FARM_BUDDY_SHOW_ICON_DESC'],
+				get = 'GetShowItemIcon',
+				set = 'SetShowItemIcon',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			space_3 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_show_item_name = {
-				type	   = 'toggle',
-				name     = L['Show item name'],
-				desc     = L['Show the item name on the Titan Bar.'],
-				get	     = 'GetShowItemName',
-				set	     = 'SetShowItemName',
-				width	   = 'full',
-				order	   = 70,
+				type = 'toggle',
+				name = L['FARM_BUDDY_SHOW_NAME'],
+				desc = L['FARM_BUDDY_SHOW_NAME_DESC'],
+				get = 'GetShowItemName',
+				set = 'SetShowItemName',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
-			space_3 = {
-				type     = 'description',
-				name     = '',
-				order    = 80,
+			space_4 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			item_show_colored_text = {
+				type = 'toggle',
+				name = L['FARM_BUDDY_SHOW_COLORED_TEXT'],
+				desc = L['FARM_BUDDY_SHOW_COLORED_TEXT_DESC'],
+				get = 'GetShowColoredText',
+				set = 'SetShowColoredText',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			space_5 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			item_track_bank = {
+				type = 'toggle',
+				name = L['FARM_BUDDY_TRACK_BANK'],
+				desc = L['FARM_BUDDY_TRACK_BANK_DESC'],
+				get = 'GetTrackBank',
+				set = 'SetTrackBank',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+			space_6 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_notification_status = {
-				type	   = 'toggle',
-				name     = L['Notification if quantity has reached'],
-				desc     = L['Shows a notification if the item quantity has reached.'],
-				get	     = 'GetNotificationStatus',
-				set	     = 'SetNotificationStatus',
-				width	   = 'full',
-				order	   = 90,
+				type = 'toggle',
+				name = L['FARM_BUDDY_NOTIFICATION'],
+				desc = L['FARM_BUDDY_NOTIFICATION_DESC'],
+				get = 'GetNotificationStatus',
+				set = 'SetNotificationStatus',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			header_actions = {
-				type	   = 'header',
-				name	   = L['Actions'],
-				order	   = 100,
+				type = 'header',
+				name = L['FARM_BUDDY_ACTIONS'],
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_reset = {
-				type	   = 'execute',
-				name     = L['Reset'],
-				desc     = L['Resets the tracked item.'],
-				func	   = 'ResetConfig',
-				width    = 'double',
-				order	   = 110,
+				type = 'execute',
+				name = L['FARM_BUDDY_RESET'],
+				desc = L['FARM_BUDDY_RESET_DESC'],
+				func = 'ResetConfig',
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
-			space_3 = {
-				type     = 'description',
-				name     = '',
-				order    = 120,
+			space_7 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_test_alert = {
-				type	   = 'execute',
-				name     = L['Test Notification'],
-				desc     = L['Triggers a test for the finish notification.'],
-				func	   = 'TestNotification',
-				width    = 'double',
-				order	   = 130,
+				type = 'execute',
+				name = L['FARM_BUDDY_TEST_NOTIFICATION'],
+				desc = L['FARM_BUDDY_TEST_NOTIFICATION_DESC'],
+				func = 'TestNotification',
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
 			}
 
 			-- TODO: Notification Sound select
 		}
 	}
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetOptionOrder()
+-- DESC : A helper function to order the option items in the order as listed in the array
+-- **************************************************************************
+function TitanFarmBuddy:GetOptionOrder()
+	OPTION_ORDER = OPTION_ORDER + 1
+	return OPTION_ORDER
 end
 
 -- **************************************************************************
@@ -161,11 +213,13 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			ShowLabelText = true,
 			ShowRegularText = false,
 			ShowColoredText = true,
-			DisplayOnRightSide = false
+			DisplayOnRightSide = true
 		},
 		savedVariables = {
 			ShowIcon = 1,
-			ShowLabelText = false
+			ShowLabelText = 1,
+			ShowColoredText = 1,
+			DisplayOnRightSide = 0
 		}
 	}
 
@@ -179,18 +233,38 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
 
-	-- TODO: Get show icon status from Titan Panel
-	-- self.registry['controlVariables'].ShowIcon
-
-	-- TODO: Refactor and handle options
-	-- TODO: Color item count
-
+	local str = ''
+	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
 	local itemName, itemLink = GetItemInfo(TitanFarmBuddy.db.char.Item)
 	local iconFileDataID = GetItemIcon(itemLink)
 	local itemCount = GetItemCount(itemLink)
-	local label = '|T' .. iconFileDataID .. ':16:16:0:-2|t'
 
-	return label .. ' ' .. itemCount .. ' ' .. itemName
+	-- Invalid item or no item defined
+	if itemLink == nil then
+
+		if showIcon == 1 then
+			str = str .. '|TInterface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy:16:16:0:-2|t '
+		end
+
+		str = str .. ADDON_NAME
+	else
+
+		if showIcon == 1 then
+			str = str .. '|T' .. iconFileDataID .. ':16:16:0:-2|t '
+		end
+
+		if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText') == 1 then
+			str = str .. TitanUtils_GetHighlightText(itemCount)
+		else
+			str = str .. itemCount
+		end
+
+		if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') == 1 then
+			str = str .. ' ' .. itemName
+		end
+	end
+
+	return str
 end
 
 function TitanPanelFarmBuddyButton_OnClick(self, button)
@@ -242,7 +316,7 @@ function TitanFarmBuddy:ValidateItem(info, input)
 		return true
 	end
 
-	TitanFarmBuddy:Print(L['The item does not exists.']);
+	TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS']);
 	return false
 end
 
@@ -297,11 +371,41 @@ function TitanFarmBuddy:GetNotificationStatus()
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:SetShowItemIcon()
+-- DESC : Sets the show item icon status
+-- **************************************************************************
+function TitanFarmBuddy:SetShowItemIcon(info, input)
+
+	local val = false
+	if input == true then
+		val = 1
+	end
+
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', val)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetShowItemIcon()
+-- DESC : Gets the show item icon status
+-- **************************************************************************
+function TitanFarmBuddy:GetShowItemIcon()
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:SetShowItemName()
 -- DESC : Sets the show item name status
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemName(info, input)
-	self.db.char.ShowItemName = input
+
+	local val = false
+	if input == true then
+		val = 1
+	end
+
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', val)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -309,7 +413,46 @@ end
 -- DESC : Gets the show item name status
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemName()
-	return self.db.char.ShowItemName
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetShowColoredText()
+-- DESC : Sets the show colored text status
+-- **************************************************************************
+function TitanFarmBuddy:SetShowColoredText(info, input)
+
+	local val = false
+	if input == true then
+		val = 1
+	end
+
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', val)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetShowColoredText()
+-- DESC : Gets the show colored text status
+-- **************************************************************************
+function TitanFarmBuddy:GetShowColoredText()
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetTrackBank()
+-- DESC : Sets the track items in bank status
+-- **************************************************************************
+function TitanFarmBuddy:SetTrackBank(info, input)
+	self.db.char.TrackBank = input
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackBank()
+-- DESC : Gets the track items in bank status
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackBank()
+	return self.db.char.TrackBank
 end
 
 -- **************************************************************************
@@ -320,7 +463,13 @@ function TitanFarmBuddy:ResetConfig()
 	self.db.char.Item = DEFAULTS.char.Item
 	self.db.char.Goal = DEFAULTS.char.Goal
 	self.db.char.GoalNotification = DEFAULTS.char.GoalNotification
-	self.db.char.ShowItemName = DEFAULTS.char.ShowItemName
+	self.db.char.TrackBank = DEFAULTS.char.TrackBank
+
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
+
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
