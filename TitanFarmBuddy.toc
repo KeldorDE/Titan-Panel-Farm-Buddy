@@ -7,6 +7,8 @@
 ## Version: 1.0.0.70200
 ## X-Child-Of: Titan
 
+embeds.xml
+
 locale\Localization.lua
 locale\Localization.DE.lua
 
