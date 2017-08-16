@@ -19,6 +19,8 @@ local DEFAULTS = {
 };
 local OPTION_ORDER = 0
 
+
+
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
 -- DESC : Is called by AceAddon when the addon is first loaded
@@ -223,8 +225,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		}
 	}
 
-	self:RegisterEvent('PLAYER_ENTERING_WORLD')
-	self:RegisterEvent('PLAYER_LEAVING_WORLD')
+	self:RegisterEvent('BAG_UPDATE')
 end
 
 -- **************************************************************************
@@ -285,7 +286,7 @@ end
 -- DESC : Parse events registered to plugin and act on them
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
-	-- TODO: Handle events
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
