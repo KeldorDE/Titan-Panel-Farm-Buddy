@@ -9,5 +9,5 @@ An World of Warcraft AddOn that extends the famous Titan Panel with the function
 ---
 # Usefull Links for Development
 **World of Warcraft Icon List:** http://www.wowhead.com/icons  
-**AddOn API Documentation:** http://wowprogramming.com
+**AddOn API Documentation:** http://wowprogramming.com  
 **WowAce Documentation:** https://www.wowace.com/projects/ace3/pages/
