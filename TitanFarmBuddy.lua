@@ -191,15 +191,15 @@ end
 -- NAME : TitanPanelFarmBuddyButton_OnShow()
 -- DESC : Display button when plugin is visible
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_OnShow()
-	-- TODO: Implement this function
+function TitanPanelFarmBuddyButton_OnShow(self)
+	TitanPanelButton_OnShow(self);
 end
 
 -- **************************************************************************
--- NAME : TitanPanelLocationButton_OnHide()
+-- NAME : TitanPanelFarmBuddyButton_OnHide()
 -- DESC : Destroy vars on button remove
 -- **************************************************************************
-function TitanPanelLocationButton_OnHide()
+function TitanPanelFarmBuddyButton_OnHide()
 	-- TODO: Implement this function
 end
 
@@ -253,4 +253,3 @@ end
 function TitanFarmBuddy:GetNotificationStatus()
 	return self.db.char.GoalNotification
 end
-
