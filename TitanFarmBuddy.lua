@@ -23,7 +23,7 @@ local DEFAULTS = {
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
--- DESC : Is called by AceAddon when the addon is first loaded
+-- DESC : Is called by AceAddon when the addon is first loaded.
 -- **************************************************************************
 function TitanFarmBuddy:OnInitialize()
 
@@ -35,7 +35,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnLoad()
--- DESC : Registers the plugin upon it loading
+-- DESC : Registers the plugin upon it loading.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnLoad(self)
 	self.registry = {
@@ -68,7 +68,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetConfigOption()
--- DESC : Gets the configuration array for the AceConfig lib
+-- DESC : Gets the configuration array for the AceConfig lib.
 -- **************************************************************************
 function TitanFarmBuddy:GetConfigOption()
 	return {
@@ -219,7 +219,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetOptionOrder()
--- DESC : A helper function to order the option items in the order as listed in the array
+-- DESC : A helper function to order the option items in the order as listed in the array.
 -- **************************************************************************
 function TitanFarmBuddy:GetOptionOrder()
 	OPTION_ORDER = OPTION_ORDER + 1
@@ -283,7 +283,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_GetTooltipText()
--- DESC : Display tooltip text
+-- DESC : Display tooltip text.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
@@ -318,7 +318,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnEvent()
--- DESC : Parse events registered to plugin and act on them
+-- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
@@ -326,7 +326,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnShow()
--- DESC : Display button when plugin is visible
+-- DESC : Display button when plugin is visible.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnShow(self)
 	TitanPanelButton_OnShow(self);
@@ -334,7 +334,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnHide()
--- DESC : Destroy vars on button remove
+-- DESC : Destroy vars on button remove.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnHide()
 	-- TODO: Implement this function
@@ -342,7 +342,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetOptionChoiceVal()
--- DESC : Returns the formated input value for an AceOption input
+-- DESC : Returns the formated input value for an AceOption input.
 -- **************************************************************************
 function TitanFarmBuddy:GetOptionChoiceVal(input)
 
@@ -356,7 +356,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:ValidateItem()
--- DESC : Checks if the entered item name is valid
+-- DESC : Checks if the entered item name is valid.
 -- **************************************************************************
 function TitanFarmBuddy:ValidateItem(info, input)
 
@@ -372,7 +372,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetItem()
--- DESC : Sets the item
+-- DESC : Sets the item.
 -- **************************************************************************
 function TitanFarmBuddy:SetItem(info, input)
    self.db.char.Item = input
@@ -381,7 +381,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetItem()
--- DESC : Gets the item
+-- DESC : Gets the item.
 -- **************************************************************************
 function TitanFarmBuddy:GetItem()
    return self.db.char.Item
@@ -389,7 +389,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetGoal()
--- DESC : Sets the item goal
+-- DESC : Sets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:SetGoal(info, input)
    self.db.char.Goal = tonumber(input)
@@ -398,7 +398,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetGoal()
--- DESC : Gets the item goal
+-- DESC : Gets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:GetGoal()
    return tostring(self.db.char.Goal)
@@ -406,7 +406,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetNotificationStatus()
--- DESC : Sets the notification status
+-- DESC : Sets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
 	self.db.char.GoalNotification = input
@@ -414,7 +414,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetNotificationStatus()
--- DESC : Gets the notification status
+-- DESC : Gets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationStatus()
 	return self.db.char.GoalNotification
@@ -422,7 +422,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetShowItemIcon()
--- DESC : Sets the show item icon status
+-- DESC : Sets the show item icon status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemIcon(info, input)
 	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
@@ -432,7 +432,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetShowItemIcon()
--- DESC : Gets the show item icon status
+-- DESC : Gets the show item icon status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemIcon()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
@@ -440,7 +440,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetShowItemName()
--- DESC : Sets the show item name status
+-- DESC : Sets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemName(info, input)
 	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
@@ -450,7 +450,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetShowItemName()
--- DESC : Gets the show item name status
+-- DESC : Gets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemName()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
@@ -458,7 +458,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetShowColoredText()
--- DESC : Sets the show colored text status
+-- DESC : Sets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowColoredText(info, input)
 	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
@@ -468,7 +468,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetShowColoredText()
--- DESC : Gets the show colored text status
+-- DESC : Gets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowColoredText()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
@@ -476,7 +476,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetTrackBank()
--- DESC : Sets the track items in bank status
+-- DESC : Sets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:SetIncludeBank(info, input)
 	self.db.char.IncludeBank = input
@@ -485,7 +485,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetTrackBank()
--- DESC : Gets the track items in bank status
+-- DESC : Gets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:GetIncludeBank()
 	return self.db.char.IncludeBank
@@ -493,7 +493,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:ResetConfig()
--- DESC : Resets the saved config to the default values
+-- DESC : Resets the saved config to the default values.
 -- **************************************************************************
 function TitanFarmBuddy:ResetConfig()
 	self.db.char.Item = DEFAULTS.char.Item
@@ -510,7 +510,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:TestNotification()
--- DESC : Raises a test notification
+-- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
 	-- TODO: Call notification function
