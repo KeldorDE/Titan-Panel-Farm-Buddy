@@ -10,14 +10,6 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0')
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = 0
-local DEFAULTS = {
-	char = {
-		Item = '',
-		Goal = '',
-		GoalNotification = 0,
-		IncludeBank = 0
-	}
-};
 
 
 
@@ -26,9 +18,6 @@ local DEFAULTS = {
 -- DESC : Is called by AceAddon when the addon is first loaded.
 -- **************************************************************************
 function TitanFarmBuddy:OnInitialize()
-
-	self.db = LibStub('AceDB-3.0'):New('TitanFarmBuddyDB', DEFAULTS, true)
-
     LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption());
     LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME);
 end
@@ -59,7 +48,11 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			ShowIcon = 1,
 			ShowLabelText = 1,
 			ShowColoredText = 1,
-			DisplayOnRightSide = false
+			DisplayOnRightSide = false,
+			Item = '',
+			Goal = 0,
+			GoalNotification = 1,
+			IncludeBank = 0
 		}
 	}
 
@@ -234,7 +227,7 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 
 	local str = ''
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
-	local itemName, itemLink = GetItemInfo(TitanFarmBuddy.db.char.Item)
+	local itemName, itemLink = GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'))
 
 	-- Invalid item or no item defined
 	if itemLink == nil then
@@ -247,7 +240,7 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 	else
 
 		local iconFileDataID = GetItemIcon(itemLink)
-		local itemCount = GetItemCount(itemLink, TitanFarmBuddy.db.char.IncludeBank)
+		local itemCount = GetItemCount(itemLink, TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank'))
 
 		if showIcon == 1 then
 			str = str .. '|T' .. iconFileDataID .. ':16:16:0:-2|t '
@@ -288,7 +281,7 @@ end
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
 	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. "\n\n"
-	local itemName, itemLink = GetItemInfo(TitanFarmBuddy.db.char.Item)
+	local itemName, itemLink = GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'))
 
 	-- Invalid item or no item defined
 	if itemLink == nil then
@@ -299,10 +292,11 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 		local countBags = GetItemCount(itemLink)
 		local countTotal = GetItemCount(itemLink, true)
 		local countBank = (countTotal - countBags)
-		local goal = L['FARM_BUDDY_NO_GOAL']
+		local goalValue = L['FARM_BUDDY_NO_GOAL']
+		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
 
-		if TitanFarmBuddy.db.char.Goal > 0 then
-			goal = TitanFarmBuddy.db.char.Goal
+		if goal > 0 then
+			goalValue = goal
 		end
 
 		str = str .. L ['FARM_BUDDY_SUMMARY'] .. "\n--------------------------------\n"
@@ -310,7 +304,7 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 		str = str .. L['FARM_BUDDY_INVENTORY'] .. ":\t" .. TitanUtils_GetHighlightText(countBags) .. "\n"
 		str = str .. L['FARM_BUDDY_BANK'] .. ":\t" .. TitanUtils_GetHighlightText(countBank) .. "\n"
 		str = str .. L['FARM_BUDDY_TOTAL'] .. ":\t" .. TitanUtils_GetHighlightText(countTotal) .. "\n"
-		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ":\t" .. TitanUtils_GetHighlightText(goal) .. "\n"
+		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ":\t" .. TitanUtils_GetHighlightText(goalValue) .. "\n"
 	end
 
 	return str
@@ -375,7 +369,7 @@ end
 -- DESC : Sets the item.
 -- **************************************************************************
 function TitanFarmBuddy:SetItem(info, input)
-   self.db.char.Item = input
+   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input)
    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
@@ -384,7 +378,7 @@ end
 -- DESC : Gets the item.
 -- **************************************************************************
 function TitanFarmBuddy:GetItem()
-   return self.db.char.Item
+   return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item')
 end
 
 -- **************************************************************************
@@ -392,7 +386,7 @@ end
 -- DESC : Sets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:SetGoal(info, input)
-   self.db.char.Goal = tonumber(input)
+   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input))
    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
@@ -401,7 +395,7 @@ end
 -- DESC : Gets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:GetGoal()
-   return tostring(self.db.char.Goal)
+   return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'))
 end
 
 -- **************************************************************************
@@ -409,7 +403,7 @@ end
 -- DESC : Sets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
-	self.db.char.GoalNotification = input
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input)
 end
 
 -- **************************************************************************
@@ -417,7 +411,7 @@ end
 -- DESC : Gets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationStatus()
-	return self.db.char.GoalNotification
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
 end
 
 -- **************************************************************************
@@ -479,7 +473,7 @@ end
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:SetIncludeBank(info, input)
-	self.db.char.IncludeBank = input
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input)
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
@@ -488,7 +482,7 @@ end
 -- DESC : Gets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:GetIncludeBank()
-	return self.db.char.IncludeBank
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
 end
 
 -- **************************************************************************
@@ -496,11 +490,11 @@ end
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
 function TitanFarmBuddy:ResetConfig()
-	self.db.char.Item = DEFAULTS.char.Item
-	self.db.char.Goal = DEFAULTS.char.Goal
-	self.db.char.GoalNotification = DEFAULTS.char.GoalNotification
-	self.db.char.IncludeBank = DEFAULTS.char.IncludeBank
 
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', '')
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', 0)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', 1)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', 0)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
