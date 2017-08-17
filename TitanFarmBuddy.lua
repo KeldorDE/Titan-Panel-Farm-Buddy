@@ -53,7 +53,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowGoal = false,
-			GoalNotificationSound = true -- TODO: set to default sound index
+			GoalNotificationSound = 'UI_FightClub_Victory'
 		}
 	}
 
@@ -664,6 +664,7 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_FightClub_Victory')
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
