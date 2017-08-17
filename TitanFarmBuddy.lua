@@ -235,8 +235,6 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 	local str = ''
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
 	local itemName, itemLink = GetItemInfo(TitanFarmBuddy.db.char.Item)
-	local iconFileDataID = GetItemIcon(itemLink)
-	local itemCount = GetItemCount(itemLink, TitanFarmBuddy.db.char.IncludeBank)
 
 	-- Invalid item or no item defined
 	if itemLink == nil then
@@ -247,6 +245,9 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 
 		str = str .. ADDON_NAME
 	else
+
+		local iconFileDataID = GetItemIcon(itemLink)
+		local itemCount = GetItemCount(itemLink, TitanFarmBuddy.db.char.IncludeBank)
 
 		if showIcon == 1 then
 			str = str .. '|T' .. iconFileDataID .. ':16:16:0:-2|t '
@@ -276,12 +277,35 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
-	-- TODO: Counting for inventory, bank and total
-	--local countBags = GetItemCount(itemLink)
-	--local countTotal = GetItemCount(itemLink, true)
-	--local countBank = (countTotal - countBags)
+	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. "\n\n"
+	local itemName, itemLink = GetItemInfo(TitanFarmBuddy.db.char.Item)
 
-	return ''
+	-- Invalid item or no item defined
+	if itemLink == nil then
+		str = L['FARM_BUDDY_NO_ITEM_TRACKED']
+	else
+
+		local iconFileDataID = GetItemIcon(itemLink)
+		local countBags = GetItemCount(itemLink)
+		local countTotal = GetItemCount(itemLink, true)
+		local countBank = (countTotal - countBags)
+		local goal = L['FARM_BUDDY_NO_GOAL']
+
+		if TitanFarmBuddy.db.char.Goal > 0 then
+			goal = TitanFarmBuddy.db.char.Goal
+		end
+
+		str = str .. L ['FARM_BUDDY_SUMMARY'] .. "\n--------------------------------\n"
+		str = str .. '|T' .. iconFileDataID .. ':16:16:0:-2|t ' .. itemName .. "\n"
+		str = str .. L['FARM_BUDDY_INVENTORY'] .. ":\t" .. TitanUtils_GetHighlightText(countBags) .. "\n"
+		str = str .. L['FARM_BUDDY_BANK'] .. ":\t" .. TitanUtils_GetHighlightText(countBank) .. "\n"
+		str = str .. L['FARM_BUDDY_TOTAL'] .. ":\t" .. TitanUtils_GetHighlightText(countTotal) .. "\n"
+		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ":\t" .. TitanUtils_GetHighlightText(goal) .. "\n"
+
+		-- TODO: Counting for inventory, bank and total
+	end
+
+	return str
 end
 
 -- **************************************************************************
