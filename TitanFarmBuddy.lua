@@ -301,8 +301,6 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 		str = str .. L['FARM_BUDDY_BANK'] .. ":\t" .. TitanUtils_GetHighlightText(countBank) .. "\n"
 		str = str .. L['FARM_BUDDY_TOTAL'] .. ":\t" .. TitanUtils_GetHighlightText(countTotal) .. "\n"
 		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ":\t" .. TitanUtils_GetHighlightText(goal) .. "\n"
-
-		-- TODO: Counting for inventory, bank and total
 	end
 
 	return str
