@@ -1,4 +1,5 @@
 local L = LibStub('AceLocale-3.0'):NewLocale('Titan', 'enUS', true)
+if not L then return end
 
 L = L or {}
 L["FARM_BUDDY_ACTIONS"] = "Actions"
@@ -11,6 +12,7 @@ L["FARM_BUDDY_GENERAL_OPTIONS"] = "General Options"
 L["FARM_BUDDY_INCLUDE_BANK"] = "Include items in your bank"
 L["FARM_BUDDY_INCLUDE_BANK_DESC"] = "If enabled items in your bank are included when counting the farmed item."
 L["FARM_BUDDY_INVENTORY"] = "Inventory"
+L["FARM_BUDDY_ITEM"] = "Item"
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "The item does not exists."
 L["FARM_BUDDY_ITEM_TO_TRACK"] = "Item to Track"
 L["FARM_BUDDY_ITEM_TO_TRACK_DESC"] = "The name of the item to track"
@@ -23,6 +25,8 @@ L["FARM_BUDDY_RESET"] = "Reset"
 L["FARM_BUDDY_RESET_DESC"] = "Resets the tracked item."
 L["FARM_BUDDY_SHOW_COLORED_TEXT"] = "Show Colored Text"
 L["FARM_BUDDY_SHOW_COLORED_TEXT_DESC"] = "Show the item count as colored text on the Titan Bar."
+L["FARM_BUDDY_SHOW_GOAL"] = "Show Goal on Titan Bar"
+L["FARM_BUDDY_SHOW_GOAL_DESC"] = "Show the goal amount on the Titan Bar if a goal is defined."
 L["FARM_BUDDY_SHOW_ICON"] = "Show icon"
 L["FARM_BUDDY_SHOW_ICON_DESC"] = "Show the item icon on the Titan Bar."
 L["FARM_BUDDY_SHOW_NAME"] = "Show item name"
