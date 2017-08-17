@@ -385,6 +385,12 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 		TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level)
 
 		info = {}
+		info.text = L['FARM_BUDDY_SHOW_GOAL']
+		info.func = TitanPanelFarmBuddyButton_ToggleShowGoal
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal')
+		L_UIDropDownMenu_AddButton(info, level)
+
+		info = {}
 		info.text = L['FARM_BUDDY_INCLUDE_BANK']
 		info.func = TitanPanelFarmBuddyButton_ToggleIncludeBank
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
@@ -580,6 +586,15 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetShowGoal()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal')
+end
+
+-- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_ToggleShowGoal()
+-- DESC : Sets the show goal status.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_ToggleShowGoal()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
