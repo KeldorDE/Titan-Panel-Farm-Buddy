@@ -12,7 +12,6 @@ local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = 0
 
 
-
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
 -- DESC : Is called by AceAddon when the addon is first loaded.
@@ -53,7 +52,8 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			Goal = 0,
 			GoalNotification = true,
 			IncludeBank = false,
-			ShowGoal = false
+			ShowGoal = false,
+			GoalNotificationSound = true -- TODO: set to default sound index
 		}
 	}
 
@@ -181,9 +181,9 @@ function TitanFarmBuddy:GetConfigOption()
 				width = 'full',
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
-			space_7 = {
-				type = 'description',
-				name = '',
+			header_notification = {
+				type = 'header',
+				name = L['FARM_BUDDY_NOTIFICATION_OPTIONS'],
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 			item_notification_status = {
@@ -195,6 +195,16 @@ function TitanFarmBuddy:GetConfigOption()
 				width = 'full',
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
+			item_notification_sound = {
+			   type = 'select',
+			   name = "Notification Sound",
+			   style = 'dropdown',
+			   values = TitanFarmBuddy_GetSounds(),
+			   set = 'SetNotificationSound',
+			   get = 'GetNotificationSound',
+				width = 'full',
+			   order = TitanFarmBuddy:GetOptionOrder(),
+		   	},
 			header_actions = {
 				type = 'header',
 				name = L['FARM_BUDDY_ACTIONS'],
@@ -506,6 +516,23 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationStatus()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetNotificationSound()
+-- DESC : Sets the notification sound.
+-- **************************************************************************
+function TitanFarmBuddy:SetNotificationSound(info, input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input)
+	PlaySound(input, 'master');
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNotificationSound()
+-- DESC : Gets the notification sound.
+-- **************************************************************************
+function TitanFarmBuddy:GetNotificationSound()
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
 end
 
 -- **************************************************************************

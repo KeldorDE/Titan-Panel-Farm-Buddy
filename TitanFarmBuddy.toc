@@ -12,4 +12,5 @@ embeds.xml
 locale\Localization.lua
 locale\Localization.DE.lua
 
+Sounds.lua
 TitanFarmBuddy.xml
