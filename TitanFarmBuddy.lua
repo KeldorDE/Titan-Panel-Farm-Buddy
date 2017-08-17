@@ -285,7 +285,7 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 
 	-- Invalid item or no item defined
 	if itemLink == nil then
-		str = L['FARM_BUDDY_NO_ITEM_TRACKED']
+		str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
 	else
 
 		local iconFileDataID = GetItemIcon(itemLink)
