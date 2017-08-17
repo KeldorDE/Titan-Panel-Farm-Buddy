@@ -42,7 +42,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		id = TITAN_FARM_BUDDY_ID,
 		category = 'Information',
 		version = TITAN_VERSION,
-		menuText = ADDON_NAME .. ' (' .. ADDON_VERSION .. ')',
+		menuText = ADDON_NAME,
 		buttonTextFunction = 'TitanPanelFarmBuddyButton_GetButtonText',
 		tooltipTitle = ADDON_NAME,
 		tooltipTextFunction = 'TitanPanelFarmBuddyButton_GetTooltipText',
