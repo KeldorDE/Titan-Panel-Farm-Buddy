@@ -220,7 +220,7 @@ function TitanFarmBuddy:GetOptionOrder()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_GetButtonText(id)
+-- NAME : TitanPanelFarmBuddyButton_GetButtonText()
 -- DESC : Calculate the item count of the tracked farm item and displays it.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
@@ -261,7 +261,7 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnClick(id, button)
+-- NAME : TitanPanelFarmBuddyButton_OnClick()
 -- DESC : Handles click events to the Titan Button.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnClick(self, button)
@@ -320,28 +320,36 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
 		TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
 
-		info = {};
+		info = {}
 		info.notCheckable = true
-		info.text = L["TITAN_PANEL_OPTIONS"];
+		info.text = L["TITAN_PANEL_OPTIONS"]
 		info.menuList = "Options"
-		info.hasArrow = 1;
-		L_UIDropDownMenu_AddButton(info);
+		info.hasArrow = 1
+		L_UIDropDownMenu_AddButton(info)
 
 		TitanPanelRightClickMenu_AddSpacer();
-		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID);
-		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID);
-		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID);
-		TitanPanelRightClickMenu_AddSpacer();
-		TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE);
+		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID)
+		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID)
+		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID)
+		TitanPanelRightClickMenu_AddSpacer()
+		TitanPanelRightClickMenu_AddCommand(L["FARM_BUDDY_RESET"], TITAN_FARM_BUDDY_ID, 'TitanPanelFarmBuddyButton_ResetConfig')
+		TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE)
+
 	elseif level == 2 and menuList == "Options" then
 
-		TitanPanelRightClickMenu_AddTitle(L["TITAN_PANEL_OPTIONS"], level);
+		TitanPanelRightClickMenu_AddTitle(L["TITAN_PANEL_OPTIONS"], level)
 
-		--info = {};
-		--info.text = L['FARM_BUDDY_INCLUDE_BANK'];
-		--info.func = TitanFarmBuddy:ToggleIncludeBank;
-		--info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, "ShowZoneText");
-		--L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+		info = {}
+		info.text = L['FARM_BUDDY_INCLUDE_BANK']
+		info.func = TitanPanelFarmBuddyButton_ToggleIncludeBank
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
+		L_UIDropDownMenu_AddButton(info, level)
+
+		info = {}
+		info.text = L['FARM_BUDDY_NOTIFICATION']
+		info.func = TitanPanelFarmBuddyButton_ToggleGoalNotification
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
+		L_UIDropDownMenu_AddButton(info, level)
 	end
 end
 
@@ -450,6 +458,15 @@ function TitanFarmBuddy:GetNotificationStatus()
 end
 
 -- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_ToggleGoalNotification()
+-- DESC : Sets the notification status.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_ToggleGoalNotification()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:SetShowItemIcon()
 -- DESC : Sets the show item icon status.
 -- **************************************************************************
@@ -521,6 +538,15 @@ function TitanFarmBuddy:GetIncludeBank()
 end
 
 -- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_ToggleIncludeBank()
+-- DESC : Sets the track items in bank status.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_ToggleIncludeBank()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:ResetConfig()
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
@@ -528,13 +554,21 @@ function TitanFarmBuddy:ResetConfig()
 
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', '')
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', 0)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', 1)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', 0)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+end
+
+-- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_ResetConfig()
+-- DESC : Resets the saved config to the default values.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_ResetConfig()
+	TitanFarmBuddy:ResetConfig()
 end
 
 -- **************************************************************************
