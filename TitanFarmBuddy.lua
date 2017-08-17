@@ -317,6 +317,41 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 end
 
 -- **************************************************************************
+-- NAME : TitanPanelRightClickMenu_PrepareFarmBuddyMenu()
+-- DESC : Display rightclick menu options
+-- **************************************************************************
+function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
+
+	if level == 1 then
+
+		TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
+
+		info = {};
+		info.notCheckable = true
+		info.text = L["TITAN_PANEL_OPTIONS"];
+		info.menuList = "Options"
+		info.hasArrow = 1;
+		L_UIDropDownMenu_AddButton(info);
+
+		TitanPanelRightClickMenu_AddSpacer();
+		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddSpacer();
+		TitanPanelRightClickMenu_AddCommand(L["TITAN_PANEL_MENU_HIDE"], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE);
+	elseif level == 2 and menuList == "Options" then
+
+		TitanPanelRightClickMenu_AddTitle(L["TITAN_PANEL_OPTIONS"], level);
+
+		--info = {};
+		--info.text = L['FARM_BUDDY_INCLUDE_BANK'];
+		--info.func = TitanFarmBuddy:ToggleIncludeBank;
+		--info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, "ShowZoneText");
+		--L_UIDropDownMenu_AddButton(info, _G["L_UIDROPDOWNMENU_MENU_LEVEL"]);
+	end
+end
+
+-- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_OnEvent()
 -- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
