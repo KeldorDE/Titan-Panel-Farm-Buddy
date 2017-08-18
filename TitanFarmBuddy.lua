@@ -62,6 +62,22 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 end
 
 -- **************************************************************************
+-- NAME : TitanFamrBuddyButton_GetID()
+-- DESC : Gets the Titan Plugin ID.
+-- **************************************************************************
+function TitanFamrBuddyButton_GetID()
+  return TITAN_FARM_BUDDY_ID;
+end
+
+-- **************************************************************************
+-- NAME : TitanFamrBuddyButton_GetAddOnName()
+-- DESC : Gets the Titan Plugin AdOn name.
+-- **************************************************************************
+function TitanFamrBuddyButton_GetAddOnName()
+  return ADDON_NAME;
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:GetConfigOption()
 -- DESC : Gets the configuration array for the AceConfig lib.
 -- **************************************************************************
@@ -272,36 +288,41 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
 
 	local str = ''
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
-	local itemName, itemLink = GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'))
+  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
 
 	-- Invalid item or no item defined
-	if itemLink == nil then
+	if itemInfo ~= nil then
 
-		if showIcon == 1 then
+    local goalValue = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
+    local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
+    local itemCount = 0
+
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
+      itemCount = itemInfo.CountBags
+    else
+      itemCount = itemInfo.CountTotal
+    end
+
+    if showIcon == 1 then
+      str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true)
+    end
+
+    str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText)
+
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') == true and goalValue > 0 then
+      str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText)
+    end
+
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') == 1 then
+      str = str .. ' ' .. itemInfo.Name
+    end
+	else
+
+    if showIcon == 1 then
 			str = str .. TitanFarmBuddy:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true)
 		end
 
 		str = str .. ADDON_NAME
-	else
-
-		local iconFileDataID = GetItemIcon(itemLink)
-		local itemCount = GetItemCount(itemLink, TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank'))
-		local goalValue = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
-		local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
-
-		if showIcon == 1 then
-			str = str .. TitanFarmBuddy:GetIconString(iconFileDataID, true)
-		end
-
-		str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText)
-
-		if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') == true and goalValue > 0 then
-			str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText)
-		end
-
-		if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') == 1 then
-			str = str .. ' ' .. itemName
-		end
 	end
 
 	return str
@@ -350,24 +371,50 @@ function TitanPanelFarmBuddyButton_OnClick(self, button)
 end
 
 -- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_GetItemInfo()
+-- DESC : Gets information for the given item name.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_GetItemInfo(name)
+
+  if name then
+
+    local itemName, itemLink = GetItemInfo(name)
+
+    if itemLink == nil then
+      return nil
+    else
+
+      local countBags = GetItemCount(itemLink)
+      local countTotal = GetItemCount(itemLink, true)
+      local info = {
+        Name = itemName,
+        Link = itemLink,
+        IconFileDataID = GetItemIcon(itemLink),
+        CountBags = countBags,
+        CountTotal = countTotal,
+        CountBank = (countTotal - countBags),
+      }
+
+      return info
+    end
+  end
+
+  return nil
+end
+
+-- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_GetTooltipText()
 -- DESC : Display tooltip text.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
 	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n\n'
-	local itemName, itemLink = GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'))
+  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
 
 	-- Invalid item or no item defined
-	if itemLink == nil then
-		str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
-	else
+	if itemInfo ~= nil then
 
-		local iconFileDataID = GetItemIcon(itemLink)
-		local countBags = GetItemCount(itemLink)
-		local countTotal = GetItemCount(itemLink, true)
-		local countBank = (countTotal - countBags)
-		local goalValue = L['FARM_BUDDY_NO_GOAL']
+    local goalValue = L['FARM_BUDDY_NO_GOAL']
 		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
 
 		if goal > 0 then
@@ -375,11 +422,13 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 		end
 
 		str = str .. L['FARM_BUDDY_SUMMARY'] .. '\n--------------------------------\n'
-		str = str .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(iconFileDataID, true) .. TitanUtils_GetHighlightText(itemName) .. '\n'
-		str = str .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(countBags) .. '\n'
-		str = str .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(countBank) .. '\n'
-		str = str .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(countTotal) .. '\n'
+		str = str .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n'
+		str = str .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
+		str = str .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
+		str = str .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
 		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n'
+	else
+    str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
 	end
 
 	return str
@@ -445,6 +494,9 @@ end
 -- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
+
+
+
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
