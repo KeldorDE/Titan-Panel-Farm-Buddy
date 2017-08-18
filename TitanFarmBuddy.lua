@@ -52,8 +52,9 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			Goal = 0,
 			GoalNotification = true,
 			IncludeBank = false,
-			ShowGoal = false,
-			GoalNotificationSound = 'UI_FightClub_Victory'
+			ShowGoal = true,
+			GoalNotificationSound = 'UI_FightClub_Victory',
+			PlayNotificationSound = true
 		}
 	}
 
@@ -196,6 +197,20 @@ function TitanFarmBuddy:GetConfigOption()
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
       space_7 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+      item_play_notification_sound = {
+				type = 'toggle',
+				name = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
+				desc = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
+				get = 'GetPlayNotificationSoundStatus',
+				set = 'SetPlayNotificationSoundStatus',
+				width = 'full',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+      space_8 = {
 				type = 'description',
 				name = '',
 				order = TitanFarmBuddy:GetOptionOrder(),
@@ -416,6 +431,12 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 		info.func = TitanPanelFarmBuddyButton_ToggleGoalNotification
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
 		L_UIDropDownMenu_AddButton(info, level)
+
+    info = {}
+		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND']
+		info.func = TitanPanelFarmBuddyButton_TogglePlayNotificationSound
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
+		L_UIDropDownMenu_AddButton(info, level)
 	end
 end
 
@@ -521,6 +542,31 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationStatus()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetPlayNotificationSoundStatus()
+-- DESC : Sets the play notification sound status.
+-- **************************************************************************
+function TitanFarmBuddy:SetPlayNotificationSoundStatus(info, input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetPlayNotificationSoundStatus()
+-- DESC : Gets the play notification sound status.
+-- **************************************************************************
+function TitanFarmBuddy:GetPlayNotificationSoundStatus()
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
+end
+
+-- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_TogglePlayNotificationSound()
+-- DESC : Sets the play notification sound status.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_TogglePlayNotificationSound()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
