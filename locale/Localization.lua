@@ -38,3 +38,4 @@ L["FARM_BUDDY_TEST_NOTIFICATION_DESC"] = "Triggers a test for the finish notific
 L["FARM_BUDDY_TOOLTIP_DESC"] = "Left click to open the settings."
 L["FARM_BUDDY_TOTAL"] = "Total"
 L["FARM_BUDDY_VERSION"] = "Version"
+L["TITAN_BUDDY_NOTIFICATION_SOUND"] = "Notification Sound"
