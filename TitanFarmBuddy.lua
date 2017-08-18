@@ -195,16 +195,21 @@ function TitanFarmBuddy:GetConfigOption()
 				width = 'full',
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
+      space_7 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
 			item_notification_sound = {
-			   type = 'select',
-			   name = "Notification Sound",
-			   style = 'dropdown',
-			   values = TitanFarmBuddy_GetSounds(),
-			   set = 'SetNotificationSound',
-			   get = 'GetNotificationSound',
-				width = 'full',
-			   order = TitanFarmBuddy:GetOptionOrder(),
-		   	},
+        type = 'select',
+        name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
+        style = 'dropdown',
+        values = TitanFarmBuddy_GetSounds(),
+        set = 'SetNotificationSound',
+        get = 'GetNotificationSound',
+        width = 'double',
+        order = TitanFarmBuddy:GetOptionOrder(),
+		  },
 			header_actions = {
 				type = 'header',
 				name = L['FARM_BUDDY_ACTIONS'],
@@ -683,5 +688,5 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
 	-- TODO: Call notification function
-	TitanFarmBuddy:Print('Hello, World!')
+	TitanFarmBuddy:Print('The notifications are not implemented yet!')
 end
