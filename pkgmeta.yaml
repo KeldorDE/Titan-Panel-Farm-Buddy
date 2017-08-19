@@ -12,6 +12,7 @@ enable-nolib-creation: no
 
 ignore:
   - README.md
+  - CHANGES.txt
 
 required-dependencies:
   - titan-panel
