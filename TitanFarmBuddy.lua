@@ -55,7 +55,8 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			IncludeBank = false,
 			ShowGoal = true,
 			GoalNotificationSound = 'UI_FightClub_Victory',
-			PlayNotificationSound = true
+			PlayNotificationSound = true,
+      NotificationDisplayDuration = 5,
 		}
 	}
 
@@ -125,6 +126,7 @@ function TitanFarmBuddy:GetConfigOption()
 				desc = L['FARM_BUDDY_ALERT_COUNT_DESC'],
 				get = 'GetGoal',
 				set = 'SetGoal',
+        validate = 'ValidateNumber',
 				usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
 				width = 'double',
 				order = TitanFarmBuddy:GetOptionOrder(),
@@ -228,6 +230,21 @@ function TitanFarmBuddy:GetConfigOption()
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
       space_8 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+      item_notification_display_duration = {
+				type = 'input',
+				name = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
+				desc = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION_DESC'],
+				get = 'GetNotificationDisplayDuration',
+				set = 'SetNotificationDisplayDuration',
+        validate = 'ValidateNumber',
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+      space_9 = {
 				type = 'description',
 				name = '',
 				order = TitanFarmBuddy:GetOptionOrder(),
@@ -578,6 +595,21 @@ function TitanFarmBuddy:ValidateItem(info, input)
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:ValidateNumber()
+-- DESC : Checks if the entered value a valid and positive number.
+-- **************************************************************************
+function TitanFarmBuddy:ValidateNumber(info, input)
+
+  local number = tonumber(input);
+  if not number or number < 0 then
+    TitanFarmBuddy:Print(L['FARM_BUDDY_INVALID_NUMBER']);
+    return false;
+  end
+
+  return true;
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:SetItem()
 -- DESC : Sets the item.
 -- **************************************************************************
@@ -643,6 +675,22 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetPlayNotificationSoundStatus()
 	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetNotificationDisplayDuration()
+-- DESC : Sets the notification display duration.
+-- **************************************************************************
+function TitanFarmBuddy:SetNotificationDisplayDuration(info, input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNotificationDisplayDuration()
+-- DESC : Gets the notification display duration.
+-- **************************************************************************
+function TitanFarmBuddy:GetNotificationDisplayDuration()
+	return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
 end
 
 -- **************************************************************************
@@ -802,6 +850,7 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_FightClub_Victory')
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5)
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
   NOTIFICATION_TRIGGERED = false;
@@ -833,6 +882,7 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
   if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
+    local notificationDisplayDuration = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration');
     local sound = nil
 
     if demo == true then
@@ -847,6 +897,6 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
       NOTIFICATION_TRIGGERED = true;
     end
 
-    TitanFarmBuddyNotification_Show(item, goal, sound);
+    TitanFarmBuddyNotification_Show(item, goal, sound, notificationDisplayDuration);
   end
 end

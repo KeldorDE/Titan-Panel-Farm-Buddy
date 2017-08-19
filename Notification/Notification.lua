@@ -9,13 +9,14 @@ local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotific
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate';
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate');
 local ADDON_NAME = TitanFamrBuddyButton_GetAddOnName();
+local FRAME_HIDDEN = true;
 
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddyNotification_Show()
 -- DESC : Shows a notification frame for the given item link.
 -- **************************************************************************
-function TitanFarmBuddyNotification_Show(itemName, goal, sound)
+function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
 
   TitanFarmBuddyNotification_HideNotification();
 
@@ -31,8 +32,9 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound)
       PlaySound(sound);
     end
 
-    UIFrameFadeIn(FRAME, 1, 0, 1);
-    FarmBuddyNotification:ScheduleTimer('HideNotification', 5);
+    UIFrameFadeIn(FRAME, 0.5, 0, 1);
+    FarmBuddyNotification:ScheduleTimer('HideNotification', duration);
+    FRAME_HIDDEN = false;
   end
 end
 
@@ -42,9 +44,20 @@ end
 -- **************************************************************************
 function FarmBuddyNotification:HideNotification()
 
-  if FRAME:IsShown() then
-    UIFrameFadeOut(FRAME, 0.2, 1, 0);
-    TitanFarmBuddyNotification_HideNotification();
+  if FRAME:IsShown() and FRAME_HIDDEN == false then
+
+    FRAME_HIDDEN = true;
+
+    local fadeInfo = {};
+    fadeInfo.mode = 'OUT';
+    fadeInfo.timeToFade = 1;
+    fadeInfo.startAlpha = 1;
+    fadeInfo.endAlpha = 0;
+    fadeInfo.finishedFunc = function()
+      TitanFarmBuddyNotification_HideNotification();
+    end;
+
+    UIFrameFade(FRAME, fadeInfo);
   end
 end
 
