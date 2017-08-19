@@ -4,19 +4,17 @@
 -- * By: Keldor
 -- **************************************************************************
 
-local TITAN_FARM_BUDDY_ID = TitanFamrBuddyButton_GetID();
+local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotification', 'AceTimer-3.0');
-local FRAME_NAME = 'TitanFarmBuddyFrame';
+local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate';
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate');
 
--- TODO: There is a bug where the notification is immediately hidden when showing every second time.
--- TODO: There is a bug that changes the opacity of the notification icon.
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddyNotification_Show()
 -- DESC : Shows a notification frame for the given item link.
 -- **************************************************************************
-function TitanFarmBuddyNotification_Show(itemName, goal)
+function TitanFarmBuddyNotification_Show(itemName, goal, sound)
 
   TitanFarmBuddyNotification_HideNotification();
 
@@ -27,6 +25,10 @@ function TitanFarmBuddyNotification_Show(itemName, goal)
     TitanFarmBuddy_SetWidth(400);
     TitanFarmBuddy_SetText(goal .. ' ' .. itemInfo.Name);
     TitanFarmBuddy_SetIcon(itemInfo.IconFileDataID);
+
+    if sound ~= nil and sound ~= '' then
+      PlaySound(sound);
+    end
 
     UIFrameFadeIn(FRAME, 1, 0, 1);
     FarmBuddyNotification:ScheduleTimer('HideNotification', 5);
@@ -75,7 +77,7 @@ end
 -- DESC : Sets the notification text.
 -- **************************************************************************
 function TitanFarmBuddy_SetText(text)
-   _G[FRAME_NAME .. 'Name']:SetText(text);
+  _G[FRAME_NAME .. 'Name']:SetText(text);
 end
 
 -- **************************************************************************
@@ -83,7 +85,7 @@ end
 -- DESC : Sets the notification icon.
 -- **************************************************************************
 function TitanFarmBuddy_SetIcon(icon)
-   _G[FRAME_NAME .. 'IconTexture']:SetTexture(icon);
+  _G[FRAME_NAME .. 'IconTexture']:SetTexture(icon);
 end
 
 -- **************************************************************************
@@ -91,5 +93,48 @@ end
 -- DESC : Sets the notification frame width.
 -- **************************************************************************
 function TitanFarmBuddy_SetWidth(width)
-   FRAME:SetWidth(400);
+  FRAME:SetWidth(400);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddyAnchor_OnMouseDown()
+-- DESC : Handles the OnMouseDown event for the TitanFarmBuddyAnchor frame.
+-- **************************************************************************
+function TitanFarmBuddyAnchor_OnMouseDown(self, button)
+
+  if button == 'LeftButton' and not self.isMoving then
+    self:StartMoving();
+    self.isMoving = true;
+  end
+
+  if button == 'RightButton' and not self.isMoving then
+    self:Hide();
+  end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddyAnchor_OnMouseUp()
+-- DESC : Handles the OnMouseUp event for the TitanFarmBuddyAnchor frame.
+-- **************************************************************************
+function TitanFarmBuddyAnchor_OnMouseUp(self, button)
+
+  if button == 'LeftButton' and self.isMoving then
+    self:StopMovingOrSizing();
+    self.isMoving = false;
+  end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddyAnchor_Show()
+-- DESC : Shows the Notification Anchor frame.
+-- **************************************************************************
+function TitanFarmBuddyAnchor_Show()
+
+  -- TODO: Hide BLizzard Option Frame and show again when anchor is hidden
+
+  -- Set Scale for Anchor frame
+  TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale());
+  _G['TitanFarmBuddyAnchorName']:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT']);
+
+  TitanFarmBuddyAnchor:Show();
 end

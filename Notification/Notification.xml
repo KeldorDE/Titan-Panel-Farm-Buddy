@@ -1,76 +1,114 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
 <Script file="Notification.lua"/>
-  <Frame name="TitanFarmBuddyAnchor" enableMouse="true" movable="true" hidden="true">
-    <Scripts>
-      <OnMouseDown>
-        if button == "LeftButton" and not self.isMoving then
-          self:StartMoving();
-          self.isMoving = true;
-        end
-
-        if button == "RightButton" and not self.isMoving then
-          self:Hide();
-        end
-      </OnMouseDown>
-      <OnMouseUp>
-        if button == "LeftButton" and self.isMoving then
-          self:StopMovingOrSizing();
-          self.isMoving = false;
-        end
-      </OnMouseUp>
-    </Scripts>
+  <Button name="TitanFarmBuddyAnchor" enableMouse="true" movable="true" hidden="true">
+    <Size>
+      <AbsDimension x="540" y="88" />
+    </Size>
+    <Anchors>
+      <Anchor point="CENTER" relativePoint="TOP" relativeTo="UIParent">
+  			<Offset>
+  				<AbsDimension x="0" y="-60" />
+  			</Offset>
+      </Anchor>
+    </Anchors>
     <Layers>
-      <Layer level="ARTWORK">
-        <Texture setAllPoints="true">
-          <Color r="0.7" g="0.7" b="0.7" a="0.8" />
-        </Texture>
-        <FontString name="TitanFarmBuddyTitle" inherits="GameFontNormal" text="Titan Farm Buddy Anchor" parent="TitanFarmBuddyAnchor">
+      <Layer level="BACKGROUND">
+        <Texture name="$parentBackground" file="Interface\AchievementFrame\UI-Achievement-Alert-Background">
           <Anchors>
-            <Anchor point="TOP" relativeto="TitanFarmBuddyAnchor"></Anchor>
+            <Anchor point="TOPLEFT" />
+            <Anchor point="BOTTOMRIGHT" />
           </Anchors>
-        </FontString>
-        <FontString name="TitanFarmBuddyAnchorText" inherits="GameFontBlackTiny" text="left-click to drag." parent="TitanFarmBuddyTitle">
+          <TexCoords left="0" right=".605" top="0" bottom=".703" />
+        </Texture>
+
+        <FontString name="$parentName" inherits="GameFontHighlight" text="">
           <Anchors>
-            <Anchor point="BOTTOM" relativeto="TitanFarmBuddyTitle">
-              <Offset y="-8" />
+            <Anchor point="BOTTOMLEFT">
+              <Offset x="72" y="36" />
+            </Anchor>
+            <Anchor point="BOTTOMRIGHT">
+              <Offset x="-60" y="36" />
             </Anchor>
           </Anchors>
+          <Size x="240" y="16" />
         </FontString>
       </Layer>
     </Layers>
-    <Size x="140" y="32" />
-    <Anchors>
-      <Anchor point="CENTER" relativeTo="UIParent"/>
-    </Anchors>
-  </Frame>
-  <Button name="TitanFarmBuddyAlertFrameTemplate" hidden="true" frameStrata="TOOLTIP" virtual="true" inherits="AlertFrameTemplate">
+    <Frames>
+      <Frame name="$parentIcon">
+        <Size>
+          <AbsDimension x="124" y="124" />
+        </Size>
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="-26" y="16" />
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Layers>
+          <Layer level="ARTWORK">
+            <Texture name="$parentTextureBG">
+              <Color r="0" g="0" b="0" a="1" />
+              <Anchors>
+                <Anchor point="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="3" />
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Size>
+                <AbsDimension x="50" y="50" />
+              </Size>
+            </Texture>
+            <Texture name="$parentTexture" file="INTERFACE\ICONS\Inv_misc_coin_01">
+              <Anchors>
+                <Anchor point="CENTER">
+                  <Offset>
+                    <AbsDimension x="0" y="3" />
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Size>
+                <AbsDimension x="50" y="50" />
+              </Size>
+            </Texture>
+          </Layer>
+          <Layer level="OVERLAY">
+            <Texture name="$parentOverlay" file="Interface\AchievementFrame\UI-Achievement-IconFrame">
+              <Anchors>
+                <Anchor point="CENTER">
+                  <Offset>
+                    <AbsDimension x="-1" y="2" />
+                  </Offset>
+                </Anchor>
+              </Anchors>
+              <Size>
+                <AbsDimension x="72" y="72" />
+              </Size>
+              <TexCoords left="0" right="0.5625" top="0" bottom="0.5625" />
+            </Texture>
+          </Layer>
+        </Layers>
+      </Frame>
+    </Frames>
+    <Scripts>
+      <OnMouseDown>
+        TitanFarmBuddyAnchor_OnMouseDown(self, button);
+      </OnMouseDown>
+      <OnMouseUp>
+        TitanFarmBuddyAnchor_OnMouseUp(self, button);
+      </OnMouseUp>
+    </Scripts>
+  </Button>
+  <Button name="TitanFarmBuddyAlertFrameTemplate" hidden="true" frameStrata="TOOLTIP" virtual="true">
     <Size>
       <AbsDimension x="300" y="88" />
     </Size>
     <Anchors>
-      <Anchor point="CENTER" relativePoint="BOTTOM" relativeTo="TitanFarmBuddyAnchor">
-  			<Offset>
-  				<AbsDimension x="0" y="-128" />
-  			</Offset>
-      </Anchor>
+      <Anchor point="CENTER" relativePoint="CENTER" relativeTo="TitanFarmBuddyAnchor" />
     </Anchors>
-    <Animations>
-      <AnimationGroup name="$parentAnimIn" parentKey="animIn">
-        <Alpha change="-1" duration="0" order="1" />
-        <Alpha change="1" duration="0.2" order="2" />
-      </AnimationGroup>
-      <AnimationGroup name="$parentWaitAndAnimOut" parentKey="waitAndAnimOut">
-        <Alpha startDelay="6.05" change="-1" duration="1.5" parentKey="animOut">
-          <Scripts>
-            <OnFinished>
-					    self:GetRegionParent():Hide();
-            </OnFinished>
-          </Scripts>
-        </Alpha>
-      </AnimationGroup>
-    </Animations>
-
     <Layers>
       <Layer level="BACKGROUND">
         <Texture name="$parentBackground" file="Interface\AchievementFrame\UI-Achievement-Alert-Background">
@@ -130,7 +168,7 @@
           </Layer>
           <Layer level="ARTWORK">
             <Texture name="$parentTextureBG">
-              <Color r="0" g="0" b="0" a=".8" />
+              <Color r="0" g="0" b="0" a="1" />
               <Anchors>
                 <Anchor point="CENTER">
                   <Offset>

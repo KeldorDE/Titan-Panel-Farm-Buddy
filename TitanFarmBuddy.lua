@@ -786,6 +786,31 @@ end
 -- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
-	-- TODO: Call notification function
-	TitanFarmBuddy:Print('The notifications are not implemented yet!')
+  TitanFarmBuddy:ShowNotification(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], true);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:ShowNotification()
+-- DESC : Raises a notification.
+-- **************************************************************************
+function TitanFarmBuddy:ShowNotification(item, demo)
+
+  local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
+
+  if notificationEnabled == true or demo == true then
+
+    local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
+    local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
+    local sound = nil
+
+    if playSound == true then
+      sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
+    end
+
+    if goal < 1 then
+      goal = 200;
+    end
+
+    TitanFarmBuddyNotification_Show(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], goal, sound);
+  end
 end
