@@ -54,7 +54,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowGoal = true,
-			GoalNotificationSound = 'UI_FightClub_Victory',
+			GoalNotificationSound = 'UI_WORLDQUEST_COMPLETE',
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
 		}
@@ -858,7 +858,7 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_FightClub_Victory');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
 
