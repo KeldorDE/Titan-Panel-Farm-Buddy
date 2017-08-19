@@ -20,10 +20,10 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
 
   TitanFarmBuddyNotification_HideNotification();
 
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(itemName)
+  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(itemName);
   if itemInfo ~= nil then
 
-    TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
+    TitanFarmBuddyNotification_SetTitle(ADDON_NAME);
     TitanFarmBuddyNotification_SetWidth(400);
     TitanFarmBuddyNotification_SetText(goal .. ' ' .. itemInfo.Name);
     TitanFarmBuddyNotification_SetIcon(itemInfo.IconFileDataID);
@@ -53,9 +53,7 @@ function FarmBuddyNotification:HideNotification()
     fadeInfo.timeToFade = 1;
     fadeInfo.startAlpha = 1;
     fadeInfo.endAlpha = 0;
-    fadeInfo.finishedFunc = function()
-      TitanFarmBuddyNotification_HideNotification();
-    end;
+    fadeInfo.finishedFunc = TitanFarmBuddyNotification_HideNotification;
 
     UIFrameFade(FRAME, fadeInfo);
   end
@@ -123,7 +121,7 @@ function TitanFarmBuddyNotification_OnMouseDown(self, button)
 
   if button == 'RightButton' and not self.isMoving then
     self:Hide();
-    InterfaceOptionsFrame_OpenToCategory(ADDON_NAME)
+    InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
   end
 end
 
