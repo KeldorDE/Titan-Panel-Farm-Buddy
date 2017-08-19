@@ -59,5 +59,5 @@ local NOTIFICATION_SOUNDS = {
 -- DESC : Get a list of available sounds.
 -- **************************************************************************
 function TitanFarmBuddy_GetSounds()
-	return NOTIFICATION_SOUNDS
+	return NOTIFICATION_SOUNDS;
 end
