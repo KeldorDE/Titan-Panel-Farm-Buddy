@@ -109,6 +109,15 @@
     <Anchors>
       <Anchor point="CENTER" relativePoint="CENTER" relativeTo="TitanFarmBuddyAnchor" />
     </Anchors>
+    <Animations>
+  		<AnimationGroup name="$parentAnimIn" parentKey="animIn">
+  			<Alpha change="1" duration="0" order="1"/>
+  			<Alpha change="1" duration="0" order="2"/>
+  		</AnimationGroup>
+  		<AnimationGroup name="$parentWaitAndAnimOut" parentKey="waitAndAnimOut">
+  			<Alpha startDelay="6.05" change="1" duration="1" parentKey="animOut" />
+  		</AnimationGroup>
+  	</Animations>
     <Layers>
       <Layer level="BACKGROUND">
         <Texture name="$parentBackground" file="Interface\AchievementFrame\UI-Achievement-Alert-Background">
