@@ -882,7 +882,7 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
   if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
-    local notificationDisplayDuration = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration');
+    local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
     local sound = nil
 
     if demo == true then
