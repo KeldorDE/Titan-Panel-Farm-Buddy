@@ -10,6 +10,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0')
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = 0
+local NOTIFICATION_TRIGGERED = false
 
 
 -- **************************************************************************
@@ -508,7 +509,9 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
-
+  -- Raise notification
+  local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
+  TitanFarmBuddy:ShowNotification(item, false);
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
@@ -564,8 +567,9 @@ end
 -- DESC : Sets the item.
 -- **************************************************************************
 function TitanFarmBuddy:SetItem(info, input)
-   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input)
-   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input)
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  NOTIFICATION_TRIGGERED = false;
 end
 
 -- **************************************************************************
@@ -573,7 +577,7 @@ end
 -- DESC : Gets the item.
 -- **************************************************************************
 function TitanFarmBuddy:GetItem()
-   return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item')
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item')
 end
 
 -- **************************************************************************
@@ -581,8 +585,9 @@ end
 -- DESC : Sets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:SetGoal(info, input)
-   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input))
-   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input))
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  NOTIFICATION_TRIGGERED = false;
 end
 
 -- **************************************************************************
@@ -590,7 +595,7 @@ end
 -- DESC : Gets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:GetGoal()
-   return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'))
+  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'))
 end
 
 -- **************************************************************************
@@ -598,7 +603,7 @@ end
 -- DESC : Sets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input)
 end
 
 -- **************************************************************************
@@ -784,6 +789,7 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true)
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  NOTIFICATION_TRIGGERED = false;
 end
 
 -- **************************************************************************
@@ -810,11 +816,15 @@ function TitanFarmBuddy:ShowNotification(item, demo)
 
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 
-  if notificationEnabled == true or demo == true then
+  if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
     local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
     local sound = nil
+
+    if demo == true then
+      item = L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'];
+    end
 
     if playSound == true then
       sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
@@ -824,6 +834,10 @@ function TitanFarmBuddy:ShowNotification(item, demo)
       goal = 200;
     end
 
-    TitanFarmBuddyNotification_Show(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], goal, sound);
+    if demo == false then
+      NOTIFICATION_TRIGGERED = true;
+    end
+
+    TitanFarmBuddyNotification_Show(item, goal, sound);
   end
 end
