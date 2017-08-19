@@ -8,6 +8,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotification', 'AceTimer-3.0');
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate';
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate');
+local ADDON_NAME = TitanFamrBuddyButton_GetAddOnName();
 
 
 -- **************************************************************************
@@ -21,10 +22,10 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound)
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(itemName)
   if itemInfo ~= nil then
 
-    TitanFarmBuddy_SetTitle(TitanFamrBuddyButton_GetAddOnName())
-    TitanFarmBuddy_SetWidth(400);
-    TitanFarmBuddy_SetText(goal .. ' ' .. itemInfo.Name);
-    TitanFarmBuddy_SetIcon(itemInfo.IconFileDataID);
+    TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
+    TitanFarmBuddyNotification_SetWidth(400);
+    TitanFarmBuddyNotification_SetText(goal .. ' ' .. itemInfo.Name);
+    TitanFarmBuddyNotification_SetIcon(itemInfo.IconFileDataID);
 
     if sound ~= nil and sound ~= '' then
       PlaySound(sound);
@@ -65,42 +66,42 @@ function TitanFarmBuddyNotification_OnClick(self, button, down)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetTitle()
+-- NAME : TitanFarmBuddyNotification_SetTitle()
 -- DESC : Sets the notification title.
 -- **************************************************************************
-function TitanFarmBuddy_SetTitle(title)
+function TitanFarmBuddyNotification_SetTitle(title)
   FRAME.unlocked:SetText(title);
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetText()
+-- NAME : TitanFarmBuddyNotification_SetText()
 -- DESC : Sets the notification text.
 -- **************************************************************************
-function TitanFarmBuddy_SetText(text)
+function TitanFarmBuddyNotification_SetText(text)
   _G[FRAME_NAME .. 'Name']:SetText(text);
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetIcon()
+-- NAME : TitanFarmBuddyNotification_SetIcon()
 -- DESC : Sets the notification icon.
 -- **************************************************************************
-function TitanFarmBuddy_SetIcon(icon)
+function TitanFarmBuddyNotification_SetIcon(icon)
   _G[FRAME_NAME .. 'IconTexture']:SetTexture(icon);
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetWidth()
+-- NAME : TitanFarmBuddyNotification_SetWidth()
 -- DESC : Sets the notification frame width.
 -- **************************************************************************
-function TitanFarmBuddy_SetWidth(width)
+function TitanFarmBuddyNotification_SetWidth(width)
   FRAME:SetWidth(400);
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddyAnchor_OnMouseDown()
+-- NAME : TitanFarmBuddyNotification_OnMouseDown()
 -- DESC : Handles the OnMouseDown event for the TitanFarmBuddyAnchor frame.
 -- **************************************************************************
-function TitanFarmBuddyAnchor_OnMouseDown(self, button)
+function TitanFarmBuddyNotification_OnMouseDown(self, button)
 
   if button == 'LeftButton' and not self.isMoving then
     self:StartMoving();
@@ -109,14 +110,15 @@ function TitanFarmBuddyAnchor_OnMouseDown(self, button)
 
   if button == 'RightButton' and not self.isMoving then
     self:Hide();
+    InterfaceOptionsFrame_OpenToCategory(ADDON_NAME)
   end
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddyAnchor_OnMouseUp()
+-- NAME : TitanFarmBuddyNotification_OnMouseUp()
 -- DESC : Handles the OnMouseUp event for the TitanFarmBuddyAnchor frame.
 -- **************************************************************************
-function TitanFarmBuddyAnchor_OnMouseUp(self, button)
+function TitanFarmBuddyNotification_OnMouseUp(self, button)
 
   if button == 'LeftButton' and self.isMoving then
     self:StopMovingOrSizing();
@@ -125,16 +127,15 @@ function TitanFarmBuddyAnchor_OnMouseUp(self, button)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddyAnchor_Show()
+-- NAME : TitanFarmBuddyNotification_ShowAnchor()
 -- DESC : Shows the Notification Anchor frame.
 -- **************************************************************************
-function TitanFarmBuddyAnchor_Show()
-
-  -- TODO: Hide BLizzard Option Frame and show again when anchor is hidden
+function TitanFarmBuddyNotification_ShowAnchor()
 
   -- Set Scale for Anchor frame
   TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale());
   _G['TitanFarmBuddyAnchorName']:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT']);
 
+  InterfaceOptionsFrame:Hide();
   TitanFarmBuddyAnchor:Show();
 end

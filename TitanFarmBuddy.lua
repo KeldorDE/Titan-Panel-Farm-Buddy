@@ -17,8 +17,8 @@ local OPTION_ORDER = 0
 -- DESC : Is called by AceAddon when the addon is first loaded.
 -- **************************************************************************
 function TitanFarmBuddy:OnInitialize()
-    LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption());
-    LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME);
+  LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption());
+  LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -246,15 +246,15 @@ function TitanFarmBuddy:GetConfigOption()
 				name = L['FARM_BUDDY_ACTIONS'],
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
-			item_reset = {
+			item_move_notification = {
 				type = 'execute',
-				name = L['FARM_BUDDY_RESET'],
-				desc = L['FARM_BUDDY_RESET_DESC'],
-				func = 'ResetConfig',
+				name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
+				desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
+				func = function() TitanFarmBuddyNotification_ShowAnchor() end,
 				width = 'double',
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
-			space_8 = {
+      space_8 = {
 				type = 'description',
 				name = '',
 				order = TitanFarmBuddy:GetOptionOrder(),
@@ -266,7 +266,20 @@ function TitanFarmBuddy:GetConfigOption()
 				func = 'TestNotification',
 				width = 'double',
 				order = TitanFarmBuddy:GetOptionOrder(),
-			}
+			},
+      space_9 = {
+				type = 'description',
+				name = '',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
+      item_reset = {
+				type = 'execute',
+				name = L['FARM_BUDDY_RESET'],
+				desc = L['FARM_BUDDY_RESET_DESC'],
+				func = 'ResetConfig',
+				width = 'double',
+				order = TitanFarmBuddy:GetOptionOrder(),
+			},
 		}
 	}
 end

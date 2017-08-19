@@ -95,10 +95,10 @@
     </Frames>
     <Scripts>
       <OnMouseDown>
-        TitanFarmBuddyAnchor_OnMouseDown(self, button);
+        TitanFarmBuddyNotification_OnMouseDown(self, button);
       </OnMouseDown>
       <OnMouseUp>
-        TitanFarmBuddyAnchor_OnMouseUp(self, button);
+        TitanFarmBuddyNotification_OnMouseUp(self, button);
       </OnMouseUp>
     </Scripts>
   </Button>
