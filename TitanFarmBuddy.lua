@@ -4,13 +4,13 @@
 -- * By: Keldor
 -- **************************************************************************
 
-local TITAN_FARM_BUDDY_ID = 'FarmBuddy'
-local ADDON_NAME = 'Titan Farm Buddy'
-local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
-local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0')
-local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version')
-local OPTION_ORDER = 0
-local NOTIFICATION_TRIGGERED = false
+local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
+local ADDON_NAME = 'Titan Farm Buddy';
+local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
+local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0');
+local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
+local OPTION_ORDER = 0;
+local NOTIFICATION_TRIGGERED = false;
 
 
 -- **************************************************************************
@@ -58,9 +58,9 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
 		}
-	}
+	};
 
-	self:RegisterEvent('BAG_UPDATE')
+	self:RegisterEvent('BAG_UPDATE');
 end
 
 -- **************************************************************************
@@ -299,7 +299,7 @@ function TitanFarmBuddy:GetConfigOption()
 				order = TitanFarmBuddy:GetOptionOrder(),
 			},
 		}
-	}
+	};
 end
 
 -- **************************************************************************
@@ -307,8 +307,8 @@ end
 -- DESC : A helper function to order the option items in the order as listed in the array.
 -- **************************************************************************
 function TitanFarmBuddy:GetOptionOrder()
-	OPTION_ORDER = OPTION_ORDER + 1
-	return OPTION_ORDER
+	OPTION_ORDER = OPTION_ORDER + 1;
+	return OPTION_ORDER;
 end
 
 -- **************************************************************************
@@ -317,46 +317,40 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
 
-	local str = ''
-	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
+	local str = '';
+	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
 
 	-- Invalid item or no item defined
 	if itemInfo ~= nil then
 
-    local goalValue = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
-    local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
-    local itemCount = 0
-
-    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
-      itemCount = itemInfo.CountBags
-    else
-      itemCount = itemInfo.CountTotal
-    end
+    local goalValue = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
+    local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText');
+    local itemCount = TitanPanelFarmBuddyButton_GetCount(itemInfo);
 
     if showIcon == 1 then
-      str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true)
+      str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true);
     end
 
-    str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText)
+    str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText);
 
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') == true and goalValue > 0 then
-      str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText)
+      str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText);
     end
 
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') == 1 then
-      str = str .. ' ' .. itemInfo.Name
+      str = str .. ' ' .. itemInfo.Name;
     end
 	else
 
     if showIcon == 1 then
-			str = str .. TitanFarmBuddy:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true)
+			str = str .. TitanFarmBuddy:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true);
 		end
 
-		str = str .. ADDON_NAME
+		str = str .. ADDON_NAME;
 	end
 
-	return str
+	return str;
 end
 
 -- **************************************************************************
@@ -365,13 +359,13 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetIconString(icon, space)
 
-	local str = '|T' .. icon .. ':16:16:0:-2|t'
+	local str = '|T' .. icon .. ':16:16:0:-2|t';
 
 	if space == true then
-		str = str .. ' '
+		str = str .. ' ';
 	end
 
-	return str
+	return str;
 end
 
 -- **************************************************************************
@@ -381,10 +375,10 @@ end
 function TitanFarmBuddy:GetBarValue(value, colored)
 
 	if colored == 1 then
-		value = TitanUtils_GetHighlightText(value)
+		value = TitanUtils_GetHighlightText(value);
 	end
 
-	return value
+	return value;
 end
 
 -- **************************************************************************
@@ -396,8 +390,8 @@ function TitanPanelFarmBuddyButton_OnClick(self, button)
 	if (button == 'LeftButton') then
 		-- Workarround for opening controls instead of AddOn options
 		-- Call it two times to ensure the AddOn panel is opened
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME)
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME)
+		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
+		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
  	end
 end
 
@@ -409,14 +403,14 @@ function TitanPanelFarmBuddyButton_GetItemInfo(name)
 
   if name then
 
-    local itemName, itemLink = GetItemInfo(name)
+    local itemName, itemLink = GetItemInfo(name);
 
     if itemLink == nil then
-      return nil
+      return nil;
     else
 
-      local countBags = GetItemCount(itemLink)
-      local countTotal = GetItemCount(itemLink, true)
+      local countBags = GetItemCount(itemLink);
+      local countTotal = GetItemCount(itemLink, true);
       local info = {
         Name = itemName,
         Link = itemLink,
@@ -424,13 +418,13 @@ function TitanPanelFarmBuddyButton_GetItemInfo(name)
         CountBags = countBags,
         CountTotal = countTotal,
         CountBank = (countTotal - countBags),
-      }
+      };
 
-      return info
+      return info;
     end
   end
 
-  return nil
+  return nil;
 end
 
 -- **************************************************************************
@@ -439,30 +433,30 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
-	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n\n'
+	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n\n';
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
 
 	-- Invalid item or no item defined
 	if itemInfo ~= nil then
 
-    local goalValue = L['FARM_BUDDY_NO_GOAL']
-		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal')
+    local goalValue = L['FARM_BUDDY_NO_GOAL'];
+		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
 
 		if goal > 0 then
-			goalValue = goal
+			goalValue = goal;
 		end
 
-		str = str .. L['FARM_BUDDY_SUMMARY'] .. '\n--------------------------------\n'
-		str = str .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n'
-		str = str .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
-		str = str .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
-		str = str .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
-		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n'
+		str = str .. L['FARM_BUDDY_SUMMARY'] .. '\n--------------------------------\n';
+		str = str .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n';
+		str = str .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n';
+		str = str .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n';
+		str = str .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n';
+		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n';
 	else
-    str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
+    str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED'];
 	end
 
-	return str
+	return str;
 end
 
 -- **************************************************************************
@@ -473,50 +467,50 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
 	if level == 1 then
 
-		TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
+		TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level);
 
-		info = {}
-		info.notCheckable = true
-		info.text = L['TITAN_PANEL_OPTIONS']
-		info.menuList = 'Options'
-		info.hasArrow = 1
-		L_UIDropDownMenu_AddButton(info)
+		info = {};
+		info.notCheckable = true;
+		info.text = L['TITAN_PANEL_OPTIONS'];
+		info.menuList = 'Options';
+		info.hasArrow = 1;
+		L_UIDropDownMenu_AddButton(info);
 
 		TitanPanelRightClickMenu_AddSpacer();
-		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddSpacer()
-		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanPanelFarmBuddyButton_ResetConfig')
-		TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE)
+		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID);
+		TitanPanelRightClickMenu_AddSpacer();
+		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanPanelFarmBuddyButton_ResetConfig');
+		TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE);
 
 	elseif level == 2 and menuList == 'Options' then
 
-		TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level)
+		TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level);
 
-		info = {}
-		info.text = L['FARM_BUDDY_SHOW_GOAL']
-		info.func = TitanPanelFarmBuddyButton_ToggleShowGoal
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal')
-		L_UIDropDownMenu_AddButton(info, level)
+		info = {};
+		info.text = L['FARM_BUDDY_SHOW_GOAL'];
+		info.func = TitanPanelFarmBuddyButton_ToggleShowGoal;
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+		L_UIDropDownMenu_AddButton(info, level);
 
-		info = {}
-		info.text = L['FARM_BUDDY_INCLUDE_BANK']
-		info.func = TitanPanelFarmBuddyButton_ToggleIncludeBank
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
-		L_UIDropDownMenu_AddButton(info, level)
+		info = {};
+		info.text = L['FARM_BUDDY_INCLUDE_BANK'];
+		info.func = TitanPanelFarmBuddyButton_ToggleIncludeBank;
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
+		L_UIDropDownMenu_AddButton(info, level);
 
-		info = {}
-		info.text = L['FARM_BUDDY_NOTIFICATION']
-		info.func = TitanPanelFarmBuddyButton_ToggleGoalNotification
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
-		L_UIDropDownMenu_AddButton(info, level)
+		info = {};
+		info.text = L['FARM_BUDDY_NOTIFICATION'];
+		info.func = TitanPanelFarmBuddyButton_ToggleGoalNotification;
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
+		L_UIDropDownMenu_AddButton(info, level);
 
-    info = {}
-		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND']
-		info.func = TitanPanelFarmBuddyButton_TogglePlayNotificationSound
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
-		L_UIDropDownMenu_AddButton(info, level)
+    info = {};
+		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'];
+		info.func = TitanPanelFarmBuddyButton_TogglePlayNotificationSound;
+		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
+		L_UIDropDownMenu_AddButton(info, level);
 	end
 end
 
@@ -534,18 +528,29 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
   if itemInfo ~= nil then
 
-    local count = itemInfo.CountBags;
-
-    if includeBank == true then
-      count = itemInfo.CountTotal;
-    end
+    local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
 
     if count >= goal then
       TitanFarmBuddy:ShowNotification(item, goal, false);
     end
   end
 
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+end
+
+-- **************************************************************************
+-- NAME : TitanPanelFarmBuddyButton_GetCount()
+-- DESC : Gets the item count.
+-- **************************************************************************
+function TitanPanelFarmBuddyButton_GetCount(itemInfo)
+
+  local count = itemInfo.CountBags;
+
+  if includeBank == true then
+    count = itemInfo.CountTotal;
+  end
+
+  return count;
 end
 
 -- **************************************************************************
@@ -557,25 +562,17 @@ function TitanPanelFarmBuddyButton_OnShow(self)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnHide()
--- DESC : Destroy vars on button remove.
--- **************************************************************************
-function TitanPanelFarmBuddyButton_OnHide()
-	-- TODO: Implement this function
-end
-
--- **************************************************************************
 -- NAME : TitanFarmBuddy:GetOptionChoiceVal()
 -- DESC : Returns the formated input value for an AceOption input.
 -- **************************************************************************
 function TitanFarmBuddy:GetOptionChoiceVal(input)
 
-	local val = false
+	local val = false;
 	if input == true then
-		val = 1
+		val = 1;
 	end
 
-	return val
+	return val;
 end
 
 -- **************************************************************************
@@ -584,14 +581,14 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ValidateItem(info, input)
 
-	local _, itemLink = GetItemInfo(input)
+	local _, itemLink = GetItemInfo(input);
 
 	if itemLink ~= nil then
-		return true
+		return true;
 	end
 
 	TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS']);
-	return false
+	return false;
 end
 
 -- **************************************************************************
@@ -614,8 +611,8 @@ end
 -- DESC : Sets the item.
 -- **************************************************************************
 function TitanFarmBuddy:SetItem(info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input)
-  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input);
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
 end
 
@@ -624,7 +621,7 @@ end
 -- DESC : Gets the item.
 -- **************************************************************************
 function TitanFarmBuddy:GetItem()
-  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item')
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
 end
 
 -- **************************************************************************
@@ -632,8 +629,8 @@ end
 -- DESC : Sets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:SetGoal(info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input))
-  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input));
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
 end
 
@@ -642,7 +639,7 @@ end
 -- DESC : Gets the item goal.
 -- **************************************************************************
 function TitanFarmBuddy:GetGoal()
-  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'))
+  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'));
 end
 
 -- **************************************************************************
@@ -650,7 +647,7 @@ end
 -- DESC : Sets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input);
 end
 
 -- **************************************************************************
@@ -658,7 +655,7 @@ end
 -- DESC : Gets the notification status.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationStatus()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 end
 
 -- **************************************************************************
@@ -666,7 +663,7 @@ end
 -- DESC : Sets the play notification sound status.
 -- **************************************************************************
 function TitanFarmBuddy:SetPlayNotificationSoundStatus(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input);
 end
 
 -- **************************************************************************
@@ -674,7 +671,7 @@ end
 -- DESC : Gets the play notification sound status.
 -- **************************************************************************
 function TitanFarmBuddy:GetPlayNotificationSoundStatus()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
 end
 
 -- **************************************************************************
@@ -682,7 +679,7 @@ end
 -- DESC : Sets the notification display duration.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationDisplayDuration(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input);
 end
 
 -- **************************************************************************
@@ -690,7 +687,7 @@ end
 -- DESC : Gets the notification display duration.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationDisplayDuration()
-	return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
+	return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
 end
 
 -- **************************************************************************
@@ -699,7 +696,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_TogglePlayNotificationSound()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -707,7 +704,7 @@ end
 -- DESC : Sets the notification sound.
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationSound(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input);
 	PlaySound(input, 'master');
 end
 
@@ -716,7 +713,7 @@ end
 -- DESC : Gets the notification sound.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationSound()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
 end
 
 -- **************************************************************************
@@ -725,7 +722,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_ToggleGoalNotification()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -733,9 +730,9 @@ end
 -- DESC : Sets the show item icon status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemIcon(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', val)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', val);
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -743,7 +740,7 @@ end
 -- DESC : Gets the show item icon status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemIcon()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
 end
 
 -- **************************************************************************
@@ -751,9 +748,9 @@ end
 -- DESC : Sets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemName(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', val)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', val);
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -761,7 +758,7 @@ end
 -- DESC : Gets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemName()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText');
 end
 
 -- **************************************************************************
@@ -769,9 +766,9 @@ end
 -- DESC : Sets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowColoredText(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', val)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', val);
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -779,7 +776,7 @@ end
 -- DESC : Gets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowColoredText()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText');
 end
 
 -- **************************************************************************
@@ -787,8 +784,8 @@ end
 -- DESC : Sets the show goal status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowGoal(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', input);
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -796,7 +793,7 @@ end
 -- DESC : Gets the show goal status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowGoal()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
 end
 
 -- **************************************************************************
@@ -805,7 +802,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_ToggleShowGoal()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -813,8 +810,8 @@ end
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:SetIncludeBank(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input);
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -822,7 +819,7 @@ end
 -- DESC : Gets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:GetIncludeBank()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
 end
 
 -- **************************************************************************
@@ -831,7 +828,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_ToggleIncludeBank()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
@@ -840,19 +837,19 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ResetConfig()
 
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', '')
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', 0)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', true)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_FightClub_Victory')
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', '');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', 0);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_FightClub_Victory');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
 
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
 end
 
@@ -861,7 +858,7 @@ end
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_ResetConfig()
-	TitanFarmBuddy:ResetConfig()
+	TitanFarmBuddy:ResetConfig();
 end
 
 -- **************************************************************************
@@ -883,7 +880,7 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
     local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
-    local sound = nil
+    local sound = nil;
 
     if demo == true then
       item = L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'];

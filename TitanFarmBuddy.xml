@@ -13,9 +13,6 @@
 							TitanPanelFarmBuddyButton_OnShow();
 							TitanPanelButton_OnShow(self);
 					</OnShow>
-					<OnHide>
-						TitanPanelFarmBuddyButton_OnHide();
-					</OnHide>
 					<OnEvent>
 							TitanPanelFarmBuddyButton_OnEvent(self, event, ...);
 					</OnEvent>
