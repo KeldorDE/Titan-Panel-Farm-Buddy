@@ -535,7 +535,6 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
   if goal ~= nil and goal > 0 then
 
-    local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
     local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
 
     if itemInfo ~= nil then
@@ -557,9 +556,10 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetCount(itemInfo)
 
+  local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
   local count = itemInfo.CountBags;
 
-  if includeBank == true then
+  if includeBank == 1 or includeBank == true then
     count = itemInfo.CountTotal;
   end
 
