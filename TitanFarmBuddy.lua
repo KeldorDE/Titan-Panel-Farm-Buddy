@@ -511,7 +511,22 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
   -- Raise notification
   local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
-  TitanFarmBuddy:ShowNotification(item, false);
+  local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
+  local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
+  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
+
+  if itemInfo ~= nil then
+
+    local count = itemInfo.CountBags;
+
+    if includeBank == true then
+      count = itemInfo.CountTotal;
+    end
+
+    if count >= goal then
+      TitanFarmBuddy:ShowNotification(item, goal, false);
+    end
+  end
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
@@ -805,21 +820,19 @@ end
 -- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
-  TitanFarmBuddy:ShowNotification(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], true);
+  TitanFarmBuddy:ShowNotification(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], 200, true);
 end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:ShowNotification()
 -- DESC : Raises a notification.
 -- **************************************************************************
-function TitanFarmBuddy:ShowNotification(item, demo)
+function TitanFarmBuddy:ShowNotification(item, goal, demo)
 
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
-
   if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
-    local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
     local sound = nil
 
     if demo == true then
@@ -828,10 +841,6 @@ function TitanFarmBuddy:ShowNotification(item, demo)
 
     if playSound == true then
       sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
-    end
-
-    if goal < 1 then
-      goal = 200;
     end
 
     if demo == false then
