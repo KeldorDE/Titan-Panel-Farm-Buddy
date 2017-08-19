@@ -7,7 +7,7 @@
 local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
 local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
-local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0');
+local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = 0;
 local NOTIFICATION_TRIGGERED = false;
@@ -61,6 +61,14 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 	};
 
 	self:RegisterEvent('BAG_UPDATE');
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:OnEnable()
+-- DESC : Is called when the Plugin gets enabled.
+-- **************************************************************************
+function TitanFarmBuddy:OnEnable()
+  self:SecureHook('ContainerFrameItemButton_OnModifiedClick');
 end
 
 -- **************************************************************************
@@ -433,7 +441,8 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetTooltipText()
 
-	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n\n';
+	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
+              TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n';
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
 
 	-- Invalid item or no item defined
@@ -871,6 +880,30 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
   TitanFarmBuddy:ShowNotification(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], 200, true);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick()
+-- DESC : Is called when an item is clicked with modifier key.
+-- **************************************************************************
+function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, ...)
+
+  if button == 'RightButton' and IsAltKeyDown() then
+    if not CursorHasItem() and not IsControlKeyDown() and not IsShiftKeyDown() then
+
+      local bagID = self:GetParent():GetID();
+      local bagSlot = self:GetID();
+      local itemLink = GetContainerItemLink(bagID, bagSlot);
+
+      if itemLink ~= nil then
+
+        TitanFarmBuddy:SetItem(nil, GetItemInfo(itemLink));
+
+        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemLink);
+        TitanFarmBuddy:Print(text);
+      end
+    end
+  end
 end
 
 -- **************************************************************************
