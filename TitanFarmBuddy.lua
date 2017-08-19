@@ -523,15 +523,19 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
   -- Raise notification
   local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
   local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
-  local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
 
-  if itemInfo ~= nil then
+  if goal ~= nil and goal > 0 then
 
-    local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
+    local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
+    local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
 
-    if count >= goal then
-      TitanFarmBuddy:ShowNotification(item, goal, false);
+    if itemInfo ~= nil then
+
+      local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
+
+      if count >= goal then
+        TitanFarmBuddy:ShowNotification(item, goal, false);
+      end
     end
   end
 
