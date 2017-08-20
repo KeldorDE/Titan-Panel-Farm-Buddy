@@ -11,7 +11,29 @@ local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'Ac
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = 0;
 local NOTIFICATION_TRIGGERED = false;
-
+local CHAT_COMMAND = 'fb';
+local CHAT_COMMANDS = {
+  track = {
+    Args = '<' .. L['FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
+    Description = L['FARM_BUDDY_COMMAND_TRACK_DESC']
+  },
+  goal = {
+    Args = '<' .. L['FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
+    Description = L['FARM_BUDDY_COMMAND_GOAL_DESC']
+  },
+  reset = {
+    Args = '',
+    Description = L['FARM_BUDDY_COMMAND_RESET_DESC']
+  },
+  version = {
+    Args = '',
+    Description = L['FARM_BUDDY_COMMAND_VERSION_DESC']
+  },
+  help = {
+    Args = '',
+    Description = L['FARM_BUDDY_COMMAND_HELP_DESC']
+  }
+};
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
@@ -20,6 +42,9 @@ local NOTIFICATION_TRIGGERED = false;
 function TitanFarmBuddy:OnInitialize()
   LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption());
   LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME);
+
+  -- Register chat command
+  TitanFarmBuddy:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand');
 end
 
 -- **************************************************************************
@@ -932,5 +957,67 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
     end
 
     TitanFarmBuddyNotification_Show(item, goal, sound, notificationDisplayDuration);
+  end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:ChatCommand()
+-- DESC : Handles AddOn commands.
+-- **************************************************************************
+function TitanFarmBuddy:ChatCommand(input)
+
+  local cmd, value = TitanFarmBuddy:GetArgs(input, 2);
+
+  -- Show help
+  if not cmd or cmd == 'help' then
+
+    local helpStr = 'Command List:\n';
+    for command, info in pairs(CHAT_COMMANDS) do
+      helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
+      if info.Args ~= '' then
+        helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args);
+      end
+      helpStr = helpStr .. ' - ' .. info.Description .. '\n';
+    end
+
+    TitanFarmBuddy:Print(helpStr);
+
+  -- Prints version information
+  elseif cmd == 'version' then
+    TitanFarmBuddy:Print(ADDON_VERSION);
+
+  -- Reset AddOn settings
+  elseif cmd == 'reset' then
+    TitanFarmBuddy:ResetConfig();
+    TitanFarmBuddy:Print(L['FARM_BUDDY_CONFIG_RESET_MSG']);
+
+  -- Set goal amount
+  elseif cmd == 'goal' then
+
+    if value ~= nil then
+      local status = TitanFarmBuddy:ValidateNumber(nil, value);
+      if status == true then
+        TitanFarmBuddy:SetGoal(nil, value);
+        TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET']);
+      end
+    else
+      TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING']);
+    end
+
+  -- Set tracked item
+  elseif cmd == 'track' then
+
+    if value ~= nil then
+      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(value);
+      if itemInfo ~= nil then
+        TitanFarmBuddy:SetItem(nil, itemInfo.Name);
+        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link);
+        TitanFarmBuddy:Print(text);
+      else
+        TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS']);
+      end
+    else
+      TitanFarmBuddy:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING']);
+    end
   end
 end
