@@ -971,7 +971,7 @@ function TitanFarmBuddy:ChatCommand(input)
   -- Show help
   if not cmd or cmd == 'help' then
 
-    local helpStr = 'Command List:\n';
+    local helpStr = L['FARM_BUDDY_COMMAND_LIST'] .. '\n';
     for command, info in pairs(CHAT_COMMANDS) do
       helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
       if info.Args ~= '' then
