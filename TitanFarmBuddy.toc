@@ -9,9 +9,8 @@
 
 embeds.xml
 
-locale\Localization.enUS.lua
 locale\Localization.deDE.lua
-locale\Localization.enGB.lua
+locale\Localization.enUS.lua
 locale\Localization.esES.lua
 locale\Localization.esMX.lua
 locale\Localization.frFR.lua

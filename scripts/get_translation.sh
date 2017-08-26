@@ -2,7 +2,7 @@
 
 API_PROJECT_ID="274538"
 API_URL="https://wow.curseforge.com/api/projects/${API_PROJECT_ID}/localization/export"
-LANGS=( "enUS" "enGB" "deDE" "frFR" "esES" "itIT" "ruRU" "koKR" "zhCN" "zhTW" "esMX" "ptBR" )
+LANGS=( "enUS" "deDE" "frFR" "esES" "itIT" "ruRU" "koKR" "zhCN" "zhTW" "esMX" "ptBR" )
 
 ROOT=$(pwd)
 if [ "${ROOT: -8}" == "/scripts" ]; then
