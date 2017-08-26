@@ -25,6 +25,10 @@ L["FARM_BUDDY_COMMAND_HELP_DESC"] = "Prints this information."
 --Translation missing 
 L["FARM_BUDDY_COMMAND_LIST"] = "List of Chat Commands"
 --Translation missing 
+L["FARM_BUDDY_COMMAND_PRIMARY_ARGS"] = "Position between 1 and !max!"
+--Translation missing 
+L["FARM_BUDDY_COMMAND_PRIMARY_DESC"] = "Sets the items position that would be shown in the Titan Panel bar."
+--Translation missing 
 L["FARM_BUDDY_COMMAND_RESET_DESC"] = "Resets Farm Buddy to it's default settings."
 --Translation missing 
 L["FARM_BUDDY_COMMAND_TRACK_ARGS"] = "Item Name|Item Link"
@@ -48,6 +52,8 @@ L["FARM_BUDDY_INVENTORY"] = "Inventory"
 L["FARM_BUDDY_ITEM"] = "Item"
 --Translation missing 
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "The item does not exists."
+--Translation missing 
+L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "The item on position !position! is now the primary item to display."
 --Translation missing 
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! is now your tracked item!"
 --Translation missing 

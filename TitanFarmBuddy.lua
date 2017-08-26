@@ -17,12 +17,16 @@ local NOTIFICATION_TRIGGERED = {};
 local CHAT_COMMAND = 'fb';
 local CHAT_COMMANDS = {
   track = {
-    Args = '<' .. L['FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
+    Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
     Description = L['FARM_BUDDY_COMMAND_TRACK_DESC']
   },
-  goal = {
-    Args = '<' .. L['FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
+  quantity = {
+    Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
     Description = L['FARM_BUDDY_COMMAND_GOAL_DESC']
+  },
+  primary = {
+    Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '>',
+    Description = L['FARM_BUDDY_COMMAND_PRIMARY_DESC']
   },
   reset = {
     Args = '',
@@ -179,7 +183,7 @@ end
 -- **************************************************************************
 function TitanFamrBuddyButton_SetItemIndexOnAccept(self, data)
   local index = tonumber(getglobal(self:GetName() .. 'EditBox'):GetText());
-  if index > 0 and index <= ITEMS_AVAILABLE then
+  if TitanFarmBuddy:IsIndexValid(index) == true then
     local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data);
     TitanFarmBuddy:SetItem(index, nil, GetItemInfo(data));
     TitanFarmBuddy:Print(text);
@@ -1257,22 +1261,20 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ChatCommand(input)
 
-  -- TODO: Refactor for 4 items support
-  local cmd, value = TitanFarmBuddy:GetArgs(input, 2);
+  local cmd, value, arg1 = TitanFarmBuddy:GetArgs(input, 3);
 
   -- Show help
   if not cmd or cmd == 'help' then
 
-    local helpStr = L['FARM_BUDDY_COMMAND_LIST'] .. '\n';
+    TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n');
     for command, info in pairs(CHAT_COMMANDS) do
-      helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
+      local helpStr = TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
       if info.Args ~= '' then
         helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args);
       end
-      helpStr = helpStr .. ' - ' .. info.Description .. '\n';
+      helpStr = helpStr .. ' - ' .. info.Description;
+      print(helpStr);
     end
-
-    TitanFarmBuddy:Print(helpStr);
 
   -- Prints version information
   elseif cmd == 'version' then
@@ -1283,14 +1285,35 @@ function TitanFarmBuddy:ChatCommand(input)
     TitanFarmBuddy:ResetConfig();
     TitanFarmBuddy:Print(L['FARM_BUDDY_CONFIG_RESET_MSG']);
 
-  -- Set goal amount
-  elseif cmd == 'goal' then
+  elseif cmd == 'primary' then
+
+    local index = tonumber(value);
+
+    if TitanFarmBuddy:IsIndexValid(index) == true then
+      local text = L['FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', tostring(index));
+      TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
+      TitanFarmBuddy:Print(text);
+      TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+    else
+      local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
+      TitanFarmBuddy:Print(text);
+    end
+
+  -- Set goal quantity
+  elseif cmd == 'quantity' then
 
     if value ~= nil then
-      local status = TitanFarmBuddy:ValidateNumber(nil, value);
+      local status = TitanFarmBuddy:ValidateNumber(nil, arg1);
       if status == true then
-        TitanFarmBuddy:SetGoal(nil, value);
-        TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET']);
+        local index = tonumber(value);
+        if TitanFarmBuddy:IsIndexValid(index) == true then
+          TitanFarmBuddy:SetItemQuantity(index, nil, arg1);
+          TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET']);
+          TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+        else
+          local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
+          TitanFarmBuddy:Print(text);
+        end
       end
     else
       TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING']);
@@ -1300,11 +1323,17 @@ function TitanFarmBuddy:ChatCommand(input)
   elseif cmd == 'track' then
 
     if value ~= nil then
-      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(value);
+      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(arg1);
       if itemInfo ~= nil then
-        TitanFarmBuddy:SetItem(nil, itemInfo.Name);
-        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link);
-        TitanFarmBuddy:Print(text);
+        local index = tonumber(value);
+        if TitanFarmBuddy:IsIndexValid(index) == true then
+          TitanFarmBuddy:SetItem(index, nil, itemInfo.Name);
+          local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link);
+          TitanFarmBuddy:Print(text);
+        else
+          local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
+          TitanFarmBuddy:Print(text);
+        end
       else
         TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS']);
       end
@@ -1312,4 +1341,15 @@ function TitanFarmBuddy:ChatCommand(input)
       TitanFarmBuddy:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING']);
     end
   end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:IsIndexValid()
+-- DESC : Returns the index status.
+-- **************************************************************************
+function TitanFarmBuddy:IsIndexValid(index)
+  if index ~= nil and index > 0 and index <= ITEMS_AVAILABLE then
+    return true;
+  end
+  return false;
 end
