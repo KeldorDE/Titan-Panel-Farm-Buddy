@@ -483,7 +483,7 @@ end
 -- DESC : Calculate the item count of the tracked farm item and displays it.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
-  
+
 	local str = '';
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
   local activeIndex = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex');
@@ -708,21 +708,18 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
-  -- TODO: Refactor for 4 items support
-  -- Raise notification
-  local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
-  local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
-
-  if goal ~= nil and goal > 0 then
-
-    local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
-
-    if itemInfo ~= nil then
-
-      local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
-
-      if count >= goal then
-        TitanFarmBuddy:ShowNotification(item, goal, false);
+  for i = 1, ITEMS_AVAILABLE do
+    local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
+    if item ~= nil and item ~= '' then
+      local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i)));
+      if quantity > 0 then
+        local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
+        if itemInfo ~= nil then
+          local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
+          if count >= quantity then
+            TitanFarmBuddy:ShowNotification(item, quantity, false);
+          end
+        end
       end
     end
   end
@@ -1134,6 +1131,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ShowNotification(item, goal, demo)
 
+  -- TODO: Queue notifications
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
   if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
 
