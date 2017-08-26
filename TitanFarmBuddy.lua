@@ -10,6 +10,8 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
+local ITEMS_AVAILABLE = 4;
+-- TODO: Refactor to 4 items support
 local NOTIFICATION_TRIGGERED = false;
 local CHAT_COMMAND = 'fb';
 local CHAT_COMMANDS = {
@@ -401,7 +403,6 @@ end
 -- DESC : A helper function to generate a item input field for the blizzard option panel.
 -- **************************************************************************
 function TitanFarmBuddy:GetTrackedItemField(index)
-
   return {
     type = 'input',
     name = L['FARM_BUDDY_ITEM'],
@@ -483,6 +484,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
 
+  -- TODO: Refactor for 4 items support
 	local str = '';
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
@@ -539,11 +541,9 @@ end
 -- DESC : Gets a value with highlighted color for the Titan Bar.
 -- **************************************************************************
 function TitanFarmBuddy:GetBarValue(value, colored)
-
 	if colored == 1 then
 		value = TitanUtils_GetHighlightText(value);
 	end
-
 	return value;
 end
 
@@ -601,27 +601,44 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 
 	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
               TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n';
+  local strTmp = '';
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
+  local hasItem = false;
 
-	-- Invalid item or no item defined
-	if itemInfo ~= nil then
+  for i = 1, ITEMS_AVAILABLE do
+    local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
 
-    local goalValue = L['FARM_BUDDY_NO_GOAL'];
-		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
+    -- No item set for this index
+    if item ~= nil and item ~= '' then
+      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
 
-		if goal > 0 then
-			goalValue = goal;
-		end
+      -- Invalid item or no item defined
+      if itemInfo ~= nil then
+        local goalValue = L['FARM_BUDDY_NO_GOAL'];
+    		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i));
 
-		str = str .. L['FARM_BUDDY_SUMMARY'] .. '\n--------------------------------\n';
-		str = str .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n';
-		str = str .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n';
-		str = str .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n';
-		str = str .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n';
-		str = str .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n';
-	else
+    		if goal > 0 then
+    			goalValue = goal;
+    		end
+
+        strTmp = strTmp .. '\n';
+    		strTmp = strTmp .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n';
+    		strTmp = strTmp .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n';
+    		strTmp = strTmp .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n';
+    		strTmp = strTmp .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n';
+    		strTmp = strTmp .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n';
+        hasItem = true;
+  		end
+    end
+  end
+
+  if hasItem == true then
+    str = str .. TitanUtils_GetHighlightText(L['FARM_BUDDY_SUMMARY']);
+    str = str .. '\n------------------------------------';
+    str = str .. strTmp;
+  else
     str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED'];
-	end
+  end
 
 	return str;
 end
@@ -687,6 +704,7 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 
+  -- TODO: Refactor for 4 items support
   -- Raise notification
   local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
   local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
@@ -848,7 +866,6 @@ function TitanFarmBuddy:SetItemShowInBar(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
-
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetNotificationStatus()
@@ -1054,15 +1071,13 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item1', '');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item2', '');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item3', '');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item4', '');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity1', 0);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity2', 0);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity3', 0);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity4', 0);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
+
+  -- Reset items
+  for i = 1, ITEMS_AVAILABLE do
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i), '');
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i), 0);
+  end
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
@@ -1090,6 +1105,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, ...)
 
+  -- TODO: Refactor for 4 items support
   if button == 'RightButton' and IsAltKeyDown() then
     if not CursorHasItem() and not IsControlKeyDown() and not IsShiftKeyDown() then
 
@@ -1143,6 +1159,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ChatCommand(input)
 
+  -- TODO: Refactor for 4 items support
   local cmd, value = TitanFarmBuddy:GetArgs(input, 2);
 
   -- Show help
