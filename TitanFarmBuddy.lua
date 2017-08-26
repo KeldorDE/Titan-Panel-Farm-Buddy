@@ -483,16 +483,20 @@ end
 -- DESC : Calculate the item count of the tracked farm item and displays it.
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_GetButtonText(id)
-
-  -- TODO: Refactor for 4 items support
+  
 	local str = '';
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
+  local activeIndex = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex');
+  local item = '';
+  if activeIndex > 0 and activeIndex <= ITEMS_AVAILABLE then
+    item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(activeIndex));
+  end
+  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
 
 	-- Invalid item or no item defined
 	if itemInfo ~= nil then
 
-    local goalValue = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal');
+    local goalValue = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(activeIndex)));
     local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText');
     local itemCount = TitanPanelFarmBuddyButton_GetCount(itemInfo);
 
@@ -615,7 +619,7 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
       -- Invalid item or no item defined
       if itemInfo ~= nil then
         local goalValue = L['FARM_BUDDY_NO_GOAL'];
-    		local goal = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i));
+    		local goal = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i)));
 
     		if goal > 0 then
     			goalValue = goal;
