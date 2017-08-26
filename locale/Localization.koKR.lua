@@ -85,6 +85,10 @@ L["FARM_BUDDY_QUANTITY"] = "Quantity"
 --Translation missing 
 L["FARM_BUDDY_RESET"] = "Reset"
 --Translation missing 
+L["FARM_BUDDY_RESET_ALL"] = "Reset all tracked Items"
+--Translation missing 
+L["FARM_BUDDY_RESET_ALL_DESC"] = "Resets all tracked items."
+--Translation missing 
 L["FARM_BUDDY_RESET_DESC"] = "Resets the tracked item."
 --Translation missing 
 L["FARM_BUDDY_SETTINGS"] = "Common"
@@ -128,3 +132,9 @@ L["FARM_BUDDY_TRACKING_DESC"] = "You can track up to 4 items at once and select 
 L["FARM_BUDDY_VERSION"] = "Version"
 --Translation missing 
 L["TITAN_BUDDY_NOTIFICATION_SOUND"] = "Notification Sound"
+--Translation missing 
+L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Are you sure you want to reset all items?"
+--Translation missing 
+L["TITAN_FARM_BUDDY_NO"] = "No"
+--Translation missing 
+L["TITAN_FARM_BUDDY_YES"] = "Yes"

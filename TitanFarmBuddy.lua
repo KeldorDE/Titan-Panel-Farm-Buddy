@@ -92,6 +92,19 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		}
 	};
 
+  StaticPopupDialogs['TitanFarmBuddyResetAllConfirm'] = {
+    text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
+    button1 = L['TITAN_FARM_BUDDY_YES'],
+    button2 = L['TITAN_FARM_BUDDY_NO'],
+    OnAccept = function()
+        TitanFarmBuddy:ResetConfig();
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
+  };
+
 	self:RegisterEvent('BAG_UPDATE');
 end
 
@@ -325,6 +338,12 @@ function TitanFarmBuddy:GetConfigOption()
         type = 'group',
         order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
+          space_actions_1 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            width = 'half',
+          },
           item_move_notification = {
             type = 'execute',
             name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
@@ -333,10 +352,16 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_8 = {
+          space_actions_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
+          },
+          space_actions_3 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            width = 'half',
           },
           item_test_alert = {
             type = 'execute',
@@ -346,16 +371,22 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_9 = {
+          space_actions_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
+          space_actions_5 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            width = 'half',
+          },
           item_reset = {
             type = 'execute',
-            name = L['FARM_BUDDY_RESET'],
-            desc = L['FARM_BUDDY_RESET_DESC'],
-            func = 'ResetConfig',
+            name = L['FARM_BUDDY_RESET_ALL'],
+            desc = L['FARM_BUDDY_RESET_ALL_DESC'],
+            func = function() StaticPopup_Show('TitanFarmBuddyResetAllConfirm'); end,
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
