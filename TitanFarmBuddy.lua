@@ -9,7 +9,7 @@ local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
-local OPTION_ORDER = 0;
+local OPTION_ORDER = {};
 local NOTIFICATION_TRIGGERED = false;
 local CHAT_COMMAND = 'fb';
 local CHAT_COMMANDS = {
@@ -74,8 +74,14 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			ShowLabelText = 1,
 			ShowColoredText = 1,
 			DisplayOnRightSide = false,
-			Item = '',
-			Goal = 0,
+			Item1 = '',
+			Item2 = '',
+			Item3 = '',
+			Item4 = '',
+			ItemGoal1 = 0,
+			ItemGoal2 = 0,
+			ItemGoal3 = 0,
+			ItemGoal4 = 0,
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowGoal = true,
@@ -126,56 +132,18 @@ function TitanFarmBuddy:GetConfigOption()
       info_version = {
         type = 'description',
         name = L['FARM_BUDDY_VERSION'] .. ': ' .. ADDON_VERSION,
-        order = TitanFarmBuddy:GetOptionOrder(),
+        order = TitanFarmBuddy:GetOptionOrder('main'),
       },
       info_author = {
         type = 'description',
         name = L['FARM_BUDDY_AUTHOR'] .. ': ' .. GetAddOnMetadata('TitanFarmBuddy', 'Author'),
-        order = TitanFarmBuddy:GetOptionOrder(),
+        order = TitanFarmBuddy:GetOptionOrder('main'),
       },
       tab_general = {
-        name = "General",
-        desc = "General Options.",
-        type = "group",
-        order = 1,
+        name = L['FARM_BUDDY_SETTINGS'],
+        type = 'group',
+        order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
-          header_general = {
-            type = 'header',
-            name = L['FARM_BUDDY_GENERAL_OPTIONS'],
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
-          item_count = {
-            type = 'input',
-            name = L['FARM_BUDDY_ITEM_TO_TRACK'],
-            desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
-            get = 'GetItem',
-            set = 'SetItem',
-            validate = 'ValidateItem',
-            usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
-            width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
-          space_1 = {
-            type = 'description',
-            name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
-          goal = {
-            type = 'input',
-            name = L['FARM_BUDDY_ALERT_COUNT'],
-            desc = L['FARM_BUDDY_ALERT_COUNT_DESC'],
-            get = 'GetGoal',
-            set = 'SetGoal',
-            validate = 'ValidateNumber',
-            usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
-            width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
-          space_2 = {
-            type = 'description',
-            name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
           item_show_item_icon = {
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_ICON'],
@@ -183,12 +151,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetShowItemIcon',
             set = 'SetShowItemIcon',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           space_3 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           item_show_item_name = {
             type = 'toggle',
@@ -197,12 +165,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetShowItemName',
             set = 'SetShowItemName',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           space_4 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           item_show_colored_text = {
             type = 'toggle',
@@ -211,12 +179,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetShowColoredText',
             set = 'SetShowColoredText',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           space_5 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           item_show_goal = {
             type = 'toggle',
@@ -225,12 +193,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetShowGoal',
             set = 'SetShowGoal',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           space_6 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
           item_track_bank = {
             type = 'toggle',
@@ -239,13 +207,40 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetIncludeBank',
             set = 'SetIncludeBank',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          header_notification = {
-            type = 'header',
-            name = L['FARM_BUDDY_NOTIFICATION_OPTIONS'],
-            order = TitanFarmBuddy:GetOptionOrder(),
+			  },
+			},
+      tab_tracking = {
+        name = L['FARM_BUDDY_ITEMS'],
+        type = 'group',
+        order = TitanFarmBuddy:GetOptionOrder('main'),
+        args = {
+          item_tracking_description = {
+            type = 'description',
+            name = L['FARM_BUDDY_TRACKING_DESC'],
+            order = TitanFarmBuddy:GetOptionOrder('tracking'),
           },
+          space_1 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('tracking'),
+          },
+          item_track_1 = TitanFarmBuddy:GetTrackedItemField(1),
+          item_track_count_1 = TitanFarmBuddy:GetTrackedItemCountField(1),
+          item_track_2 = TitanFarmBuddy:GetTrackedItemField(2),
+          item_track_count_2 = TitanFarmBuddy:GetTrackedItemCountField(2),
+          item_track_3 = TitanFarmBuddy:GetTrackedItemField(3),
+          item_track_count_3 = TitanFarmBuddy:GetTrackedItemCountField(3),
+          item_track_4 = TitanFarmBuddy:GetTrackedItemField(4),
+          item_track_count_4 = TitanFarmBuddy:GetTrackedItemCountField(4),
+        }
+      },
+      tab_notifications = {
+        name = L['FARM_BUDDY_NOTIFICATIONS'],
+        type = 'group',
+        order = TitanFarmBuddy:GetOptionOrder('main'),
+        args = {
           item_notification_status = {
             type = 'toggle',
             name = L['FARM_BUDDY_NOTIFICATION'],
@@ -253,12 +248,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetNotificationStatus',
             set = 'SetNotificationStatus',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           space_7 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           item_play_notification_sound = {
             type = 'toggle',
@@ -267,12 +262,12 @@ function TitanFarmBuddy:GetConfigOption()
             get = 'GetPlayNotificationSoundStatus',
             set = 'SetPlayNotificationSoundStatus',
             width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           space_8 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           item_notification_display_duration = {
             type = 'input',
@@ -282,12 +277,12 @@ function TitanFarmBuddy:GetConfigOption()
             set = 'SetNotificationDisplayDuration',
             validate = 'ValidateNumber',
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           space_9 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
           item_notification_sound = {
             type = 'select',
@@ -297,25 +292,27 @@ function TitanFarmBuddy:GetConfigOption()
             set = 'SetNotificationSound',
             get = 'GetNotificationSound',
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          header_actions = {
-            type = 'header',
-            name = L['FARM_BUDDY_ACTIONS'],
-            order = TitanFarmBuddy:GetOptionOrder(),
-          },
+        }
+      },
+      tab_actions = {
+        name = L['FARM_BUDDY_ACTIONS'],
+        type = 'group',
+        order = TitanFarmBuddy:GetOptionOrder('main'),
+        args = {
           item_move_notification = {
             type = 'execute',
             name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
             desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
             func = function() TitanFarmBuddyNotification_ShowAnchor() end,
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
           space_8 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
           item_test_alert = {
             type = 'execute',
@@ -323,12 +320,12 @@ function TitanFarmBuddy:GetConfigOption()
             desc = L['FARM_BUDDY_TEST_NOTIFICATION_DESC'],
             func = 'TestNotification',
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
           space_9 = {
             type = 'description',
             name = '',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
           item_reset = {
             type = 'execute',
@@ -336,35 +333,8 @@ function TitanFarmBuddy:GetConfigOption()
             desc = L['FARM_BUDDY_RESET_DESC'],
             func = 'ResetConfig',
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder(),
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-			  },
-			},
-      tab_tracking = {
-        name = "Tracking",
-        desc = "Tracking Options.",
-        type = "group",
-        order = 2,
-        args = {
-
-        }
-      },
-      tab_notifications = {
-        name = "Notifications",
-        desc = "Notification Options.",
-        type = "group",
-        order = 2,
-        args = {
-
-        }
-      },
-      tab_actions = {
-        name = "Actions",
-        desc = "Tracking Options.",
-        type = "group",
-        order = 3,
-        args = {
-
         }
       },
 		}
@@ -372,12 +342,55 @@ function TitanFarmBuddy:GetConfigOption()
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackedItemField()
+-- DESC : A helper function to generate a item input field for the blizzard option panel.
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackedItemField(index)
+
+  return {
+    type = 'input',
+    name = L['FARM_BUDDY_ITEM'],
+    desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
+    get = function() return TitanFarmBuddy:GetItem(index) end,
+    set = function(info, input) TitanFarmBuddy:SetItem(index, info, input) end,
+    validate = 'ValidateItem',
+    usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
+    width = 'double',
+    order = TitanFarmBuddy:GetOptionOrder(),
+  };
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackedItemCountField()
+-- DESC : A helper function to generate a item count input field for the blizzard option panel.
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackedItemCountField(index)
+
+  return {
+    type = 'input',
+    name = L['FARM_BUDDY_QUANTITY'],
+    desc = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
+    get = function() return TitanFarmBuddy:GetItemGoal(index) end,
+    set = function(info, input) TitanFarmBuddy:SetItemGoal(index, info, input) end,
+    validate = 'ValidateNumber',
+    usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
+    width = 'half',
+    order = TitanFarmBuddy:GetOptionOrder(),
+  };
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:GetOptionOrder()
 -- DESC : A helper function to order the option items in the order as listed in the array.
 -- **************************************************************************
-function TitanFarmBuddy:GetOptionOrder()
-	OPTION_ORDER = OPTION_ORDER + 1;
-	return OPTION_ORDER;
+function TitanFarmBuddy:GetOptionOrder(category)
+
+  if not OPTION_ORDER.category then
+    OPTION_ORDER.category = 0
+  end
+
+	OPTION_ORDER.category = OPTION_ORDER.category + 1;
+	return OPTION_ORDER.category;
 end
 
 -- **************************************************************************
@@ -681,29 +694,19 @@ function TitanFarmBuddy:ValidateNumber(info, input)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:SetItem()
--- DESC : Sets the item.
--- **************************************************************************
-function TitanFarmBuddy:SetItem(info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', input);
-  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  NOTIFICATION_TRIGGERED = false;
-end
-
--- **************************************************************************
 -- NAME : TitanFarmBuddy:GetItem()
 -- DESC : Gets the item.
 -- **************************************************************************
-function TitanFarmBuddy:GetItem()
-  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item');
+function TitanFarmBuddy:GetItem(index)
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(index));
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:SetGoal()
--- DESC : Sets the item goal.
+-- NAME : TitanFarmBuddy:SetItem()
+-- DESC : Sets the item.
 -- **************************************************************************
-function TitanFarmBuddy:SetGoal(info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', tonumber(input));
+function TitanFarmBuddy:SetItem(index, info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(index), input);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
 end
@@ -712,8 +715,18 @@ end
 -- NAME : TitanFarmBuddy:GetGoal()
 -- DESC : Gets the item goal.
 -- **************************************************************************
-function TitanFarmBuddy:GetGoal()
-  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Goal'));
+function TitanFarmBuddy:GetItemGoal(index)
+  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemGoal' .. tostring(index)));
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetGoal()
+-- DESC : Sets the item goal.
+-- **************************************************************************
+function TitanFarmBuddy:SetItemGoal(index, info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemGoal' .. tostring(index), tonumber(input));
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  NOTIFICATION_TRIGGERED = false;
 end
 
 -- **************************************************************************
