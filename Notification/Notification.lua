@@ -150,3 +150,14 @@ function TitanFarmBuddyNotification_ShowAnchor()
   InterfaceOptionsFrame:Hide();
   TitanFarmBuddyAnchor:Show();
 end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddyNotification_Shown()
+-- DESC : Gets the notification is currently shown status.
+-- **************************************************************************
+function TitanFarmBuddyNotification_Shown()
+  if FRAME_HIDDEN == false then
+    return true;
+  end
+  return false;
+end

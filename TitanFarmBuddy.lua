@@ -7,10 +7,12 @@
 local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
 local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
-local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0');
+local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
 local ITEMS_AVAILABLE = 4;
+local NOTIFICATION_COUNT = 0;
+local NOTIFICATION_QUEUE = {};
 local NOTIFICATION_TRIGGERED = {};
 local CHAT_COMMAND = 'fb';
 local CHAT_COMMANDS = {
@@ -118,7 +120,17 @@ end
 -- DESC : Is called when the Plugin gets enabled.
 -- **************************************************************************
 function TitanFarmBuddy:OnEnable()
+
   self:SecureHook('ContainerFrameItemButton_OnModifiedClick');
+  self:ScheduleRepeatingTimer('NotificationTask', 1);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:OnDisable()
+-- DESC : Is called when the Plugin gets disabled.
+-- **************************************************************************
+function TitanFarmBuddy:OnDisable()
+  self:CancelAllTimers();
 end
 
 -- **************************************************************************
@@ -720,7 +732,7 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
         if itemInfo ~= nil then
           local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
           if count >= quantity then
-            TitanFarmBuddy:ShowNotification(i, item, quantity, false);
+            TitanFarmBuddy:QueueNotification(i, item, quantity);
           end
         end
       end
@@ -1129,12 +1141,24 @@ function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, .
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:QueueNotification()
+-- DESC : Queues a notification.
+-- **************************************************************************
+function TitanFarmBuddy:QueueNotification(index, item, quantity)
+  NOTIFICATION_COUNT = NOTIFICATION_COUNT + 1;
+  NOTIFICATION_QUEUE[NOTIFICATION_COUNT] = {
+    Index = index,
+    Item = item,
+    Quantity = quantity,
+  };
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:ShowNotification()
 -- DESC : Raises a notification.
 -- **************************************************************************
-function TitanFarmBuddy:ShowNotification(index, item, goal, demo)
+function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
 
-  -- TODO: Queue notifications
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
   if (notificationEnabled == true and NOTIFICATION_TRIGGERED[index] == false) or demo == true then
 
@@ -1154,7 +1178,21 @@ function TitanFarmBuddy:ShowNotification(index, item, goal, demo)
       NOTIFICATION_TRIGGERED[index] = true;
     end
 
-    TitanFarmBuddyNotification_Show(item, goal, sound, notificationDisplayDuration);
+    TitanFarmBuddyNotification_Show(item, quantity, sound, notificationDisplayDuration);
+  end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:NotificationTask()
+-- DESC : Is called by the timer to handle the next notification.
+-- **************************************************************************
+function TitanFarmBuddy:NotificationTask()
+  if TitanFarmBuddyNotification_Shown() == false then
+    for index, notification in pairs(NOTIFICATION_QUEUE) do
+      TitanFarmBuddy:ShowNotification(notification.Index, notification.Item, notification.Quantity, false);
+      NOTIFICATION_QUEUE[index] = nil;
+      break;
+    end
   end
 end
 
