@@ -11,6 +11,16 @@ embeds.xml
 
 locale\Localization.enUS.lua
 locale\Localization.deDE.lua
+locale\Localization.enGB.lua
+locale\Localization.esES.lua
+locale\Localization.esMX.lua
+locale\Localization.frFR.lua
+locale\Localization.itIT.lua
+locale\Localization.koKR.lua
+locale\Localization.ptBR.lua
+locale\Localization.ruRU.lua
+locale\Localization.zhCN.lua
+locale\Localization.zhTW.lua
 
 Sounds.lua
 TitanFarmBuddy.xml
