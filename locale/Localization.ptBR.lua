@@ -101,6 +101,10 @@ L["FARM_BUDDY_SHOW_ICON"] = "Show icon"
 --Translation missing 
 L["FARM_BUDDY_SHOW_ICON_DESC"] = "Show the item icon on the Titan Bar."
 --Translation missing 
+L["FARM_BUDDY_SHOW_IN_BAR"] = "Primary"
+--Translation missing 
+L["FARM_BUDDY_SHOW_IN_BAR_DESC"] = "If this checkbox is enabled the items farm status will be shown on the Titan Panel bar."
+--Translation missing 
 L["FARM_BUDDY_SHOW_NAME"] = "Show item name"
 --Translation missing 
 L["FARM_BUDDY_SHOW_NAME_DESC"] = "Show the item name on the Titan Bar."

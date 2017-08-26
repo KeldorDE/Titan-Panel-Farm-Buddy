@@ -78,10 +78,11 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			Item2 = '',
 			Item3 = '',
 			Item4 = '',
-			ItemGoal1 = 0,
-			ItemGoal2 = 0,
-			ItemGoal3 = 0,
-			ItemGoal4 = 0,
+			ItemQuantity1 = 0,
+			ItemQuantity2 = 0,
+			ItemQuantity3 = 0,
+			ItemQuantity4 = 0,
+      ItemShowInBarIndex = 1,
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowGoal = true,
@@ -227,13 +228,36 @@ function TitanFarmBuddy:GetConfigOption()
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
           },
           item_track_1 = TitanFarmBuddy:GetTrackedItemField(1),
-          item_track_count_1 = TitanFarmBuddy:GetTrackedItemCountField(1),
+          item_track_count_1 = TitanFarmBuddy:GetTrackedItemQuantityField(1),
+          item_track_show_bar_1 = TitanFarmBuddy:GetTrackedItemShowBarField(1),
+          item_clear_button_1 = TitanFarmBuddy:GetTrackedItemClearButton(1),
+          space_10 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('tracking'),
+          },
           item_track_2 = TitanFarmBuddy:GetTrackedItemField(2),
-          item_track_count_2 = TitanFarmBuddy:GetTrackedItemCountField(2),
+          item_track_count_2 = TitanFarmBuddy:GetTrackedItemQuantityField(2),
+          item_track_show_bar_2 = TitanFarmBuddy:GetTrackedItemShowBarField(2),
+          item_clear_button_2 = TitanFarmBuddy:GetTrackedItemClearButton(2),
+          space_20 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('tracking'),
+          },
           item_track_3 = TitanFarmBuddy:GetTrackedItemField(3),
-          item_track_count_3 = TitanFarmBuddy:GetTrackedItemCountField(3),
+          item_track_count_3 = TitanFarmBuddy:GetTrackedItemQuantityField(3),
+          item_track_show_bar_3 = TitanFarmBuddy:GetTrackedItemShowBarField(3),
+          item_clear_button_3 = TitanFarmBuddy:GetTrackedItemClearButton(3),
+          space_30 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('tracking'),
+          },
           item_track_4 = TitanFarmBuddy:GetTrackedItemField(4),
-          item_track_count_4 = TitanFarmBuddy:GetTrackedItemCountField(4),
+          item_track_count_4 = TitanFarmBuddy:GetTrackedItemQuantityField(4),
+          item_track_show_bar_4 = TitanFarmBuddy:GetTrackedItemShowBarField(4),
+          item_clear_button_4 = TitanFarmBuddy:GetTrackedItemClearButton(4),
         }
       },
       tab_notifications = {
@@ -356,26 +380,55 @@ function TitanFarmBuddy:GetTrackedItemField(index)
     validate = 'ValidateItem',
     usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
     width = 'double',
-    order = TitanFarmBuddy:GetOptionOrder(),
+    order = TitanFarmBuddy:GetOptionOrder('tracking'),
   };
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemCountField()
+-- NAME : TitanFarmBuddy:GetTrackedItemQuantityField()
 -- DESC : A helper function to generate a item count input field for the blizzard option panel.
 -- **************************************************************************
-function TitanFarmBuddy:GetTrackedItemCountField(index)
-
+function TitanFarmBuddy:GetTrackedItemQuantityField(index)
   return {
     type = 'input',
     name = L['FARM_BUDDY_QUANTITY'],
     desc = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
-    get = function() return TitanFarmBuddy:GetItemGoal(index) end,
-    set = function(info, input) TitanFarmBuddy:SetItemGoal(index, info, input) end,
+    get = function() return TitanFarmBuddy:GetItemQuantity(index) end,
+    set = function(info, input) TitanFarmBuddy:SetItemQuantity(index, info, input) end,
     validate = 'ValidateNumber',
     usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
     width = 'half',
-    order = TitanFarmBuddy:GetOptionOrder(),
+    order = TitanFarmBuddy:GetOptionOrder('tracking'),
+  };
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackedItemShowBarField()
+-- DESC : A helper function to generate a item show in Titan bar checkbox for the blizzard option panel.
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackedItemShowBarField(index)
+  return {
+    type = 'toggle',
+    name = L['FARM_BUDDY_SHOW_IN_BAR'],
+    desc = L['FARM_BUDDY_SHOW_IN_BAR_DESC'],
+    get = function() return TitanFarmBuddy:GetItemShowInBar(index) end,
+    set = function(info, input) TitanFarmBuddy:SetItemShowInBar(index, info, input) end,
+    width = 'half',
+    order = TitanFarmBuddy:GetOptionOrder('tracking'),
+  };
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackedItemClearButton()
+-- DESC : A helper function to generate a button for the blizzard option panel to reset the tracked item.
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackedItemClearButton(index)
+  return {
+    type = 'execute',
+    name = L['FARM_BUDDY_RESET'],
+    desc = L['FARM_BUDDY_RESET_DESC'],
+    func = function() TitanFarmBuddy:ResetItem(index) end,
+    order = TitanFarmBuddy:GetOptionOrder('tracking'),
   };
 end
 
@@ -712,22 +765,59 @@ function TitanFarmBuddy:SetItem(index, info, input)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:GetGoal()
--- DESC : Gets the item goal.
+-- NAME : TitanFarmBuddy:ResetItem()
+-- DESC : Resets the item with the given index.
 -- **************************************************************************
-function TitanFarmBuddy:GetItemGoal(index)
-  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemGoal' .. tostring(index)));
-end
+function TitanFarmBuddy:ResetItem(index)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(index), '');
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), '0');
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetGoal()
--- DESC : Sets the item goal.
--- **************************************************************************
-function TitanFarmBuddy:SetItemGoal(index, info, input)
-  TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemGoal' .. tostring(index), tonumber(input));
+  if tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')) == tostring(index) then
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', '');
+  end
+
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
 end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetItemQuantity()
+-- DESC : Gets the item goal.
+-- **************************************************************************
+function TitanFarmBuddy:GetItemQuantity(index)
+  return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index)));
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetItemQuantity()
+-- DESC : Sets the item goal.
+-- **************************************************************************
+function TitanFarmBuddy:SetItemQuantity(index, info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), tonumber(input));
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  NOTIFICATION_TRIGGERED = false;
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetItemShowInBar()
+-- DESC : Gets the item show in bar status.
+-- **************************************************************************
+function TitanFarmBuddy:GetItemShowInBar(index)
+  if tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')) == tostring(index) then
+    return true;
+  end
+  return false;
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetItemShowInBar()
+-- DESC : Sets the item show in bar status.
+-- **************************************************************************
+function TitanFarmBuddy:SetItemShowInBar(index, info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
+  TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+end
+
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:SetNotificationStatus()
