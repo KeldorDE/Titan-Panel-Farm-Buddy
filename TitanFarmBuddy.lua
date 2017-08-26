@@ -11,8 +11,7 @@ local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'Ac
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
 local ITEMS_AVAILABLE = 4;
--- TODO: Refactor to 4 items support
-local NOTIFICATION_TRIGGERED = false;
+local NOTIFICATION_TRIGGERED = {};
 local CHAT_COMMAND = 'fb';
 local CHAT_COMMANDS = {
   track = {
@@ -106,6 +105,10 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
     hideOnEscape = true,
     preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
   };
+
+  for i = 1, ITEMS_AVAILABLE do
+    NOTIFICATION_TRIGGERED[i] = false;
+  end
 
 	self:RegisterEvent('BAG_UPDATE');
 end
@@ -717,7 +720,7 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
         if itemInfo ~= nil then
           local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
           if count >= quantity then
-            TitanFarmBuddy:ShowNotification(item, quantity, false);
+            TitanFarmBuddy:ShowNotification(i, item, quantity, false);
           end
         end
       end
@@ -811,7 +814,7 @@ end
 function TitanFarmBuddy:SetItem(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(index), input);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  NOTIFICATION_TRIGGERED = false;
+  NOTIFICATION_TRIGGERED[index] = false;
 end
 
 -- **************************************************************************
@@ -827,7 +830,7 @@ function TitanFarmBuddy:ResetItem(index)
   end
 
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  NOTIFICATION_TRIGGERED = false;
+  NOTIFICATION_TRIGGERED[index] = false;
 end
 
 -- **************************************************************************
@@ -845,7 +848,7 @@ end
 function TitanFarmBuddy:SetItemQuantity(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), tonumber(input));
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  NOTIFICATION_TRIGGERED = false;
+  NOTIFICATION_TRIGGERED[index] = false;
 end
 
 -- **************************************************************************
@@ -1078,10 +1081,10 @@ function TitanFarmBuddy:ResetConfig()
   for i = 1, ITEMS_AVAILABLE do
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i), '');
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i), 0);
+    NOTIFICATION_TRIGGERED[i] = false;
   end
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  NOTIFICATION_TRIGGERED = false;
 end
 
 -- **************************************************************************
@@ -1097,7 +1100,7 @@ end
 -- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
-  TitanFarmBuddy:ShowNotification(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], 200, true);
+  TitanFarmBuddy:ShowNotification(0, L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], 200, true);
 end
 
 -- **************************************************************************
@@ -1129,11 +1132,11 @@ end
 -- NAME : TitanFarmBuddy:ShowNotification()
 -- DESC : Raises a notification.
 -- **************************************************************************
-function TitanFarmBuddy:ShowNotification(item, goal, demo)
+function TitanFarmBuddy:ShowNotification(index, item, goal, demo)
 
   -- TODO: Queue notifications
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
-  if (notificationEnabled == true and NOTIFICATION_TRIGGERED == false) or demo == true then
+  if (notificationEnabled == true and NOTIFICATION_TRIGGERED[index] == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
     local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
@@ -1148,7 +1151,7 @@ function TitanFarmBuddy:ShowNotification(item, goal, demo)
     end
 
     if demo == false then
-      NOTIFICATION_TRIGGERED = true;
+      NOTIFICATION_TRIGGERED[index] = true;
     end
 
     TitanFarmBuddyNotification_Show(item, goal, sound, notificationDisplayDuration);
