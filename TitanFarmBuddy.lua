@@ -804,7 +804,7 @@ function TitanFarmBuddy:ResetItem(index)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), '0');
 
   if tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')) == tostring(index) then
-    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', '');
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
   end
 
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
@@ -1045,8 +1045,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ResetConfig()
 
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item', '');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Goal', 0);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
@@ -1056,6 +1054,15 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item1', '');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item2', '');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item3', '');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item4', '');
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity1', 0);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity2', 0);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity3', 0);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity4', 0);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED = false;
