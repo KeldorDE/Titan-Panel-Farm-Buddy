@@ -49,3 +49,5 @@ crashlytics.properties
 crashlytics-build.properties
 
 .on-save.json
+
+scripts/api.token.sh
