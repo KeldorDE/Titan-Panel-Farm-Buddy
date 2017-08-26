@@ -51,6 +51,8 @@ L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "The item does not exists."
 --Translation missing 
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! is now your tracked item!"
 --Translation missing 
+L["FARM_BUDDY_ITEM_SET_POSITION_MSG"] = "The entered position is not valid. Pleaser enter a position between 1 and max!."
+--Translation missing 
 L["FARM_BUDDY_ITEM_TO_TRACK_DESC"] = "The name of the item to track"
 --Translation missing 
 L["FARM_BUDDY_ITEM_TO_TRACK_USAGE"] = "Enter the name of an item or CTRL + Click an item from your inventory. Please note: The item have to be in your World of Warcraft Data Cache otherwise the item is not known to the AddOn API functions."
@@ -133,8 +135,14 @@ L["FARM_BUDDY_VERSION"] = "Version"
 --Translation missing 
 L["TITAN_BUDDY_NOTIFICATION_SOUND"] = "Notification Sound"
 --Translation missing 
+L["TITAN_FARM_BUDDY_CANCEL"] = "Cancel"
+--Translation missing 
+L["TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX"] = "Please enter the Position where you want to place the clicked item. (1 - %s)"
+--Translation missing 
 L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Are you sure you want to reset all items?"
 --Translation missing 
 L["TITAN_FARM_BUDDY_NO"] = "No"
+--Translation missing 
+L["TITAN_FARM_BUDDY_OK"] = "OK"
 --Translation missing 
 L["TITAN_FARM_BUDDY_YES"] = "Yes"

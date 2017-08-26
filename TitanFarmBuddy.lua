@@ -95,18 +95,7 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 		}
 	};
 
-  StaticPopupDialogs['TitanFarmBuddyResetAllConfirm'] = {
-    text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
-    button1 = L['TITAN_FARM_BUDDY_YES'],
-    button2 = L['TITAN_FARM_BUDDY_NO'],
-    OnAccept = function()
-        TitanFarmBuddy:ResetConfig();
-    end,
-    timeout = 0,
-    whileDead = true,
-    hideOnEscape = true,
-    preferredIndex = 3,  -- avoid some UI taint, see http://www.wowace.com/announcements/how-to-avoid-some-ui-taint/
-  };
+  TitanFarmBuddy:RegisterDialogs();
 
   for i = 1, ITEMS_AVAILABLE do
     NOTIFICATION_TRIGGERED[i] = false;
@@ -131,6 +120,73 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:OnDisable()
   self:CancelAllTimers();
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:RegisterDialogs()
+-- DESC : Registers the addons dialog boxes.
+-- **************************************************************************
+function TitanFarmBuddy:RegisterDialogs()
+
+  StaticPopupDialogs[ADDON_NAME .. 'ResetAllConfirm'] = {
+    text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
+    button1 = L['TITAN_FARM_BUDDY_YES'],
+    button2 = L['TITAN_FARM_BUDDY_NO'],
+    OnAccept = function()
+      TitanFarmBuddy:ResetConfig();
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+  };
+  StaticPopupDialogs[ADDON_NAME .. 'SetItemIndex'] = {
+    text = L['TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX'],
+    button1 = L['TITAN_FARM_BUDDY_OK'],
+    button2 = L['TITAN_FARM_BUDDY_CANCEL'],
+    hasEditBox = true,
+    OnShow = TitanFamrBuddyButton_SetItemIndexOnShow,
+    OnAccept = TitanFamrBuddyButton_SetItemIndexOnAccept,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+  };
+end
+
+-- **************************************************************************
+-- NAME : TitanFamrBuddyButton_SetItemIndexOnShow()
+-- DESC : Callback function for the SetItemIndex OnShow event.
+-- **************************************************************************
+function TitanFamrBuddyButton_SetItemIndexOnShow(self)
+
+  -- Get first position without an item as preferred default value
+  local defaultIndex = 1;
+  for i = 1, ITEMS_AVAILABLE do
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i)) == '' then
+      defaultIndex = i;
+      break;
+    end
+  end
+
+  -- Set default value for dialog editbox
+  getglobal(self:GetName() .. 'EditBox'):SetText(tostring(defaultIndex));
+end
+
+-- **************************************************************************
+-- NAME : TitanFamrBuddyButton_SetItemIndexOnAccept()
+-- DESC : Callback function for the SetItemIndex OnAccept event.
+-- **************************************************************************
+function TitanFamrBuddyButton_SetItemIndexOnAccept(self, data)
+  local index = tonumber(getglobal(self:GetName() .. 'EditBox'):GetText());
+  if index > 0 and index <= ITEMS_AVAILABLE then
+    local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data);
+    TitanFarmBuddy:SetItem(index, nil, GetItemInfo(data));
+    TitanFarmBuddy:Print(text);
+  else
+    local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
+    TitanFarmBuddy:Print(text);
+  end
 end
 
 -- **************************************************************************
@@ -403,7 +459,7 @@ function TitanFarmBuddy:GetConfigOption()
             type = 'execute',
             name = L['FARM_BUDDY_RESET_ALL'],
             desc = L['FARM_BUDDY_RESET_ALL_DESC'],
-            func = function() StaticPopup_Show('TitanFarmBuddyResetAllConfirm'); end,
+            func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm'); end,
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
@@ -1121,7 +1177,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, ...)
 
-  -- TODO: Refactor for 4 items support
   if button == 'RightButton' and IsAltKeyDown() then
     if not CursorHasItem() and not IsControlKeyDown() and not IsShiftKeyDown() then
 
@@ -1131,10 +1186,10 @@ function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, .
 
       if itemLink ~= nil then
 
-        TitanFarmBuddy:SetItem(nil, GetItemInfo(itemLink));
-
-        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemLink);
-        TitanFarmBuddy:Print(text);
+        local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', tostring(ITEMS_AVAILABLE));
+        if dialog then
+          dialog.data = itemLink;
+        end
       end
     end
   end
