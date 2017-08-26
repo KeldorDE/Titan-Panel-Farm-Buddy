@@ -9,8 +9,8 @@
 
 embeds.xml
 
-locale\Localization.lua
-locale\Localization.DE.lua
+locale\Localization.enUS.lua
+locale\Localization.deDE.lua
 
 Sounds.lua
 TitanFarmBuddy.xml
