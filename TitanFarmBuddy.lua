@@ -77,9 +77,9 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			DisplayOnRightSide = true
 		},
 		savedVariables = {
-			ShowIcon = 1,
-			ShowLabelText = 1,
-			ShowColoredText = 1,
+			ShowIcon = true,
+			ShowLabelText = true,
+			ShowColoredText = true,
 			DisplayOnRightSide = false,
 			Item1 = '',
 			Item2 = '',
@@ -604,7 +604,7 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
     local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText');
     local itemCount = TitanPanelFarmBuddyButton_GetCount(itemInfo);
 
-    if showIcon == 1 then
+    if showIcon then
       str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true);
     end
 
@@ -614,12 +614,12 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
       str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText);
     end
 
-    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') == 1 then
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
       str = str .. ' ' .. itemInfo.Name;
     end
 	else
 
-    if showIcon == 1 then
+    if showIcon then
 			str = str .. TitanFarmBuddy:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true);
 		end
 
@@ -649,7 +649,7 @@ end
 -- DESC : Gets a value with highlighted color for the Titan Bar.
 -- **************************************************************************
 function TitanFarmBuddy:GetBarValue(value, colored)
-	if colored == 1 then
+	if colored then
 		value = TitanUtils_GetHighlightText(value);
 	end
 	return value;
@@ -853,20 +853,6 @@ end
 -- **************************************************************************
 function TitanPanelFarmBuddyButton_OnShow(self)
 	TitanPanelButton_OnShow(self);
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetOptionChoiceVal()
--- DESC : Returns the formated input value for an AceOption input.
--- **************************************************************************
-function TitanFarmBuddy:GetOptionChoiceVal(input)
-
-	local val = false;
-	if input == true then
-		val = 1;
-	end
-
-	return val;
 end
 
 -- **************************************************************************
@@ -1092,8 +1078,7 @@ end
 -- DESC : Sets the show item icon status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemIcon(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', val);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
@@ -1110,8 +1095,7 @@ end
 -- DESC : Sets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemName(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', val);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
@@ -1128,8 +1112,7 @@ end
 -- DESC : Sets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowColoredText(info, input)
-	local val = TitanFarmBuddy:GetOptionChoiceVal(input);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', val);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
@@ -1202,13 +1185,15 @@ function TitanFarmBuddy:ResetConfig()
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', 1);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', 1);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', 1);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', false);
 
   -- Reset items
   for i = 1, ITEMS_AVAILABLE do
