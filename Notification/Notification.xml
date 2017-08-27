@@ -119,6 +119,7 @@
 					<Scripts>
 						<OnFinished>
 							self:GetRegionParent():Hide();
+              TitanFarmBuddyNotification_HideNotification();
 						</OnFinished>
 					</Scripts>
 				</Alpha>
