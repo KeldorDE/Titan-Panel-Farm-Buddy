@@ -3,6 +3,8 @@ if not L then return end
 
 L = L or {}
 --Translation missing 
+L["FARM_BUDDY_ABOUT"] = "About"
+--Translation missing 
 L["FARM_BUDDY_ACTIONS"] = "Actions"
 --Translation missing 
 L["FARM_BUDDY_ALERT_COUNT"] = "Quantity for Alert"
@@ -14,6 +16,8 @@ L["FARM_BUDDY_ANCHOR_HELP_TEXT"] = "Hold left mouse button to move. Right click 
 L["FARM_BUDDY_AUTHOR"] = "Author"
 --Translation missing 
 L["FARM_BUDDY_BANK"] = "Bank"
+--Translation missing 
+L["FARM_BUDDY_CHAT_COMMANDS"] = "Chat Commands"
 --Translation missing 
 L["FARM_BUDDY_COMMAND_GOAL_ARGS"] = "Quantity"
 --Translation missing 
@@ -38,6 +42,8 @@ L["FARM_BUDDY_COMMAND_TRACK_DESC"] = "Sets the tracked item."
 L["FARM_BUDDY_COMMAND_VERSION_DESC"] = "Show the current used Farm Buddy Version."
 --Translation missing 
 L["FARM_BUDDY_CONFIG_RESET_MSG"] = "The configuration has been set back to the defaults."
+--Translation missing 
+L["FARM_BUDDY_GERMAN"] = "German"
 --Translation missing 
 L["FARM_BUDDY_GOAL_SET"] = "The goal quantity has been set."
 --Translation missing 
@@ -72,6 +78,8 @@ L["FARM_BUDDY_ITEM_TO_TRACK_DESC"] = "The name of the item to track"
 L["FARM_BUDDY_ITEM_TO_TRACK_USAGE"] = "Enter the name of an item or CTRL + Click an item from your inventory. Please note: The item have to be in your World of Warcraft Data Cache otherwise the item is not known to the AddOn API functions."
 --Translation missing 
 L["FARM_BUDDY_ITEMS"] = "Items"
+--Translation missing 
+L["FARM_BUDDY_LOCALIZATION"] = "Localization"
 --Translation missing 
 L["FARM_BUDDY_MOVE_NOTIFICATION"] = "Change Notification Position"
 --Translation missing 

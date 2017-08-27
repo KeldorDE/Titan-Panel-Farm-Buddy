@@ -254,7 +254,7 @@ function TitanFarmBuddy:GetConfigOption()
         type = 'group',
         order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
-          item_show_item_icon = {
+          general_show_item_icon = {
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_ICON'],
             desc = L['FARM_BUDDY_SHOW_ICON_DESC'],
@@ -263,12 +263,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_1 = {
+          general_space_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          item_show_item_name = {
+          general_show_item_name = {
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_NAME'],
             desc = L['FARM_BUDDY_SHOW_NAME_DESC'],
@@ -277,12 +277,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_2 = {
+          general_space_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          item_show_colored_text = {
+          general_show_colored_text = {
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_COLORED_TEXT'],
             desc = L['FARM_BUDDY_SHOW_COLORED_TEXT_DESC'],
@@ -291,12 +291,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_3 = {
+          general_space_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          item_show_goal = {
+          general_show_goal = {
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_GOAL'],
             desc = L['FARM_BUDDY_SHOW_GOAL_DESC'],
@@ -305,12 +305,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_4 = {
+          general_space_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          item_track_bank = {
+          general_track_bank = {
             type = 'toggle',
             name = L['FARM_BUDDY_INCLUDE_BANK'],
             desc = L['FARM_BUDDY_INCLUDE_BANK_DESC'],
@@ -319,17 +319,17 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_5 = {
+          general_space_5 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_general_6 = {
+          general_space_6 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          item_display_style = {
+          general_display_style = {
             type = 'select',
             style = 'radio',
             name = L['FARM_BUDDY_ITEM_DISPLAY_STYLE'],
@@ -347,47 +347,47 @@ function TitanFarmBuddy:GetConfigOption()
         type = 'group',
         order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
-          item_tracking_description = {
+          items_tracking_description = {
             type = 'description',
             name = L['FARM_BUDDY_TRACKING_DESC'],
             order = TitanFarmBuddy:GetOptionOrder('items'),
           },
-          space_tracking_1 = {
+          items_space_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('items'),
           },
-          item_track_1 = TitanFarmBuddy:GetTrackedItemField(1),
-          item_track_count_1 = TitanFarmBuddy:GetTrackedItemQuantityField(1),
-          item_track_show_bar_1 = TitanFarmBuddy:GetTrackedItemShowBarField(1),
-          item_clear_button_1 = TitanFarmBuddy:GetTrackedItemClearButton(1),
-          space_tracking_2 = {
+          items_track_1 = TitanFarmBuddy:GetTrackedItemField(1),
+          items_track_count_1 = TitanFarmBuddy:GetTrackedItemQuantityField(1),
+          items_track_show_bar_1 = TitanFarmBuddy:GetTrackedItemShowBarField(1),
+          items_clear_button_1 = TitanFarmBuddy:GetTrackedItemClearButton(1),
+          items_space_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('items'),
           },
-          item_track_2 = TitanFarmBuddy:GetTrackedItemField(2),
-          item_track_count_2 = TitanFarmBuddy:GetTrackedItemQuantityField(2),
-          item_track_show_bar_2 = TitanFarmBuddy:GetTrackedItemShowBarField(2),
-          item_clear_button_2 = TitanFarmBuddy:GetTrackedItemClearButton(2),
-          space_tracking_3 = {
+          items_track_2 = TitanFarmBuddy:GetTrackedItemField(2),
+          items_track_count_2 = TitanFarmBuddy:GetTrackedItemQuantityField(2),
+          items_track_show_bar_2 = TitanFarmBuddy:GetTrackedItemShowBarField(2),
+          items_clear_button_2 = TitanFarmBuddy:GetTrackedItemClearButton(2),
+          items_space_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('items'),
           },
-          item_track_3 = TitanFarmBuddy:GetTrackedItemField(3),
-          item_track_count_3 = TitanFarmBuddy:GetTrackedItemQuantityField(3),
-          item_track_show_bar_3 = TitanFarmBuddy:GetTrackedItemShowBarField(3),
-          item_clear_button_3 = TitanFarmBuddy:GetTrackedItemClearButton(3),
-          space_tracking_4 = {
+          items_track_3 = TitanFarmBuddy:GetTrackedItemField(3),
+          items_track_count_3 = TitanFarmBuddy:GetTrackedItemQuantityField(3),
+          items_track_show_bar_3 = TitanFarmBuddy:GetTrackedItemShowBarField(3),
+          items_clear_button_3 = TitanFarmBuddy:GetTrackedItemClearButton(3),
+          items_space_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('items'),
           },
-          item_track_4 = TitanFarmBuddy:GetTrackedItemField(4),
-          item_track_count_4 = TitanFarmBuddy:GetTrackedItemQuantityField(4),
-          item_track_show_bar_4 = TitanFarmBuddy:GetTrackedItemShowBarField(4),
-          item_clear_button_4 = TitanFarmBuddy:GetTrackedItemClearButton(4),
+          items_track_4 = TitanFarmBuddy:GetTrackedItemField(4),
+          items_track_count_4 = TitanFarmBuddy:GetTrackedItemQuantityField(4),
+          items_track_show_bar_4 = TitanFarmBuddy:GetTrackedItemShowBarField(4),
+          items_clear_button_4 = TitanFarmBuddy:GetTrackedItemClearButton(4),
         },
       },
       tab_notifications = {
@@ -395,7 +395,7 @@ function TitanFarmBuddy:GetConfigOption()
         type = 'group',
         order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
-          item_notification_status = {
+          notifications_notification_status = {
             type = 'toggle',
             name = L['FARM_BUDDY_NOTIFICATION'],
             desc = L['FARM_BUDDY_NOTIFICATION_DESC'],
@@ -404,12 +404,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_1 = {
+          notifications_space_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_notification_display_duration = {
+          notifications_notification_display_duration = {
             type = 'input',
             name = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
             desc = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION_DESC'],
@@ -419,12 +419,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_2 = {
+          notifications_space_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_notification_glow = {
+          notifications_notification_glow = {
             type = 'toggle',
             name = L['FARM_BUDDY_NOTIFICATION_GLOW'],
             desc = L['FARM_BUDDY_NOTIFICATION_GLOW_DESC'],
@@ -433,12 +433,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_3 = {
+          notifications_space_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_notification_shine = {
+          notifications_notification_shine = {
             type = 'toggle',
             name = L['FARM_BUDDY_NOTIFICATION_SHINE'],
             desc = L['FARM_BUDDY_NOTIFICATION_SHINE_DESC'],
@@ -447,12 +447,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_4 = {
+          notifications_space_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_play_notification_sound = {
+          notifications_play_notification_sound = {
             type = 'toggle',
             name = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
             desc = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
@@ -461,12 +461,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_5 = {
+          notifications_space_5 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_notification_sound = {
+          notifications_notification_sound = {
             type = 'select',
             name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
             style = 'dropdown',
@@ -476,12 +476,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_6 = {
+          notifications_space_6 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_move_notification = {
+          notifications_move_notification = {
             type = 'execute',
             name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
             desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
@@ -496,18 +496,18 @@ function TitanFarmBuddy:GetConfigOption()
         type = 'group',
         order = TitanFarmBuddy:GetOptionOrder('main'),
         args = {
-          space_actions_1 = {
+          actions_space_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_2 = {
+          actions_space_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
             width = 'half',
           },
-          item_test_alert = {
+          actions_test_alert = {
             type = 'execute',
             name = L['FARM_BUDDY_TEST_NOTIFICATION'],
             desc = L['FARM_BUDDY_TEST_NOTIFICATION_DESC'],
@@ -515,18 +515,18 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_3 = {
+          actions_space_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_4 = {
+          actions_space_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
             width = 'half',
           },
-          item_reset_items = {
+          actions_reset_items = {
             type = 'execute',
             name = L['FARM_BUDDY_RESET_ALL_ITEMS'],
             desc = L['FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
@@ -534,25 +534,104 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_5 = {
+          actions_space_5 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
             width = 'full',
           },
-          space_actions_6 = {
+          actions_space_6 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
             width = 'half',
           },
-          item_reset_all = {
+          actions_reset_all = {
             type = 'execute',
             name = L['FARM_BUDDY_RESET_ALL'],
             desc = L['FARM_BUDDY_RESET_ALL_DESC'],
             func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm'); end,
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
+          },
+        }
+      },
+      tab_about = {
+        name = L['FARM_BUDDY_ABOUT'],
+        type = 'group',
+        order = TitanFarmBuddy:GetOptionOrder('about'),
+        args = {
+          about_space_1 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+          },
+          about_info_version_title = {
+            type = 'description',
+            name = L['FARM_BUDDY_VERSION'],
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'half',
+          },
+          about_info_version = {
+            type = 'description',
+            name = ADDON_VERSION,
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'double',
+          },
+          about_space_2 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+          },
+          about_info_author_title = {
+            type = 'description',
+            name = L['FARM_BUDDY_AUTHOR'],
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'half',
+          },
+          about_info_author = {
+            type = 'description',
+            name = GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'double',
+          },
+          about_space_3 = {
+            type = 'description',
+            name = '\n\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+          },
+          about_info_localization_title = {
+            type = 'description',
+            fontSize = 'medium',
+            name = TitanUtils_GetGoldText(L['FARM_BUDDY_LOCALIZATION']) .. '\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_deDE = {
+            type = 'description',
+            fontSize = 'small',
+            name = TitanUtils_GetGreenText(L['FARM_BUDDY_GERMAN']) .. '\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_supporters = {
+            type = 'description',
+            name = '   • Keldor\n\n\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_chat_commands_title = {
+            type = 'description',
+            fontSize = 'medium',
+            name = TitanUtils_GetGoldText(L['FARM_BUDDY_CHAT_COMMANDS']) .. '\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_chat_commands = {
+            type = 'description',
+            name = TitanFarmBuddy:GetChatCommandsHelp(false),
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
           },
         }
       },
@@ -745,7 +824,6 @@ end
 -- DESC : Handles click events to the Titan Button.
 -- **************************************************************************
 function TitanFarmBuddy_OnClick(self, button)
-
 	if (button == 'LeftButton') then
 		-- Workarround for opening controls instead of AddOn options
 		-- Call it two times to ensure the AddOn panel is opened
@@ -1496,14 +1574,7 @@ function TitanFarmBuddy:ChatCommand(input)
   if not cmd or cmd == 'help' then
 
     TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n');
-    for command, info in pairs(CHAT_COMMANDS) do
-      local helpStr = TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
-      if info.Args ~= '' then
-        helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args);
-      end
-      helpStr = helpStr .. ' - ' .. info.Description;
-      print(helpStr);
-    end
+    TitanFarmBuddy:GetChatCommandsHelp(true);
 
   -- Prints version information
   elseif cmd == 'version' then
@@ -1570,6 +1641,31 @@ function TitanFarmBuddy:ChatCommand(input)
       TitanFarmBuddy:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING']);
     end
   end
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetChatCommandsHelp()
+-- DESC : Returns the help text of the chat commands.
+-- **************************************************************************
+function TitanFarmBuddy:GetChatCommandsHelp(printOut)
+
+  local helpStr = '';
+
+  for command, info in pairs(CHAT_COMMANDS) do
+    helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command);
+    if info.Args ~= '' then
+      helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args);
+    end
+    helpStr = helpStr .. ' - ' .. info.Description;
+    if printOut then
+      print(helpStr);
+      helpStr = '';
+    else
+      helpStr = helpStr .. '\n';
+    end
+  end
+
+  return helpStr;
 end
 
 -- **************************************************************************
