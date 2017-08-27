@@ -244,7 +244,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_3 = {
+          space_general_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
@@ -258,7 +258,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_4 = {
+          space_general_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
@@ -272,7 +272,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_5 = {
+          space_general_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
@@ -286,7 +286,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
-          space_6 = {
+          space_general_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('general'),
@@ -312,7 +312,7 @@ function TitanFarmBuddy:GetConfigOption()
             name = L['FARM_BUDDY_TRACKING_DESC'],
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
           },
-          space_1 = {
+          space_tracking_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
@@ -321,7 +321,7 @@ function TitanFarmBuddy:GetConfigOption()
           item_track_count_1 = TitanFarmBuddy:GetTrackedItemQuantityField(1),
           item_track_show_bar_1 = TitanFarmBuddy:GetTrackedItemShowBarField(1),
           item_clear_button_1 = TitanFarmBuddy:GetTrackedItemClearButton(1),
-          space_10 = {
+          space_tracking_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
@@ -330,7 +330,7 @@ function TitanFarmBuddy:GetConfigOption()
           item_track_count_2 = TitanFarmBuddy:GetTrackedItemQuantityField(2),
           item_track_show_bar_2 = TitanFarmBuddy:GetTrackedItemShowBarField(2),
           item_clear_button_2 = TitanFarmBuddy:GetTrackedItemClearButton(2),
-          space_20 = {
+          space_tracking_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
@@ -339,7 +339,7 @@ function TitanFarmBuddy:GetConfigOption()
           item_track_count_3 = TitanFarmBuddy:GetTrackedItemQuantityField(3),
           item_track_show_bar_3 = TitanFarmBuddy:GetTrackedItemShowBarField(3),
           item_clear_button_3 = TitanFarmBuddy:GetTrackedItemClearButton(3),
-          space_30 = {
+          space_tracking_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('tracking'),
