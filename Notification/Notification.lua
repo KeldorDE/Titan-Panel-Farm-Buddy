@@ -8,7 +8,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotification');
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate';
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate');
-local ADDON_NAME = TitanFamrBuddyButton_GetAddOnName();
+local ADDON_NAME = TitanFarmBuddy_GetAddOnName();
 local FRAME_HIDDEN = true;
 
 
@@ -32,7 +32,7 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, 
       PlaySound(sound);
     end
 
-    if glow == true then
+    if glow then
       FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
       FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375);
       FRAME.glow:SetVertexColor(1,1,1);
@@ -41,7 +41,7 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, 
       FRAME.glow:Hide();
     end
 
-    if shine == true then
+    if shine then
       FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
       FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500);
       FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16);
@@ -55,10 +55,10 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, 
     FRAME:Show();
     FRAME.animIn:Play();
 
-    if glow == true then
+    if glow then
       FRAME.glow.animIn:Play();
     end
-    if shine == true then
+    if shine then
       FRAME.shine.animIn:Play();
     end
 

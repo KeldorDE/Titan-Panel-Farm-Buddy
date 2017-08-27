@@ -51,6 +51,14 @@ L["FARM_BUDDY_INVENTORY"] = "Inventory"
 --Translation missing 
 L["FARM_BUDDY_ITEM"] = "Item"
 --Translation missing 
+L["FARM_BUDDY_ITEM_DISPLAY_STYLE"] = "Item Display Style in Titan Bar"
+--Translation missing 
+L["FARM_BUDDY_ITEM_DISPLAY_STYLE_1"] = "Only the primary Item"
+--Translation missing 
+L["FARM_BUDDY_ITEM_DISPLAY_STYLE_2"] = "Show all Items"
+--Translation missing 
+L["FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC"] = "The item display style in the Titan Panel Bar."
+--Translation missing 
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "The item does not exists."
 --Translation missing 
 L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "The item on position !position! is now the primary item to display."
