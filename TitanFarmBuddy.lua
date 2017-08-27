@@ -1492,7 +1492,7 @@ end
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
 function TitanFarmBuddy_ResetConfig()
-	TitanFarmBuddy:ResetConfig();
+	TitanFarmBuddy:ResetConfig(false);
 end
 
 -- **************************************************************************
