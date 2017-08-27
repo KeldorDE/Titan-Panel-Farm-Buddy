@@ -1,7 +1,7 @@
 # Titan-Panel-Farm-Buddy
 
 
-An World of Warcraft AddOn that extends the famous Titan Panel with the functionality to Track up to four Farmed Items in the Titan Panel Bar.
+An World of Warcraft AddOn that extends the famous Titan Panel with the functionality to Track up to four Farmed Items in the Titan Panel Bar. An notification will appear if the defined goal quantity for an item has reached.
 
 **Quickstart**  
 Alt + Right click on an Item in your Bags or Bank to start tracking.
