@@ -55,18 +55,18 @@ function TitanFarmBuddy:OnInitialize()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnLoad()
+-- NAME : TitanFarmBuddy_OnLoad()
 -- DESC : Registers the plugin upon it loading.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_OnLoad(self)
+function TitanFarmBuddy_OnLoad(self)
 	self.registry = {
 		id = TITAN_FARM_BUDDY_ID,
 		category = 'Information',
 		version = TITAN_VERSION,
 		menuText = ADDON_NAME,
-		buttonTextFunction = 'TitanPanelFarmBuddyButton_GetButtonText',
+		buttonTextFunction = 'TitanFarmBuddy_GetButtonText',
 		tooltipTitle = ADDON_NAME,
-		tooltipTextFunction = 'TitanPanelFarmBuddyButton_GetTooltipText',
+		tooltipTextFunction = 'TitanFarmBuddy_GetTooltipText',
 		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
 		iconWidth = 0,
 		controlVariables = {
@@ -583,10 +583,10 @@ function TitanFarmBuddy:GetOptionOrder(category)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_GetButtonText()
+-- NAME : TitanFarmBuddy_GetButtonText()
 -- DESC : Calculate the item count of the tracked farm item and displays it.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_GetButtonText(id)
+function TitanFarmBuddy_GetButtonText(id)
 
 	local str = '';
 	local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon');
@@ -595,14 +595,14 @@ function TitanPanelFarmBuddyButton_GetButtonText(id)
   if activeIndex > 0 and activeIndex <= ITEMS_AVAILABLE then
     item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(activeIndex));
   end
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
+  local itemInfo = TitanFarmBuddy_GetItemInfo(item);
 
 	-- Invalid item or no item defined
 	if itemInfo ~= nil then
 
     local goalValue = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(activeIndex)));
     local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText');
-    local itemCount = TitanPanelFarmBuddyButton_GetCount(itemInfo);
+    local itemCount = TitanFarmBuddy_GetCount(itemInfo);
 
     if showIcon then
       str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true);
@@ -653,10 +653,10 @@ function TitanFarmBuddy:GetBarValue(value, colored)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnClick()
+-- NAME : TitanFarmBuddy_OnClick()
 -- DESC : Handles click events to the Titan Button.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_OnClick(self, button)
+function TitanFarmBuddy_OnClick(self, button)
 
 	if (button == 'LeftButton') then
 		-- Workarround for opening controls instead of AddOn options
@@ -667,10 +667,10 @@ function TitanPanelFarmBuddyButton_OnClick(self, button)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_GetItemInfo()
+-- NAME : TitanFarmBuddy_GetItemInfo()
 -- DESC : Gets information for the given item name.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_GetItemInfo(name)
+function TitanFarmBuddy_GetItemInfo(name)
 
   if name then
 
@@ -699,15 +699,15 @@ function TitanPanelFarmBuddyButton_GetItemInfo(name)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_GetTooltipText()
+-- NAME : TitanFarmBuddy_GetTooltipText()
 -- DESC : Display tooltip text.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_GetTooltipText()
+function TitanFarmBuddy_GetTooltipText()
 
 	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
               TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n';
   local strTmp = '';
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
+  local itemInfo = TitanFarmBuddy_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
   local hasItem = false;
 
   for i = 1, ITEMS_AVAILABLE do
@@ -715,7 +715,7 @@ function TitanPanelFarmBuddyButton_GetTooltipText()
 
     -- No item set for this index
     if item ~= nil and item ~= '' then
-      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
+      local itemInfo = TitanFarmBuddy_GetItemInfo(item);
 
       -- Invalid item or no item defined
       if itemInfo ~= nil then
@@ -770,7 +770,7 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID);
 		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID);
 		TitanPanelRightClickMenu_AddSpacer();
-		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanPanelFarmBuddyButton_ResetConfig');
+		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanFarmBuddy_ResetConfig');
 		TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE);
 
 	elseif level == 2 and menuList == 'Options' then
@@ -779,44 +779,44 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
 		info = {};
 		info.text = L['FARM_BUDDY_SHOW_GOAL'];
-		info.func = TitanPanelFarmBuddyButton_ToggleShowGoal;
+		info.func = TitanFarmBuddy_ToggleShowGoal;
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
 		L_UIDropDownMenu_AddButton(info, level);
 
 		info = {};
 		info.text = L['FARM_BUDDY_INCLUDE_BANK'];
-		info.func = TitanPanelFarmBuddyButton_ToggleIncludeBank;
+		info.func = TitanFarmBuddy_ToggleIncludeBank;
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
 		L_UIDropDownMenu_AddButton(info, level);
 
 		info = {};
 		info.text = L['FARM_BUDDY_NOTIFICATION'];
-		info.func = TitanPanelFarmBuddyButton_ToggleGoalNotification;
+		info.func = TitanFarmBuddy_ToggleGoalNotification;
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 		L_UIDropDownMenu_AddButton(info, level);
 
     info = {};
 		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'];
-		info.func = TitanPanelFarmBuddyButton_TogglePlayNotificationSound;
+		info.func = TitanFarmBuddy_TogglePlayNotificationSound;
 		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
 		L_UIDropDownMenu_AddButton(info, level);
 	end
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnEvent()
+-- NAME : TitanFarmBuddy_OnEvent()
 -- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
+function TitanFarmBuddy_OnEvent(self, event, ...)
 
   for i = 1, ITEMS_AVAILABLE do
     local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
     if item ~= nil and item ~= '' then
       local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i)));
       if quantity > 0 then
-        local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(item);
+        local itemInfo = TitanFarmBuddy_GetItemInfo(item);
         if itemInfo ~= nil then
-          local count = TitanPanelFarmBuddyButton_GetCount(itemInfo);
+          local count = TitanFarmBuddy_GetCount(itemInfo);
           if count >= quantity then
             TitanFarmBuddy:QueueNotification(i, item, quantity);
           end
@@ -829,10 +829,10 @@ function TitanPanelFarmBuddyButton_OnEvent(self, event, ...)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_GetCount()
+-- NAME : TitanFarmBuddy_GetCount()
 -- DESC : Gets the item count.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_GetCount(itemInfo)
+function TitanFarmBuddy_GetCount(itemInfo)
 
   local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
   local count = itemInfo.CountBags;
@@ -845,10 +845,10 @@ function TitanPanelFarmBuddyButton_GetCount(itemInfo)
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_OnShow()
+-- NAME : TitanFarmBuddy_OnShow()
 -- DESC : Display button when plugin is visible.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_OnShow(self)
+function TitanFarmBuddy_OnShow(self)
 	TitanPanelButton_OnShow(self);
 end
 
@@ -1004,10 +1004,10 @@ function TitanFarmBuddy:GetNotificationDisplayDuration()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_TogglePlayNotificationSound()
+-- NAME : TitanFarmBuddy_TogglePlayNotificationSound()
 -- DESC : Sets the play notification sound status.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_TogglePlayNotificationSound()
+function TitanFarmBuddy_TogglePlayNotificationSound()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
@@ -1062,10 +1062,10 @@ function TitanFarmBuddy:GetNotificationShine()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_ToggleGoalNotification()
+-- NAME : TitanFarmBuddy_ToggleGoalNotification()
 -- DESC : Sets the notification status.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_ToggleGoalNotification()
+function TitanFarmBuddy_ToggleGoalNotification()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
@@ -1139,10 +1139,10 @@ function TitanFarmBuddy:GetShowGoal()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_ToggleShowGoal()
+-- NAME : TitanFarmBuddy_ToggleShowGoal()
 -- DESC : Sets the show goal status.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_ToggleShowGoal()
+function TitanFarmBuddy_ToggleShowGoal()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
@@ -1165,10 +1165,10 @@ function TitanFarmBuddy:GetIncludeBank()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_ToggleIncludeBank()
+-- NAME : TitanFarmBuddy_ToggleIncludeBank()
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_ToggleIncludeBank()
+function TitanFarmBuddy_ToggleIncludeBank()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
@@ -1203,10 +1203,10 @@ function TitanFarmBuddy:ResetConfig()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelFarmBuddyButton_ResetConfig()
+-- NAME : TitanFarmBuddy_ResetConfig()
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
-function TitanPanelFarmBuddyButton_ResetConfig()
+function TitanFarmBuddy_ResetConfig()
 	TitanFarmBuddy:ResetConfig();
 end
 
@@ -1368,7 +1368,7 @@ function TitanFarmBuddy:ChatCommand(input)
   elseif cmd == 'track' then
 
     if value ~= nil then
-      local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(arg1);
+      local itemInfo = TitanFarmBuddy_GetItemInfo(arg1);
       if itemInfo ~= nil then
         local index = tonumber(value);
         if TitanFarmBuddy:IsIndexValid(index) == true then

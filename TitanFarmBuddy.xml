@@ -6,18 +6,18 @@
 			<Button name="TitanPanelFarmBuddyButton" inherits="TitanPanelComboTemplate" frameStrata="FULLSCREEN" toplevel="true">
 				<Scripts>
 					<OnLoad>
-							TitanPanelFarmBuddyButton_OnLoad(self);
+							TitanFarmBuddy_OnLoad(self);
 							TitanPanelButton_OnLoad(self);
 					</OnLoad>
 					<OnShow>
-							TitanPanelFarmBuddyButton_OnShow();
+							TitanFarmBuddy_OnShow();
 							TitanPanelButton_OnShow(self);
 					</OnShow>
 					<OnEvent>
-							TitanPanelFarmBuddyButton_OnEvent(self, event, ...);
+							TitanFarmBuddy_OnEvent(self, event, ...);
 					</OnEvent>
 					<OnClick>
-							TitanPanelFarmBuddyButton_OnClick(self, button);
+							TitanFarmBuddy_OnClick(self, button);
 							TitanPanelButton_OnClick(self, button);
 					</OnClick>
 				</Scripts>

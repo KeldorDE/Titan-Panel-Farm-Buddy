@@ -20,7 +20,7 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, 
 
   TitanFarmBuddyNotification_HideNotification(false);
 
-  local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(itemName);
+  local itemInfo = TitanFarmBuddy_GetItemInfo(itemName);
   if itemInfo ~= nil then
 
     TitanFarmBuddyNotification_SetTitle(ADDON_NAME);
