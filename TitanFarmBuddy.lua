@@ -610,7 +610,7 @@ function TitanFarmBuddy_GetButtonText(id)
 
     str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText);
 
-    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') == true and goalValue > 0 then
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') and goalValue > 0 then
       str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText);
     end
 
@@ -765,6 +765,20 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 		info.hasArrow = 1;
 		L_UIDropDownMenu_AddButton(info);
 
+    info = {};
+		info.notCheckable = true;
+		info.text = L['FARM_BUDDY_NOTIFICATIONS'];
+		info.menuList = 'Notifications';
+		info.hasArrow = 1;
+		L_UIDropDownMenu_AddButton(info);
+
+    info = {};
+		info.notCheckable = true;
+		info.text = L['FARM_BUDDY_ACTIONS'];
+		info.menuList = 'Actions';
+		info.hasArrow = 1;
+		L_UIDropDownMenu_AddButton(info);
+
 		TitanPanelRightClickMenu_AddSpacer();
 		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID);
 		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID);
@@ -773,33 +787,70 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanFarmBuddy_ResetConfig');
 		TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE);
 
-	elseif level == 2 and menuList == 'Options' then
+	elseif level == 2 then
 
-		TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level);
+    if menuList == 'Options' then
 
-		info = {};
-		info.text = L['FARM_BUDDY_SHOW_GOAL'];
-		info.func = TitanFarmBuddy_ToggleShowGoal;
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
-		L_UIDropDownMenu_AddButton(info, level);
+      TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level);
 
-		info = {};
-		info.text = L['FARM_BUDDY_INCLUDE_BANK'];
-		info.func = TitanFarmBuddy_ToggleIncludeBank;
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
-		L_UIDropDownMenu_AddButton(info, level);
+  		info = {};
+  		info.text = L['FARM_BUDDY_SHOW_GOAL'];
+  		info.func = TitanFarmBuddy_ToggleShowGoal;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+  		L_UIDropDownMenu_AddButton(info, level);
 
-		info = {};
-		info.text = L['FARM_BUDDY_NOTIFICATION'];
-		info.func = TitanFarmBuddy_ToggleGoalNotification;
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
-		L_UIDropDownMenu_AddButton(info, level);
+  		info = {};
+  		info.text = L['FARM_BUDDY_INCLUDE_BANK'];
+  		info.func = TitanFarmBuddy_ToggleIncludeBank;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
+  		L_UIDropDownMenu_AddButton(info, level);
 
-    info = {};
-		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'];
-		info.func = TitanFarmBuddy_TogglePlayNotificationSound;
-		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
-		L_UIDropDownMenu_AddButton(info, level);
+    elseif menuList == 'Notifications' then
+
+      info = {};
+  		info.text = L['FARM_BUDDY_NOTIFICATION'];
+  		info.func = TitanFarmBuddy_ToggleGoalNotification;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
+  		L_UIDropDownMenu_AddButton(info, level);
+
+      L_UIDropDownMenu_AddSeparator({}, level);
+
+      info = {};
+  		info.text = L['FARM_BUDDY_NOTIFICATION_GLOW'];
+  		info.func = TitanFarmBuddy_ToggleNotificationGlow;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
+  		L_UIDropDownMenu_AddButton(info, level);
+
+      info = {};
+  		info.text = L['FARM_BUDDY_NOTIFICATION_SHINE'];
+  		info.func = TitanFarmBuddy_ToggleNotificationShine;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
+  		L_UIDropDownMenu_AddButton(info, level);
+
+      info = {};
+  		info.text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'];
+  		info.func = TitanFarmBuddy_TogglePlayNotificationSound;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
+  		L_UIDropDownMenu_AddButton(info, level);
+
+    elseif menuList == 'Actions' then
+
+      info = {};
+    	info.notCheckable = true;
+    	info.text = L['FARM_BUDDY_TEST_NOTIFICATION'];
+    	info.value = 'SettingsCustom';
+    	info.func = function() TitanFarmBuddy:TestNotification(); end;
+      L_UIDropDownMenu_AddButton(info, level);
+
+      L_UIDropDownMenu_AddSeparator({}, level);
+
+      info = {};
+    	info.notCheckable = true;
+    	info.text = L['FARM_BUDDY_RESET_ALL'];
+    	info.value = 'SettingsCustom';
+    	info.func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm'); end;
+      L_UIDropDownMenu_AddButton(info, level);
+    end
 	end
 end
 
@@ -1067,6 +1118,24 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_ToggleGoalNotification()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy_ToggleNotificationGlow()
+-- DESC : Sets the notification glow effect status.
+-- **************************************************************************
+function TitanFarmBuddy_ToggleNotificationGlow()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
+	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy_ToggleNotificationShine()
+-- DESC : Sets the notification shine effect status.
+-- **************************************************************************
+function TitanFarmBuddy_ToggleNotificationShine()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
