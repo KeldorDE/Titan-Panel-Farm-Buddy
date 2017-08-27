@@ -364,7 +364,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_7 = {
+          space_notifications_1 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
@@ -378,7 +378,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_8 = {
+          space_notifications_2 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
@@ -393,7 +393,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_9 = {
+          space_notifications_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
@@ -408,6 +408,19 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
+          space_notifications_4 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          item_move_notification = {
+            type = 'execute',
+            name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
+            desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
+            func = function() TitanFarmBuddyNotification_ShowAnchor() end,
+            width = 'double',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+          },
         }
       },
       tab_actions = {
@@ -419,22 +432,8 @@ function TitanFarmBuddy:GetConfigOption()
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
-            width = 'half',
-          },
-          item_move_notification = {
-            type = 'execute',
-            name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
-            desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
-            func = function() TitanFarmBuddyNotification_ShowAnchor() end,
-            width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
           space_actions_2 = {
-            type = 'description',
-            name = '',
-            order = TitanFarmBuddy:GetOptionOrder('actions'),
-          },
-          space_actions_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
@@ -448,12 +447,12 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_4 = {
+          space_actions_3 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
           },
-          space_actions_5 = {
+          space_actions_4 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('actions'),
