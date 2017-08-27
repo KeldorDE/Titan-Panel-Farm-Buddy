@@ -206,6 +206,7 @@ function TitanFarmBuddy_SetItemIndexOnAccept(self, data)
     local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data);
     TitanFarmBuddy:SetItem(index, nil, GetItemInfo(data));
     TitanFarmBuddy:Print(text);
+    LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
   else
     local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
     TitanFarmBuddy:Print(text);
@@ -1032,7 +1033,6 @@ end
 -- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
 function TitanFarmBuddy_OnEvent(self, event, ...)
-
   for i = 1, ITEMS_AVAILABLE do
     local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
     if item ~= nil and item ~= '' then
@@ -1123,6 +1123,7 @@ function TitanFarmBuddy:SetItem(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(index), input);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED[index] = false;
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1139,6 +1140,7 @@ function TitanFarmBuddy:ResetItem(index)
 
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED[index] = false;
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1157,6 +1159,7 @@ function TitanFarmBuddy:SetItemQuantity(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), tonumber(input));
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED[index] = false;
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1177,6 +1180,7 @@ end
 function TitanFarmBuddy:SetItemShowInBar(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1185,6 +1189,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1202,6 +1207,7 @@ end
 function TitanFarmBuddy:SetItemDisplayStyle(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', input);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1218,6 +1224,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetPlayNotificationSoundStatus(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1234,6 +1241,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationDisplayDuration(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1251,6 +1259,7 @@ end
 function TitanFarmBuddy_TogglePlayNotificationSound()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1260,6 +1269,7 @@ end
 function TitanFarmBuddy:SetNotificationSound(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input);
 	PlaySound(input, 'master');
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1276,6 +1286,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationGlow(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', input);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1292,6 +1303,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationShine(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', input);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1309,6 +1321,7 @@ end
 function TitanFarmBuddy_ToggleGoalNotification()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1318,6 +1331,7 @@ end
 function TitanFarmBuddy_ToggleNotificationGlow()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1327,6 +1341,7 @@ end
 function TitanFarmBuddy_ToggleNotificationShine()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1336,6 +1351,7 @@ end
 function TitanFarmBuddy:SetShowItemIcon(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1353,6 +1369,7 @@ end
 function TitanFarmBuddy:SetShowItemName(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1370,6 +1387,7 @@ end
 function TitanFarmBuddy:SetShowColoredText(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1387,6 +1405,7 @@ end
 function TitanFarmBuddy:SetShowQuantity(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1404,6 +1423,7 @@ end
 function TitanFarmBuddy_ToggleShowQuantity()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1413,6 +1433,7 @@ end
 function TitanFarmBuddy:SetIncludeBank(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1430,6 +1451,7 @@ end
 function TitanFarmBuddy_ToggleIncludeBank()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1462,6 +1484,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
   end
 
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1594,6 +1617,7 @@ function TitanFarmBuddy:ChatCommand(input)
       TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
       TitanFarmBuddy:Print(text);
       TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+      LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
     else
       local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
       TitanFarmBuddy:Print(text);
@@ -1610,6 +1634,7 @@ function TitanFarmBuddy:ChatCommand(input)
           TitanFarmBuddy:SetItemQuantity(index, nil, arg1);
           TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET']);
           TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
+          LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
         else
           local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE);
           TitanFarmBuddy:Print(text);
