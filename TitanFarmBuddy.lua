@@ -140,11 +140,23 @@ end
 function TitanFarmBuddy:RegisterDialogs()
 
   StaticPopupDialogs[ADDON_NAME .. 'ResetAllConfirm'] = {
+    text = L['TITAN_FARM_BUDDY_CONFIRM_ALL_RESET'],
+    button1 = L['TITAN_FARM_BUDDY_YES'],
+    button2 = L['TITAN_FARM_BUDDY_NO'],
+    OnAccept = function()
+      TitanFarmBuddy:ResetConfig(false);
+    end,
+    timeout = 0,
+    whileDead = true,
+    hideOnEscape = true,
+    preferredIndex = 3,
+  };
+  StaticPopupDialogs[ADDON_NAME .. 'ResetAllItemsConfirm'] = {
     text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
     button1 = L['TITAN_FARM_BUDDY_YES'],
     button2 = L['TITAN_FARM_BUDDY_NO'],
     OnAccept = function()
-      TitanFarmBuddy:ResetConfig();
+      TitanFarmBuddy:ResetConfig(true);
     end,
     timeout = 0,
     whileDead = true,
@@ -514,7 +526,27 @@ function TitanFarmBuddy:GetConfigOption()
             order = TitanFarmBuddy:GetOptionOrder('actions'),
             width = 'half',
           },
-          item_reset = {
+          item_reset_items = {
+            type = 'execute',
+            name = L['FARM_BUDDY_RESET_ALL_ITEMS'],
+            desc = L['FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
+            func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllItemsConfirm'); end,
+            width = 'double',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+          },
+          space_actions_5 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            width = 'full',
+          },
+          space_actions_6 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            width = 'half',
+          },
+          item_reset_all = {
             type = 'execute',
             name = L['FARM_BUDDY_RESET_ALL'],
             desc = L['FARM_BUDDY_RESET_ALL_DESC'],
@@ -902,8 +934,15 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
       info = {};
     	info.notCheckable = true;
+    	info.text = L['FARM_BUDDY_RESET_ALL_ITEMS'];
+    	info.value = '';
+    	info.func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllItemsConfirm'); end;
+      L_UIDropDownMenu_AddButton(info, level);
+
+      info = {};
+    	info.notCheckable = true;
     	info.text = L['FARM_BUDDY_RESET_ALL'];
-    	info.value = 'SettingsCustom';
+    	info.value = '';
     	info.func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm'); end;
       L_UIDropDownMenu_AddButton(info, level);
     end
@@ -1319,21 +1358,23 @@ end
 -- NAME : TitanFarmBuddy:ResetConfig()
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
-function TitanFarmBuddy:ResetConfig()
+function TitanFarmBuddy:ResetConfig(itemsOnly)
 
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 1);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', false);
+  if itemsOnly == false then
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 1);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', false);
+  end
 
   -- Reset items
   for i = 1, ITEMS_AVAILABLE do

@@ -109,9 +109,13 @@ L["FARM_BUDDY_QUANTITY"] = "Quantity"
 --Translation missing 
 L["FARM_BUDDY_RESET"] = "Reset"
 --Translation missing 
-L["FARM_BUDDY_RESET_ALL"] = "Reset all tracked Items"
+L["FARM_BUDDY_RESET_ALL"] = "Reset settings to default"
 --Translation missing 
-L["FARM_BUDDY_RESET_ALL_DESC"] = "Resets all tracked items."
+L["FARM_BUDDY_RESET_ALL_DESC"] = "Reset all settings to their default values."
+--Translation missing 
+L["FARM_BUDDY_RESET_ALL_ITEMS"] = "Reset all tracked Items"
+--Translation missing 
+L["FARM_BUDDY_RESET_ALL_ITEMS_DESC"] = "Resets all tracked items."
 --Translation missing 
 L["FARM_BUDDY_RESET_DESC"] = "Resets the tracked item."
 --Translation missing 
@@ -160,6 +164,8 @@ L["TITAN_BUDDY_NOTIFICATION_SOUND"] = "Notification Sound"
 L["TITAN_FARM_BUDDY_CANCEL"] = "Cancel"
 --Translation missing 
 L["TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX"] = "Please enter the Position where you want to place the clicked item. (1 - %s)"
+--Translation missing 
+L["TITAN_FARM_BUDDY_CONFIRM_ALL_RESET"] = "Are you sure you want to reset all settings to their default values?"
 --Translation missing 
 L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Are you sure you want to reset all items?"
 --Translation missing 
