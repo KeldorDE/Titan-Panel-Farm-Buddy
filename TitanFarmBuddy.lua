@@ -92,7 +92,7 @@ function TitanFarmBuddy_OnLoad(self)
       ItemShowInBarIndex = 1,
 			GoalNotification = true,
 			IncludeBank = false,
-			ShowGoal = true,
+			ShowQuantity = true,
 			GoalNotificationSound = 'UI_WORLDQUEST_COMPLETE',
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
@@ -283,8 +283,8 @@ function TitanFarmBuddy:GetConfigOption()
             type = 'toggle',
             name = L['FARM_BUDDY_SHOW_GOAL'],
             desc = L['FARM_BUDDY_SHOW_GOAL_DESC'],
-            get = 'GetShowGoal',
-            set = 'SetShowGoal',
+            get = 'GetShowQuantity',
+            set = 'SetShowQuantity',
             width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
@@ -610,7 +610,7 @@ function TitanFarmBuddy_GetButtonText(id)
 
     str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText);
 
-    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal') and goalValue > 0 then
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity') and goalValue > 0 then
       str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(goalValue, showColoredText);
     end
 
@@ -795,8 +795,8 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
   		info = {};
   		info.text = L['FARM_BUDDY_SHOW_GOAL'];
-  		info.func = TitanFarmBuddy_ToggleShowGoal;
-  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+  		info.func = TitanFarmBuddy_ToggleShowQuantity;
+  		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity');
   		L_UIDropDownMenu_AddButton(info, level);
 
   		info = {};
@@ -1191,28 +1191,28 @@ function TitanFarmBuddy:GetShowColoredText()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:SetShowGoal()
+-- NAME : TitanFarmBuddy:SetShowQuantity()
 -- DESC : Sets the show goal status.
 -- **************************************************************************
-function TitanFarmBuddy:SetShowGoal(info, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', input);
+function TitanFarmBuddy:SetShowQuantity(info, input)
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:GetShowGoal()
+-- NAME : TitanFarmBuddy:GetShowQuantity()
 -- DESC : Gets the show goal status.
 -- **************************************************************************
-function TitanFarmBuddy:GetShowGoal()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+function TitanFarmBuddy:GetShowQuantity()
+	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity');
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleShowGoal()
+-- NAME : TitanFarmBuddy_ToggleShowQuantity()
 -- DESC : Sets the show goal status.
 -- **************************************************************************
-function TitanFarmBuddy_ToggleShowGoal()
-	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowGoal');
+function TitanFarmBuddy_ToggleShowQuantity()
+	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
 end
 
@@ -1249,7 +1249,7 @@ end
 function TitanFarmBuddy:ResetConfig()
 
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true);
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowGoal', true);
+	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true);
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true);
