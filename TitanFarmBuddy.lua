@@ -30,7 +30,7 @@ local CHAT_COMMANDS = {
     Description = L['FARM_BUDDY_COMMAND_PRIMARY_DESC']
   },
   reset = {
-    Args = '',
+    Args = '<' .. L['FARM_BUDDY_COMMAND_RESET_ARGS'] .. '>',
     Description = L['FARM_BUDDY_COMMAND_RESET_DESC']
   },
   version = {
@@ -1605,7 +1605,13 @@ function TitanFarmBuddy:ChatCommand(input)
 
   -- Reset AddOn settings
   elseif cmd == 'reset' then
-    TitanFarmBuddy:ResetConfig();
+
+    if value == 'all' then
+      TitanFarmBuddy:ResetConfig(false);
+    else
+      TitanFarmBuddy:ResetConfig(true);
+    end
+
     TitanFarmBuddy:Print(L['FARM_BUDDY_CONFIG_RESET_MSG']);
 
   elseif cmd == 'primary' then
