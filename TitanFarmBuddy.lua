@@ -96,6 +96,8 @@ function TitanPanelFarmBuddyButton_OnLoad(self)
 			GoalNotificationSound = 'UI_WORLDQUEST_COMPLETE',
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
+      NotificationGlow = true,
+      NotificationShine = true,
 		}
 	};
 
@@ -369,20 +371,6 @@ function TitanFarmBuddy:GetConfigOption()
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          item_play_notification_sound = {
-            type = 'toggle',
-            name = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
-            desc = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
-            get = 'GetPlayNotificationSoundStatus',
-            set = 'SetPlayNotificationSoundStatus',
-            width = 'full',
-            order = TitanFarmBuddy:GetOptionOrder('notifications'),
-          },
-          space_notifications_2 = {
-            type = 'description',
-            name = '',
-            order = TitanFarmBuddy:GetOptionOrder('notifications'),
-          },
           item_notification_display_duration = {
             type = 'input',
             name = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
@@ -393,7 +381,49 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
+          space_notifications_2 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          item_notification_glow = {
+            type = 'toggle',
+            name = L['FARM_BUDDY_NOTIFICATION_GLOW'],
+            desc = L['FARM_BUDDY_NOTIFICATION_GLOW_DESC'],
+            get = 'GetNotificationGlow',
+            set = 'SetNotificationGlow',
+            width = 'full',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
           space_notifications_3 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          item_notification_shine = {
+            type = 'toggle',
+            name = L['FARM_BUDDY_NOTIFICATION_SHINE'],
+            desc = L['FARM_BUDDY_NOTIFICATION_SHINE_DESC'],
+            get = 'GetNotificationShine',
+            set = 'SetNotificationShine',
+            width = 'full',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          space_notifications_4 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          item_play_notification_sound = {
+            type = 'toggle',
+            name = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
+            desc = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
+            get = 'GetPlayNotificationSoundStatus',
+            set = 'SetPlayNotificationSoundStatus',
+            width = 'full',
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
+          },
+          space_notifications_5 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
@@ -408,7 +438,7 @@ function TitanFarmBuddy:GetConfigOption()
             width = 'double',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
-          space_notifications_4 = {
+          space_notifications_6 = {
             type = 'description',
             name = '',
             order = TitanFarmBuddy:GetOptionOrder('notifications'),
@@ -419,7 +449,7 @@ function TitanFarmBuddy:GetConfigOption()
             desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
             func = function() TitanFarmBuddyNotification_ShowAnchor() end,
             width = 'double',
-            order = TitanFarmBuddy:GetOptionOrder('actions'),
+            order = TitanFarmBuddy:GetOptionOrder('notifications'),
           },
         }
       },
@@ -1017,6 +1047,38 @@ function TitanFarmBuddy:GetNotificationSound()
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:SetNotificationGlow()
+-- DESC : Sets the notification glow effect status.
+-- **************************************************************************
+function TitanFarmBuddy:SetNotificationGlow(info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', input);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNotificationGlow()
+-- DESC : Gets the notification glow effect status.
+-- **************************************************************************
+function TitanFarmBuddy:GetNotificationGlow()
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetNotificationShine()
+-- DESC : Sets the notification shine effect status.
+-- **************************************************************************
+function TitanFarmBuddy:SetNotificationShine(info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', input);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNotificationShine()
+-- DESC : Gets the notification shine effect status.
+-- **************************************************************************
+function TitanFarmBuddy:GetNotificationShine()
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
+end
+
+-- **************************************************************************
 -- NAME : TitanPanelFarmBuddyButton_ToggleGoalNotification()
 -- DESC : Sets the notification status.
 -- **************************************************************************
@@ -1222,6 +1284,8 @@ function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
     local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
+    local notificationGlow = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
+    local notificationShine = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
     local sound = nil;
 
     if demo == true then
@@ -1236,7 +1300,7 @@ function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
       NOTIFICATION_TRIGGERED[index] = true;
     end
 
-    TitanFarmBuddyNotification_Show(item, quantity, sound, notificationDisplayDuration);
+    TitanFarmBuddyNotification_Show(item, quantity, sound, notificationDisplayDuration, notificationGlow, notificationShine);
   end
 end
 

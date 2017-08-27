@@ -16,7 +16,7 @@ local FRAME_HIDDEN = true;
 -- NAME : TitanFarmBuddyNotification_Show()
 -- DESC : Shows a notification frame for the given item link.
 -- **************************************************************************
-function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
+function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, shine)
 
   TitanFarmBuddyNotification_HideNotification(false);
 
@@ -32,24 +32,36 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
       PlaySound(sound);
     end
 
-    -- TODO: Option glow
-    FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
-    FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375);
-    FRAME.glow:SetVertexColor(1,1,1);
-    FRAME.glow:Show();
+    if glow == true then
+      FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
+      FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375);
+      FRAME.glow:SetVertexColor(1,1,1);
+      FRAME.glow:Show();
+    else
+      FRAME.glow:Hide();
+    end
 
-    -- TODO: Option shine
-    FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
-    FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500);
-    FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16);
-    FRAME.shine:Show();
+    if shine == true then
+      FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
+      FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500);
+      FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16);
+      FRAME.shine:Show();
+    else
+      FRAME.shine:Hide();
+    end
 
     FRAME_HIDDEN = false;
 
     FRAME:Show();
     FRAME.animIn:Play();
-    FRAME.glow.animIn:Play();
-    FRAME.shine.animIn:Play();
+
+    if glow == true then
+      FRAME.glow.animIn:Play();
+    end
+    if shine == true then
+      FRAME.shine.animIn:Play();
+    end
+
     FRAME.waitAndAnimOut:Play();
   end
 end

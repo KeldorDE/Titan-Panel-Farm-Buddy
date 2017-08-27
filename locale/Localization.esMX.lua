@@ -73,11 +73,19 @@ L["FARM_BUDDY_NO_GOAL"] = "No goal defined"
 --Translation missing 
 L["FARM_BUDDY_NO_ITEM_TRACKED"] = "You have no item for tracking selected."
 --Translation missing 
-L["FARM_BUDDY_NOTIFICATION"] = "Notification if quantity has reached"
+L["FARM_BUDDY_NOTIFICATION"] = "Enable Notifications"
 --Translation missing 
 L["FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME"] = "Hearthstone"
 --Translation missing 
 L["FARM_BUDDY_NOTIFICATION_DESC"] = "Shows a notification if the item quantity has reached."
+--Translation missing 
+L["FARM_BUDDY_NOTIFICATION_GLOW"] = "Show Glow Effect"
+--Translation missing 
+L["FARM_BUDDY_NOTIFICATION_GLOW_DESC"] = "Shows a glow effect if a notification is shown."
+--Translation missing 
+L["FARM_BUDDY_NOTIFICATION_SHINE"] = "Show Shine Effect"
+--Translation missing 
+L["FARM_BUDDY_NOTIFICATION_SHINE_DESC"] = "Shows a shine effect if a notification is shown."
 --Translation missing 
 L["FARM_BUDDY_NOTIFICATIONS"] = "Notifications"
 --Translation missing 
