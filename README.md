@@ -1,30 +1,34 @@
 # Titan-Panel-Farm-Buddy
 
 
-An World of Warcraft AddOn that extends the famous Titan Panel with the functionality to Track an Farmed Item in the Titan Panel Bar.
+An World of Warcraft AddOn that extends the famous Titan Panel with the functionality to Track up to four Farmed Items in the Titan Panel Bar.
 
 **Quickstart**  
 Alt + Right click on an Item in your Bags or Bank to start tracking.
 You can also enter the name of the desired Item in the AddOn settings.
 
 **Features**  
-* Track an farmed Item in the Titan Panel Bar
-* Track inventory or inventory and bank totals
+* Track up to four farmed Items in the Titan Panel Bar
+* Track inventory or inventory and bank quantity
 * Show item icon in the Titan Panel Bar
-* Define a optional goal for the farmed item
-* Shows a notification if the item goal has reached
+* Define a optional quantity for the farmed item
+* Shows a notification if the item quantity has reached
 * Select an optional sound for the notification
-* Show colored item count
+* Customize notification effects
+* Show colored item count and quantity
 * Localized (English and German)
 * Shortcut for fast tracking (ALT + right click)
+* Toggle item display modes
 
 **Please note:** Through the limitation of the API functions it is currently only possible to track known items. That means the items have to be in your data cache (Opened Tooltips, Inventory, Bank etc.)
 The item name will be validated if you set it if the item name is invalid or not known by the API you will see a notification.
 
 **Chat Commands**  
-* /fb track < Item name or Item Link > - Sets the tracked item.
-* /fb goal < Quantity > - Sets the goal quantity.
-* /fb reset - Resets Farm Buddy to it's default settings.
+* /fb track < Item Slot 1 - 4 > < Item name or Item Link > - Sets the tracked item.
+* /fb quantity < Item Slot 1 - 4 > < Quantity > - Sets the goal quantity.
+* /fb primary < Item Slot 1 - 4 > - Sets the items position that would be shown in the Titan Panel bar.
+* /fb reset < all | items > - Resets Farm Buddy to it's default settings.
+* /fb settings - Open up the AddOn settings page.
 * /fb version - Show the current used Farm Buddy Version.
 * /fb help - Shows the available chat commands.
 
