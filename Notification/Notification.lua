@@ -5,7 +5,7 @@
 -- **************************************************************************
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
-local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotification', 'AceTimer-3.0');
+local FarmBuddyNotification = LibStub('AceAddon-3.0'):NewAddon('FarmBuddyNotification');
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate';
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate');
 local ADDON_NAME = TitanFamrBuddyButton_GetAddOnName();
@@ -18,7 +18,7 @@ local FRAME_HIDDEN = true;
 -- **************************************************************************
 function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
 
-  TitanFarmBuddyNotification_HideNotification();
+  TitanFarmBuddyNotification_HideNotification(false);
 
   local itemInfo = TitanPanelFarmBuddyButton_GetItemInfo(itemName);
   if itemInfo ~= nil then
@@ -32,30 +32,25 @@ function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration)
       PlaySound(sound);
     end
 
-    UIFrameFadeIn(FRAME, 0.5, 0, 1);
-    FarmBuddyNotification:ScheduleTimer('HideNotification', duration);
+    -- TODO: Option glow
+    FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
+    FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375);
+    FRAME.glow:SetVertexColor(1,1,1);
+    FRAME.glow:Show();
+
+    -- TODO: Option shine
+    FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild");
+    FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500);
+    FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16);
+    FRAME.shine:Show();
+
     FRAME_HIDDEN = false;
-  end
-end
 
--- **************************************************************************
--- NAME : FarmBuddyNotification:HideNotification()
--- DESC : Hides the active notification frame.
--- **************************************************************************
-function FarmBuddyNotification:HideNotification()
-
-  if FRAME:IsShown() and FRAME_HIDDEN == false then
-
-    FRAME_HIDDEN = true;
-
-    local fadeInfo = {};
-    fadeInfo.mode = 'OUT';
-    fadeInfo.timeToFade = 1;
-    fadeInfo.startAlpha = 1;
-    fadeInfo.endAlpha = 0;
-    fadeInfo.finishedFunc = TitanFarmBuddyNotification_HideNotification;
-
-    UIFrameFade(FRAME, fadeInfo);
+    FRAME:Show();
+    FRAME.animIn:Play();
+    FRAME.glow.animIn:Play();
+    FRAME.shine.animIn:Play();
+    FRAME.waitAndAnimOut:Play();
   end
 end
 
@@ -63,17 +58,12 @@ end
 -- NAME : TitanFarmBuddyNotification_HideNotification()
 -- DESC : Resets the timer and hides the notification.
 -- **************************************************************************
-function TitanFarmBuddyNotification_HideNotification()
-  FarmBuddyNotification:CancelAllTimers();
-  FRAME:Hide();
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_OnClick()
--- DESC : This function is fired when the user clicks on the notification.
--- **************************************************************************
-function TitanFarmBuddyNotification_OnClick(self, button, down)
-  FarmBuddyNotification:HideNotification();
+function TitanFarmBuddyNotification_HideNotification(click)
+  FRAME_HIDDEN = true;
+  FRAME.waitAndAnimOut:Stop();
+  if click == true then
+    FRAME.animOut:Play();
+  end
 end
 
 -- **************************************************************************
@@ -89,7 +79,7 @@ end
 -- DESC : Sets the notification text.
 -- **************************************************************************
 function TitanFarmBuddyNotification_SetText(text)
-  _G[FRAME_NAME .. 'Name']:SetText(text);
+  FRAME.Name:SetText(text);
 end
 
 -- **************************************************************************
@@ -97,7 +87,7 @@ end
 -- DESC : Sets the notification icon.
 -- **************************************************************************
 function TitanFarmBuddyNotification_SetIcon(icon)
-  _G[FRAME_NAME .. 'IconTexture']:SetTexture(icon);
+  FRAME.Icon.Texture:SetTexture(icon);
 end
 
 -- **************************************************************************
@@ -105,7 +95,7 @@ end
 -- DESC : Sets the notification frame width.
 -- **************************************************************************
 function TitanFarmBuddyNotification_SetWidth(width)
-  FRAME:SetWidth(400);
+  FRAME:SetWidth(width);
 end
 
 -- **************************************************************************
@@ -145,7 +135,7 @@ function TitanFarmBuddyNotification_ShowAnchor()
 
   -- Set Scale for Anchor frame
   TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale());
-  _G['TitanFarmBuddyAnchorName']:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT']);
+  TitanFarmBuddyAnchor.Name:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT']);
 
   InterfaceOptionsFrame:Hide();
   TitanFarmBuddyAnchor:Show();
