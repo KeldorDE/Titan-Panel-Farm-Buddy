@@ -14,6 +14,7 @@ enable-nolib-creation: no
 ignore:
   - README.md
   - CHANGES.txt
+  - CHANGELOG.txt
   - scripts
 
 required-dependencies:
