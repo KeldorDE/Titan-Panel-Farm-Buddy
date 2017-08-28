@@ -95,7 +95,7 @@ function TitanFarmBuddy_OnLoad(self)
 			ItemQuantity3 = 0,
 			ItemQuantity4 = 0,
       ItemShowInBarIndex = 1,
-      ItemDisplayStyle = 1,
+      ItemDisplayStyle = 2,
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowQuantity = true,
@@ -1478,9 +1478,9 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
-  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 1);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 2);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true);
-  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', false);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', true);
   end
 
   -- Reset items

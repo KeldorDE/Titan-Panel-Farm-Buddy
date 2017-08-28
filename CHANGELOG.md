@@ -1,5 +1,8 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.1.4**
+* Set correct values for default settings
+
 **1.1.3**  
 * Fixed a bug that no button text will appear if the game language has changed
 
