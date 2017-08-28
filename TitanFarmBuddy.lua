@@ -750,10 +750,13 @@ function TitanFarmBuddy_GetButtonText(id)
   end
 
   for i, item in pairs(items) do
-    if i > 1 then
-      str = str .. '   ';
-    end
-    str = str .. TitanFarmBuddy:GetItemString(item, showIcon);
+  	local itemStr = TitanFarmBuddy:GetItemString(item, showIcon);
+  	if itemStr ~= nil and itemStr ~= '' then
+  		if i > 1 then
+  		  str = str .. '   ';
+  		end
+  		str = str .. itemStr;
+  	end
   end
 
   -- No item found
