@@ -810,7 +810,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetIconString(icon, space)
   local fontSize = TitanPanelGetVar('FontSize') + 6;
-	local str = '|T' .. icon .. ':' .. fontSize .. ':' .. fontSize .. ':0:-2|t';
+	local str = '|T' .. icon .. ':' .. fontSize .. ':' .. fontSize .. ':2:0|t';
 	if space == true then
 		str = str .. ' ';
 	end
