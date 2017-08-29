@@ -1,5 +1,8 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.1.6**
+* Removed accidental added print output
+
 **1.1.5**
 * Set the icon size based on the Titan Panel Font Size
 
