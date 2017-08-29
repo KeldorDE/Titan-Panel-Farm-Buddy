@@ -1,7 +1,5 @@
 #!/bin/bash
 
-API_PROJECT_ID="274538"
-API_URL="https://wow.curseforge.com/api/projects/${API_PROJECT_ID}/localization/export"
 LANGS=( "enUS" "deDE" "frFR" "esES" "itIT" "ruRU" "koKR" "zhCN" "zhTW" "esMX" "ptBR" )
 
 ROOT=$(pwd)
@@ -22,7 +20,12 @@ if [ -z ${API_TOKEN} ]; then
   echo -e "\033[1;31mNo API Token found!\033[m"
   exit 0
 fi
+if [ -z ${API_PROJECT_ID} ]; then
+  echo -e "\033[1;31mNo API Porject ID found!\033[m"
+  exit 0
+fi
 
+API_URL="https://wow.curseforge.com/api/projects/${API_PROJECT_ID}/localization/export"
 LOCALE_PATH="${ROOT}/locale"
 
 for i in "${LANGS[@]}"
