@@ -809,7 +809,9 @@ end
 -- DESC : Gets an icon string.
 -- **************************************************************************
 function TitanFarmBuddy:GetIconString(icon, space)
-	local str = '|T' .. icon .. ':16:16:0:-2|t';
+  local fontSize = TitanPanelGetVar('FontSize') + 6;
+  print(fontSize);
+	local str = '|T' .. icon .. ':' .. fontSize .. ':' .. fontSize .. ':0:-2|t';
 	if space == true then
 		str = str .. ' ';
 	end
