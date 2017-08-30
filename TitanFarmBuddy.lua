@@ -4,6 +4,11 @@
 -- * By: Keldor
 -- **************************************************************************
 
+-- TODO: Soundkit https://www.townlong-yak.com/framexml/ptr/SoundKitConstants.lua
+-- TODO: http://www.wowinterface.com/forums/showthread.php?t=55536
+-- TODO: https://wow.gamepedia.com/Patch_7.3.0/API_changes
+-- TODO: AceEvent
+
 local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
 local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
@@ -99,7 +104,7 @@ function TitanFarmBuddy_OnLoad(self)
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowQuantity = true,
-			GoalNotificationSound = 'UI_WORLDQUEST_COMPLETE',
+			GoalNotificationSound = SOUNDKIT.UI_WORLDQUEST_COMPLETE,
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
       NotificationGlow = true,
@@ -475,7 +480,7 @@ function TitanFarmBuddy:GetConfigOption()
             type = 'select',
             name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
             style = 'dropdown',
-            values = TitanFarmBuddy_GetSounds(),
+            values = TitanFarmBuddy:GetSounds(),
             set = 'SetNotificationSound',
             get = 'GetNotificationSound',
             width = 'double',
@@ -1721,4 +1726,19 @@ function TitanFarmBuddy:IsIndexValid(index)
     return true;
   end
   return false;
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetSounds()
+-- DESC : Get a list of available sounds.
+-- **************************************************************************
+function TitanFarmBuddy:GetSounds()
+
+	local sounds = {};
+
+	for k, v in pairs(SOUNDKIT) do
+		sounds[v] = k;
+	end
+
+	return sounds;
 end

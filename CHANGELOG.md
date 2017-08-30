@@ -1,5 +1,9 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.1.7**
+* TOC file updated for patch 7.3
+* Fixed PlaySound() incompatibilities that appeared with patch 7.3
+
 **1.1.6**
 * Removed accidental added print output
 
