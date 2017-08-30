@@ -4,15 +4,10 @@
 -- * By: Keldor
 -- **************************************************************************
 
--- TODO: Soundkit https://www.townlong-yak.com/framexml/ptr/SoundKitConstants.lua
--- TODO: http://www.wowinterface.com/forums/showthread.php?t=55536
--- TODO: https://wow.gamepedia.com/Patch_7.3.0/API_changes
--- TODO: AceEvent
-
 local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
 local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
-local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0');
+local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
 local ITEMS_AVAILABLE = 4;
@@ -60,8 +55,20 @@ function TitanFarmBuddy:OnInitialize()
   LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption());
   LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME);
 
+  self:RegisterDialogs();
+
+  for i = 1, ITEMS_AVAILABLE do
+    NOTIFICATION_TRIGGERED[i] = false;
+  end
+
+  ITEM_DISPLAY_STYLES[1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1'];
+  ITEM_DISPLAY_STYLES[2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2'];
+
   -- Register chat command
-  TitanFarmBuddy:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand');
+  self:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand');
+
+  -- Register events
+  self:RegisterEvent('BAG_UPDATE', 'BagUpdate');
 end
 
 -- **************************************************************************
@@ -111,17 +118,6 @@ function TitanFarmBuddy_OnLoad(self)
       NotificationShine = true,
 		}
 	};
-
-  TitanFarmBuddy:RegisterDialogs();
-
-  for i = 1, ITEMS_AVAILABLE do
-    NOTIFICATION_TRIGGERED[i] = false;
-  end
-
-  ITEM_DISPLAY_STYLES[1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1'];
-  ITEM_DISPLAY_STYLES[2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2'];
-
-	self:RegisterEvent('BAG_UPDATE');
 end
 
 -- **************************************************************************
@@ -129,7 +125,6 @@ end
 -- DESC : Is called when the Plugin gets enabled.
 -- **************************************************************************
 function TitanFarmBuddy:OnEnable()
-
   self:SecureHook('ContainerFrameItemButton_OnModifiedClick');
   self:ScheduleRepeatingTimer('NotificationTask', 1);
 end
@@ -1042,10 +1037,10 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_OnEvent()
+-- NAME : TitanFarmBuddy:BagUpdate()
 -- DESC : Parse events registered to plugin and act on them.
 -- **************************************************************************
-function TitanFarmBuddy_OnEvent(self, event, ...)
+function TitanFarmBuddy:BagUpdate()
   for i = 1, ITEMS_AVAILABLE do
     local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
     if item ~= nil and item ~= '' then
