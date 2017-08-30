@@ -1086,6 +1086,17 @@ end
 -- DESC : Display button when plugin is visible.
 -- **************************************************************************
 function TitanFarmBuddy_OnShow(self)
+
+  -- SOUNDKIT Fux for Patch 7.3
+  -- Since 7.3 the sound is a number so check if we have a string
+  -- from AddON version <= 1.1.6
+  local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
+  if sound ~= nil then
+    if not tonumber(sound) then
+      TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.UI_WORLDQUEST_COMPLETE);
+    end
+  end
+
 	TitanPanelButton_OnShow(self);
 end
 
