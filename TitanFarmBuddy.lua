@@ -1051,6 +1051,8 @@ function TitanFarmBuddy:BagUpdate()
           local count = TitanFarmBuddy_GetCount(itemInfo);
           if count >= quantity then
             TitanFarmBuddy:QueueNotification(i, item, quantity);
+          else
+            NOTIFICATION_TRIGGERED[i] = false;
           end
         end
       end

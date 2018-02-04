@@ -1,5 +1,8 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.1.9**
+* Bugfix: Reset notification status if item count below goal
+
 **1.1.8**
 * Fixed icon position
 
