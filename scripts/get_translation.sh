@@ -43,7 +43,7 @@ do
   RESP=$($(which curl) --header "X-Api-Token: ${API_TOKEN}" --silent "${API_URL}?lang=$i")
 
   echo "Writing ${LOCALE_FILE}"
-  echo "local L = LibStub('AceLocale-3.0'):NewLocale('Titan', '$i', ${LOCALE_DEFAULT})" > "${LOCALE_FILE}"
+  echo "local L = LibStub('AceLocale-3.0'):NewLocale('${PROJECT_ID}', '$i', ${LOCALE_DEFAULT})" > "${LOCALE_FILE}"
   echo "if not L then return end" >> "${LOCALE_FILE}"
   echo "" >> "${LOCALE_FILE}"
   echo "${RESP}" >> "${LOCALE_FILE}"
