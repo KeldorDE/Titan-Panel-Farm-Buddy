@@ -17,14 +17,14 @@ You can also enter the name of the desired Item in the AddOn settings.
 * Customize notification effects
 * Show colored item count and quantity
 * Localized (English and German)
-* Shortcut for fast tracking (ALT + right click)
+* Define an shortcut for fast tracking (Default: ALT + right click)
 * Toggle item display modes
 
 **Please note:** Through the limitation of the API functions it is currently only possible to track known items. That means the items have to be in your data cache (Opened Tooltips, Inventory, Bank etc.)
 The item name will be validated if you set it if the item name is invalid or not known by the API you will see a notification.
 
 **Chat Commands**  
-* /fb track < Item Slot 1 - 4 > < Item name or Item Link > - Sets the tracked item.
+* /fb track < Item Slot 1 - 4 > < Item ID | Item Name | Item Link > - Sets the tracked item.
 * /fb quantity < Item Slot 1 - 4 > < Quantity > - Sets the goal quantity.
 * /fb primary < Item Slot 1 - 4 > - Sets the items position that would be shown in the Titan Panel bar.
 * /fb reset < all | items > - Resets Farm Buddy to it's default settings.
