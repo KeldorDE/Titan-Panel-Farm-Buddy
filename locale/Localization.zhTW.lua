@@ -47,6 +47,12 @@ L["FARM_BUDDY_COMMAND_VERSION_DESC"] = "Show the current used Farm Buddy Version
 --Translation missing 
 L["FARM_BUDDY_CONFIG_RESET_MSG"] = "The configuration has been set back to the defaults."
 --Translation missing 
+L["FARM_BUDDY_FAST_TRACKING_MOUSE_BUTTON"] = "Fast tracking mouse button"
+--Translation missing 
+L["FARM_BUDDY_FAST_TRACKING_SHORTCUTS"] = "Fast tracking shortcuts"
+--Translation missing 
+L["FARM_BUDDY_FAST_TRACKING_SHORTCUTS_DESC"] = "Combine your desired keys as a fast tracking shortcut. Fast tracking allows you to track an item from your inventory with these shortcut."
+--Translation missing 
 L["FARM_BUDDY_GERMAN"] = "German"
 --Translation missing 
 L["FARM_BUDDY_GOAL_SET"] = "The goal quantity has been set."
@@ -82,6 +88,16 @@ L["FARM_BUDDY_ITEM_TO_TRACK_DESC"] = "The name of the item to track"
 L["FARM_BUDDY_ITEM_TO_TRACK_USAGE"] = "Enter the name of an item or CTRL + Click an item from your inventory. Please note: The item have to be in your World of Warcraft Data Cache otherwise the item is not known to the AddOn API functions."
 --Translation missing 
 L["FARM_BUDDY_ITEMS"] = "Items"
+--Translation missing 
+L["FARM_BUDDY_KEY_ALT"] = "Alt"
+--Translation missing 
+L["FARM_BUDDY_KEY_CTRL"] = "Ctrl"
+--Translation missing 
+L["FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON"] = "Left mouse button"
+--Translation missing 
+L["FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON"] = "Right mouse button"
+--Translation missing 
+L["FARM_BUDDY_KEY_SHIFT"] = "Shift"
 --Translation missing 
 L["FARM_BUDDY_LOCALIZATION"] = "Localization"
 --Translation missing 
@@ -123,7 +139,7 @@ L["FARM_BUDDY_RESET"] = "Reset"
 --Translation missing 
 L["FARM_BUDDY_RESET_ALL"] = "Reset settings to default"
 --Translation missing 
-L["FARM_BUDDY_RESET_ALL_DESC"] = "Reset all settings to their default values."
+L["FARM_BUDDY_RESET_ALL_DESC"] = "Reset all settings to default values."
 --Translation missing 
 L["FARM_BUDDY_RESET_ALL_ITEMS"] = "Reset all tracked Items"
 --Translation missing 
@@ -132,6 +148,8 @@ L["FARM_BUDDY_RESET_ALL_ITEMS_DESC"] = "Resets all tracked items."
 L["FARM_BUDDY_RESET_DESC"] = "Resets the tracked item."
 --Translation missing 
 L["FARM_BUDDY_SETTINGS"] = "Common"
+--Translation missing 
+L["FARM_BUDDY_SHORTCUTS"] = "Shortcuts"
 --Translation missing 
 L["FARM_BUDDY_SHOW_COLORED_TEXT"] = "Show Colored Text"
 --Translation missing 
@@ -177,7 +195,7 @@ L["TITAN_FARM_BUDDY_CANCEL"] = "Cancel"
 --Translation missing 
 L["TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX"] = "Please enter the Position where you want to place the clicked item. (1 - %s)"
 --Translation missing 
-L["TITAN_FARM_BUDDY_CONFIRM_ALL_RESET"] = "Are you sure you want to reset all settings to their default values?"
+L["TITAN_FARM_BUDDY_CONFIRM_ALL_RESET"] = "Are you sure you want to reset all settings to default values?"
 --Translation missing 
 L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Are you sure you want to reset all items?"
 --Translation missing 

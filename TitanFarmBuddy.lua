@@ -116,6 +116,12 @@ function TitanFarmBuddy_OnLoad(self)
       NotificationDisplayDuration = 5,
       NotificationGlow = true,
       NotificationShine = true,
+      FastTrackingMouseButton = 'RightButton',
+      FastTrackingKeys = {
+        ctrl = false,
+        shift = false,
+        alt = true,
+      },
 		}
 	};
 end
@@ -125,7 +131,7 @@ end
 -- DESC : Is called when the Plugin gets enabled.
 -- **************************************************************************
 function TitanFarmBuddy:OnEnable()
-  self:SecureHook('ContainerFrameItemButton_OnModifiedClick');
+  self:SecureHook('ContainerFrameItemButton_OnModifiedClick', 'ModifiedClick');
   self:ScheduleRepeatingTimer('NotificationTask', 1);
 end
 
@@ -343,6 +349,48 @@ function TitanFarmBuddy:GetConfigOption()
             set = 'SetItemDisplayStyle',
             width = 'full',
             values = ITEM_DISPLAY_STYLES,
+            order = TitanFarmBuddy:GetOptionOrder('general'),
+          },
+          general_space_7 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('general'),
+          },
+          general_shortcuts_heading = {
+            type = 'header',
+            name = L['FARM_BUDDY_SHORTCUTS'],
+            order = TitanFarmBuddy:GetOptionOrder('general'),
+          },
+          general_fast_tracking_shortcut_mouse_button = {
+            type = 'select',
+            style = 'radio',
+            name = L['FARM_BUDDY_FAST_TRACKING_MOUSE_BUTTON'],
+            get = 'GetFastTrackingMouseButton',
+            set = 'SetFastTrackingMouseButton',
+            width = 'full',
+            values = {
+              LeftButton = L['FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON'],
+              RightButton = L['FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON'],
+            },
+            order = TitanFarmBuddy:GetOptionOrder('general'),
+          },
+          general_space_8 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('general'),
+          },
+          general_fast_tracking_shortcut_keys = {
+            type = 'multiselect',
+            name = L['FARM_BUDDY_FAST_TRACKING_SHORTCUTS'],
+            desc = L['FARM_BUDDY_FAST_TRACKING_SHORTCUTS_DESC'],
+            set = 'SetKeySetting',
+            get = 'GetKeySetting',
+            values = {
+              alt = L['FARM_BUDDY_KEY_ALT'],
+              ctrl = L['FARM_BUDDY_KEY_CTRL'],
+              shift = L['FARM_BUDDY_KEY_SHIFT'],
+            },
+            width = 'full',
             order = TitanFarmBuddy:GetOptionOrder('general'),
           },
 			  },
@@ -1180,7 +1228,6 @@ function TitanFarmBuddy:SetItemQuantity(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(index), tonumber(input));
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
   NOTIFICATION_TRIGGERED[index] = false;
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1201,7 +1248,6 @@ end
 function TitanFarmBuddy:SetItemShowInBar(index, info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1210,7 +1256,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationStatus(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1228,7 +1273,6 @@ end
 function TitanFarmBuddy:SetItemDisplayStyle(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', input);
   TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1240,12 +1284,57 @@ function TitanFarmBuddy:GetItemDisplayStyle()
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:SetFastTrackingMouseButton()
+-- DESC : Sets the fast tracking mouse button.
+-- **************************************************************************
+function TitanFarmBuddy:SetFastTrackingMouseButton(info, input)
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton', input);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetFastTrackingMouseButton()
+-- DESC : Gets the fast tracking mouse button.
+-- **************************************************************************
+function TitanFarmBuddy:GetFastTrackingMouseButton()
+  return TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton');
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:SetKeySetting()
+-- DESC : Sets the fast tracking shortcut key.
+-- **************************************************************************
+function TitanFarmBuddy:SetKeySetting(info, key, state)
+
+  local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys');
+
+  if (options[key] ~= nil) then
+    options[key] = state;
+  end
+
+  TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys', options);
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetKeySetting()
+-- DESC : Gets the fast tracking shortcut key.
+-- **************************************************************************
+function TitanFarmBuddy:GetKeySetting(info, key)
+
+  local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys');
+
+  if (options[key] ~= nil) then
+    return options[key];
+  end
+
+  return false;
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:SetPlayNotificationSoundStatus()
 -- DESC : Sets the play notification sound status.
 -- **************************************************************************
 function TitanFarmBuddy:SetPlayNotificationSoundStatus(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1262,7 +1351,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationDisplayDuration(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1280,7 +1368,6 @@ end
 function TitanFarmBuddy_TogglePlayNotificationSound()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1290,7 +1377,6 @@ end
 function TitanFarmBuddy:SetNotificationSound(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input);
 	PlaySound(input, 'master');
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1307,7 +1393,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationGlow(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', input);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1324,7 +1409,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:SetNotificationShine(info, input)
   TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', input);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1342,7 +1426,6 @@ end
 function TitanFarmBuddy_ToggleGoalNotification()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1352,7 +1435,6 @@ end
 function TitanFarmBuddy_ToggleNotificationGlow()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1362,7 +1444,6 @@ end
 function TitanFarmBuddy_ToggleNotificationShine()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationShine');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1372,7 +1453,6 @@ end
 function TitanFarmBuddy:SetShowItemIcon(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1390,7 +1470,6 @@ end
 function TitanFarmBuddy:SetShowItemName(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1408,7 +1487,6 @@ end
 function TitanFarmBuddy:SetShowColoredText(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1426,7 +1504,6 @@ end
 function TitanFarmBuddy:SetShowQuantity(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1444,7 +1521,6 @@ end
 function TitanFarmBuddy_ToggleShowQuantity()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1454,7 +1530,6 @@ end
 function TitanFarmBuddy:SetIncludeBank(info, input)
 	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input);
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1472,7 +1547,6 @@ end
 function TitanFarmBuddy_ToggleIncludeBank()
 	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank');
 	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID);
-  LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
 end
 
 -- **************************************************************************
@@ -1495,6 +1569,12 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 2);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', true);
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton', 'RightButton');
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys', {
+      ctrl = false,
+      shift = false,
+      alt = true,
+    });
   end
 
   -- Reset items
@@ -1525,24 +1605,62 @@ function TitanFarmBuddy:TestNotification()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick()
+-- NAME : TitanFarmBuddy:ModifiedClick()
 -- DESC : Is called when an item is clicked with modifier key.
 -- **************************************************************************
-function TitanFarmBuddy:ContainerFrameItemButton_OnModifiedClick(self, button, ...)
+function TitanFarmBuddy:ModifiedClick(handle, button, ...)
 
-  if button == 'RightButton' and IsAltKeyDown() then
-    if not CursorHasItem() and not IsControlKeyDown() and not IsShiftKeyDown() then
+  local fastTrackingMouseButton = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton');
+  local fastTrackingKeys = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys');
+  local conditions = false;
 
-      local bagID = self:GetParent():GetID();
-      local bagSlot = self:GetID();
-      local itemLink = GetContainerItemLink(bagID, bagSlot);
+  -- Check modifier keys
+  for key, state in pairs(fastTrackingKeys) do
+    if (key == 'alt') then
+      if (state == true) then
+        conditions = IsAltKeyDown();
+      else
+        conditions = not IsAltKeyDown();
+      end;
 
-      if itemLink ~= nil then
+      if (conditions == false) then
+        break;
+      end;
 
-        local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', tostring(ITEMS_AVAILABLE));
-        if dialog then
-          dialog.data = itemLink;
-        end
+    elseif (key == 'ctrl') then
+      if (state == true) then
+        conditions = IsControlKeyDown();
+      else
+        conditions = not IsControlKeyDown();
+      end;
+
+      if (conditions == false) then
+        break;
+      end
+
+    elseif (key == 'shift') then
+      if (state == true) then
+        conditions = IsShiftKeyDown();
+      else
+        conditions = not IsShiftKeyDown();
+      end;
+
+      if (conditions == false) then
+        break;
+      end
+    end
+  end
+
+  if button == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
+    local bagID = handle:GetParent():GetID();
+    local bagSlot = handle:GetID();
+    local itemLink = GetContainerItemLink(bagID, bagSlot);
+
+    if itemLink ~= nil then
+
+      local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', tostring(ITEMS_AVAILABLE));
+      if dialog then
+        dialog.data = itemLink;
       end
     end
   end

@@ -1,5 +1,9 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.2.0**
+* Added fast tracking settings to configure the shortcut
+* Bugfix: Removed settings GUI flickering while changing settings
+
 **1.1.9**
 * Bugfix: Reset notification status if item count below goal
 
