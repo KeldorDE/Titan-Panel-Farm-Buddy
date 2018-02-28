@@ -1,5 +1,8 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.2.1**
+* Bugfix: Notification is triggered again if item is removed and the count is under the defined goal
+
 **1.2.0**
 * Added fast tracking settings to configure the shortcut
 * Bugfix: Removed settings GUI flickering while changing settings

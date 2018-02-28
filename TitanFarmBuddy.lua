@@ -12,7 +12,6 @@ local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
 local ITEMS_AVAILABLE = 4;
 local ITEM_DISPLAY_STYLES = {};
-local NOTIFICATION_COUNT = 0;
 local NOTIFICATION_QUEUE = {};
 local NOTIFICATION_TRIGGERED = {};
 local CHAT_COMMAND = 'fb';
@@ -1100,9 +1099,10 @@ function TitanFarmBuddy:BagUpdate()
         if itemInfo ~= nil then
           local count = TitanFarmBuddy_GetCount(itemInfo);
           if count >= quantity then
-            TitanFarmBuddy:QueueNotification(i, item, quantity);
+            self:QueueNotification(itemInfo.ItemID, item, quantity);
           else
-            NOTIFICATION_TRIGGERED[i] = false;
+            NOTIFICATION_QUEUE[itemInfo.ItemID] = nil;
+            NOTIFICATION_TRIGGERED[itemInfo.ItemID] = false;
           end
         end
       end
@@ -1673,8 +1673,7 @@ end
 -- DESC : Queues a notification.
 -- **************************************************************************
 function TitanFarmBuddy:QueueNotification(index, item, quantity)
-  NOTIFICATION_COUNT = NOTIFICATION_COUNT + 1;
-  NOTIFICATION_QUEUE[NOTIFICATION_COUNT] = {
+  NOTIFICATION_QUEUE[index] = {
     Index = index,
     Item = item,
     Quantity = quantity,
@@ -1687,8 +1686,13 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
 
+  local triggerStatus = true;
+  if (NOTIFICATION_TRIGGERED[index] == nil or NOTIFICATION_TRIGGERED[index] == false) then
+    triggerStatus = false;
+  end
+
   local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
-  if (notificationEnabled == true and NOTIFICATION_TRIGGERED[index] == false) or demo == true then
+  if (notificationEnabled == true and triggerStatus == false) or demo == true then
 
     local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound');
     local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'));
