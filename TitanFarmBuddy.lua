@@ -905,7 +905,9 @@ function TitanFarmBuddy_GetItemInfo(name)
 
       local countBags = GetItemCount(itemLink);
       local countTotal = GetItemCount(itemLink, true);
+      local _, itemID = strsplit(':', itemLink);
       local info = {
+        ItemID = itemID,
         Name = itemName,
         Link = itemLink,
         IconFileDataID = GetItemIcon(itemLink),
