@@ -1,6 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\..\FrameXML\UI.xsd">
-<Script file="Notification.lua"/>
   <Button name="TitanFarmBuddyAnchor" enableMouse="true" movable="true" hidden="true">
     <Size>
       <AbsDimension x="540" y="88" />
