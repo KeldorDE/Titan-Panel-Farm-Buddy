@@ -1,5 +1,9 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.2.2**
+* API update for patch 8.0
+* Fixed could not load Notification.lua error
+
 **1.2.1**
 * Bugfix: Notification is triggered again if item is removed and the count is under the defined goal
 
