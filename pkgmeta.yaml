@@ -12,6 +12,10 @@ externals:
 
 enable-nolib-creation: no
 
+manual-changelog:
+  filename: CHANGELOG.txt
+  markup-type: markdown
+
 ignore:
   - README.md
   - CHANGES.txt
