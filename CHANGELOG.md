@@ -1,5 +1,8 @@
 # Titan-Panel-Farm-Buddy Changelog
 
+**1.2.3**
+* Updated API version in AddOn name
+
 **1.2.2**
 * API update for patch 8.0
 * Fixed could not load Notification.lua error
