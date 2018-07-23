@@ -10,7 +10,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0');
 local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
-local ITEMS_AVAILABLE = 4;
+local ITEMS_AVAILABLE = 9;
 local ITEM_DISPLAY_STYLES = {};
 local NOTIFICATION_QUEUE = {};
 local NOTIFICATION_TRIGGERED = {};
@@ -101,10 +101,20 @@ function TitanFarmBuddy_OnLoad(self)
 			Item2 = '',
 			Item3 = '',
 			Item4 = '',
+			Item5 = '',
+			Item6 = '',
+			Item7 = '',
+			Item8 = '',
+			Item9 = '',
 			ItemQuantity1 = 0,
 			ItemQuantity2 = 0,
 			ItemQuantity3 = 0,
 			ItemQuantity4 = 0,
+			ItemQuantity5 = 0,
+			ItemQuantity6 = 0,
+			ItemQuantity7 = 0,
+			ItemQuantity8 = 0,
+			ItemQuantity9 = 0,
       ItemShowInBarIndex = 1,
       ItemDisplayStyle = 2,
 			GoalNotification = true,
@@ -440,6 +450,51 @@ function TitanFarmBuddy:GetConfigOption()
           items_track_count_4 = TitanFarmBuddy:GetTrackedItemQuantityField(4),
           items_track_show_bar_4 = TitanFarmBuddy:GetTrackedItemShowBarField(4),
           items_clear_button_4 = TitanFarmBuddy:GetTrackedItemClearButton(4),
+          items_space_5 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('items'),
+          },
+          items_track_5 = TitanFarmBuddy:GetTrackedItemField(5),
+          items_track_count_5 = TitanFarmBuddy:GetTrackedItemQuantityField(5),
+          items_track_show_bar_5 = TitanFarmBuddy:GetTrackedItemShowBarField(5),
+          items_clear_button_5 = TitanFarmBuddy:GetTrackedItemClearButton(5),
+          items_space_6 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('items'),
+          },
+          items_track_6 = TitanFarmBuddy:GetTrackedItemField(6),
+          items_track_count_6 = TitanFarmBuddy:GetTrackedItemQuantityField(6),
+          items_track_show_bar_6 = TitanFarmBuddy:GetTrackedItemShowBarField(6),
+          items_clear_button_6 = TitanFarmBuddy:GetTrackedItemClearButton(6),
+          items_space_7 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('items'),
+          },
+          items_track_7 = TitanFarmBuddy:GetTrackedItemField(7),
+          items_track_count_7 = TitanFarmBuddy:GetTrackedItemQuantityField(7),
+          items_track_show_bar_7 = TitanFarmBuddy:GetTrackedItemShowBarField(7),
+          items_clear_button_7 = TitanFarmBuddy:GetTrackedItemClearButton(7),
+          items_space_8 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('items'),
+          },
+          items_track_8 = TitanFarmBuddy:GetTrackedItemField(8),
+          items_track_count_8 = TitanFarmBuddy:GetTrackedItemQuantityField(8),
+          items_track_show_bar_8 = TitanFarmBuddy:GetTrackedItemShowBarField(8),
+          items_clear_button_8 = TitanFarmBuddy:GetTrackedItemClearButton(8),
+		  items_space_9 = {
+            type = 'description',
+            name = '',
+            order = TitanFarmBuddy:GetOptionOrder('items'),
+          },
+          items_track_9 = TitanFarmBuddy:GetTrackedItemField(9),
+          items_track_count_9 = TitanFarmBuddy:GetTrackedItemQuantityField(9),
+          items_track_show_bar_9 = TitanFarmBuddy:GetTrackedItemShowBarField(9),
+          items_clear_button_9 = TitanFarmBuddy:GetTrackedItemClearButton(9),
         },
       },
       tab_notifications = {
