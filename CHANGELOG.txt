@@ -1,3 +1,7 @@
+1.2.8
+------------------
+- API update for patch 9.2.0
+
 1.2.7
 ------------------
 - API update for patch 9.1.5
