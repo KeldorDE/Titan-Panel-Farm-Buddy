@@ -1037,7 +1037,7 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
   		info.checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification');
       UIDropDownMenu_AddButton(info, level);
 
-      UIDropDownMenu_AddSeparator({}, level);
+      UIDropDownMenu_AddSeparator(level);
 
       info = {};
   		info.text = L['FARM_BUDDY_NOTIFICATION_GLOW'];
@@ -1066,7 +1066,7 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
     	info.func = function() TitanFarmBuddy:TestNotification(); end;
       UIDropDownMenu_AddButton(info, level);
 
-      UIDropDownMenu_AddSeparator({}, level);
+      UIDropDownMenu_AddSeparator(level);
 
       info = {};
     	info.notCheckable = true;

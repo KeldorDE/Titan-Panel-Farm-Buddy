@@ -1,3 +1,8 @@
+1.2.10
+------------------
+- API update for patch 9.2.7
+- Fixed UI error when hovering over dropdown menu items
+
 1.2.9
 ------------------
 - API update for patch 9.2.5
