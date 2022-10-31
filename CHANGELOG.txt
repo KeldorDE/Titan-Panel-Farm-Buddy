@@ -1,3 +1,8 @@
+1.2.11
+------------------
+- API update for patch 10.0.0
+- Fixed SecureHook error on load
+
 1.2.10
 ------------------
 - API update for patch 9.2.7

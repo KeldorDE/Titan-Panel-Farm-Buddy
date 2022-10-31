@@ -1,10 +1,10 @@
-## Interface: 90207
-## Title: Titan Panel [|cffeda55fFarm Buddy|r] |cff00aa001.2.10.90207|r
+## Interface: 100000
+## Title: Titan Panel [|cffeda55fFarm Buddy|r] |cff00aa001.2.11.100000|r
 ## Notes: Adds the functionality to Track an Farmed Item in the Titan Panel Bar.
 ## Author: Keldor (https://www.devil-coding.de)
 ## SavedVariables: TitanFarmBuddyDB
 ## Dependencies: Titan
-## Version: 1.2.10.90207
+## Version: 1.2.11.100000
 ## X-Child-Of: Titan
 
 embeds.xml
