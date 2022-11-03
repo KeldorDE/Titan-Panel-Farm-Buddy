@@ -130,7 +130,7 @@ end
 -- DESC : Is called when the Plugin gets enabled.
 -- **************************************************************************
 function TitanFarmBuddy:OnEnable()
-  self:SecureHook('ContainerFrameItemButton_OnModifiedClick', 'ModifiedClick');
+  self:SecureHook('HandleModifiedItemClick', 'ModifiedClick');
   self:ScheduleRepeatingTimer('NotificationTask', 1);
 end
 
@@ -1610,7 +1610,12 @@ end
 -- NAME : TitanFarmBuddy:ModifiedClick()
 -- DESC : Is called when an item is clicked with modifier key.
 -- **************************************************************************
-function TitanFarmBuddy:ModifiedClick(handle, button, ...)
+function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
+
+  -- item location is only not nil for bag item clicks
+  if itemLocation == nil then
+    return;
+  end
 
   local fastTrackingMouseButton = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton');
   local fastTrackingKeys = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys');
@@ -1653,11 +1658,7 @@ function TitanFarmBuddy:ModifiedClick(handle, button, ...)
     end
   end
 
-  if button == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
-    local bagID = handle:GetParent():GetID();
-    local bagSlot = handle:GetID();
-    local itemLink = GetContainerItemLink(bagID, bagSlot);
-
+  if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
     if itemLink ~= nil then
 
       local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', tostring(ITEMS_AVAILABLE));
