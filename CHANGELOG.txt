@@ -1,10 +1,10 @@
-1.2.14
+1.2.15
 ------------------
-- API update for patch 10.0.7
+- API update for patch 10.1
 
 1.2.14
 ------------------
-- API update for patch 10.1
+- API update for patch 10.0.7
 
 1.2.13
 ------------------
