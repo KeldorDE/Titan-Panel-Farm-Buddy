@@ -1,3 +1,8 @@
+1.2.16
+------------------
+- API update for patch 10.1.5
+- Set the AddOn list icon
+
 1.2.15
 ------------------
 - API update for patch 10.1
