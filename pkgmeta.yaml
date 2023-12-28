@@ -21,6 +21,7 @@ ignore:
   - CHANGES.txt
   - CHANGELOG.txt
   - scripts
+  - .github
 
 required-dependencies:
   - titan-panel
