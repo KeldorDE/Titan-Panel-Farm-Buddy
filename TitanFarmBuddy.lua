@@ -672,14 +672,14 @@ function TitanFarmBuddy:GetConfigOption()
             order = TitanFarmBuddy:GetOptionOrder('about'),
             width = 'full',
           },
-          support_title = {
+          about_info_support_title = {
             type = 'description',
             fontSize = 'medium',
             name = TitanUtils_GetGoldText(L['FARM_BUDDY_SUPPORT']) .. '\n',
             order = TitanFarmBuddy:GetOptionOrder('about'),
             width = 'full',
           },
-          support_text = {
+          about_info_support_text = {
             type = 'description',
             name = '   • ' .. L['FARM_BUDDY_SUPPORT_TEXT'] .. '\n\n\n',
             order = TitanFarmBuddy:GetOptionOrder('about'),
