@@ -8,7 +8,7 @@ local TITAN_FARM_BUDDY_ID = 'FarmBuddy';
 local ADDON_NAME = 'Titan Farm Buddy';
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true);
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0');
-local ADDON_VERSION = GetAddOnMetadata('TitanFarmBuddy', 'Version');
+local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version');
 local OPTION_ORDER = {};
 local ITEMS_AVAILABLE = 4;
 local ITEM_DISPLAY_STYLES = {};
@@ -256,7 +256,7 @@ function TitanFarmBuddy:GetConfigOption()
       },
       info_author = {
         type = 'description',
-        name = L['FARM_BUDDY_AUTHOR'] .. ': ' .. GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+        name = L['FARM_BUDDY_AUTHOR'] .. ': ' .. C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
         order = TitanFarmBuddy:GetOptionOrder('main'),
       },
       tab_general = {
@@ -643,7 +643,7 @@ function TitanFarmBuddy:GetConfigOption()
           },
           about_info_author = {
             type = 'description',
-            name = GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+            name = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
             order = TitanFarmBuddy:GetOptionOrder('about'),
             width = 'double',
           },
@@ -894,10 +894,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_OnClick(self, button)
 	if (button == 'LeftButton') then
-		-- Workarround for opening controls instead of AddOn options
-		-- Call it two times to ensure the AddOn panel is opened
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
+    Settings.OpenToCategory(ADDON_NAME);
  	end
 end
 
@@ -1831,10 +1828,7 @@ function TitanFarmBuddy:ChatCommand(input)
       TitanFarmBuddy:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING']);
     end
   elseif cmd == 'settings' then
-    -- Workarround for opening controls instead of AddOn options
-		-- Call it two times to ensure the AddOn panel is opened
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
-		InterfaceOptionsFrame_OpenToCategory(ADDON_NAME);
+    Settings.OpenToCategory(ADDON_NAME);
   end
 end
 
