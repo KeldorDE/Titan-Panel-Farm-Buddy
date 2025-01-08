@@ -1,4 +1,10 @@
+1.2.22
+------------------
+- API update for patch 11.0.7
+- Fix "attempt to index global InterfaceOptionsFrame" error
+
 1.2.21
+------------------
 - API update for patch 11
 - Fix GetAddOnMetadata() is null error
 - Replace deprecated InterfaceOptionsFrame_OpenToCategory() function

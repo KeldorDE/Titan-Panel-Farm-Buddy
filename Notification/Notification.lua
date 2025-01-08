@@ -149,7 +149,6 @@ function TitanFarmBuddyNotification_ShowAnchor()
   TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale());
   TitanFarmBuddyAnchor.Name:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT']);
 
-  InterfaceOptionsFrame:Hide();
   TitanFarmBuddyAnchor:Show();
 end
 
