@@ -1,0 +1,27 @@
+## Interface: 110007
+## Title: Titan Panel [|cffeda55fFarm Buddy|r] |cff00aa001.3.0|r
+## IconTexture: Interface\Icons\INV_Misc_Coin_01
+## Notes: Adds the functionality to track an farmed item in the Titan Panel bar.|n|cffbbbbbbBy Keldor|r|n|nSupport:|n|cff82c5ff- patreon.com/eso_database_com|r|n|n
+## Author: Keldor (https://www.devil-coding.de)
+## SavedVariables: TitanFarmBuddyDB
+## Dependencies: Titan
+## Version: 1.3.0
+## X-Child-Of: Titan
+
+embeds.xml
+
+locale\Localization.deDE.lua
+locale\Localization.enUS.lua
+locale\Localization.esES.lua
+locale\Localization.esMX.lua
+locale\Localization.frFR.lua
+locale\Localization.itIT.lua
+locale\Localization.koKR.lua
+locale\Localization.ptBR.lua
+locale\Localization.ruRU.lua
+locale\Localization.zhCN.lua
+locale\Localization.zhTW.lua
+
+TitanFarmBuddy.xml
+Notification/Notification.xml
+Notification/Notification.lua

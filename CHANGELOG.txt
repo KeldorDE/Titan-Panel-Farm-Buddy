@@ -1,3 +1,10 @@
+1.3.0
+------------------
+- Add Classic support
+- Add Cataclysm Classic support
+- Bugfix: Fast tracking modified click handling (Thanks to MrFIXIT)
+- Change default notification sound to make the code compatible with Classic
+
 1.2.22
 ------------------
 - API update for patch 11.0.7

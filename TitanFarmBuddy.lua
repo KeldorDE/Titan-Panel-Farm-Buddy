@@ -110,7 +110,7 @@ function TitanFarmBuddy_OnLoad(self)
 			GoalNotification = true,
 			IncludeBank = false,
 			ShowQuantity = true,
-			GoalNotificationSound = SOUNDKIT.UI_WORLDQUEST_COMPLETE,
+			GoalNotificationSound = SOUNDKIT.ALARM_CLOCK_WARNING_3,
 			PlayNotificationSound = true,
       NotificationDisplayDuration = 5,
       NotificationGlow = true,
@@ -1622,8 +1622,8 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
-  -- item location is only not nil for bag item clicks
-  if itemLocation == nil then
+  -- item location can be nil for bags/bank/mail and is not nil for inventory slots, make an explicit check
+  if itemLocation and itemLocation.IsBagAndSlot and (not itemLocation:IsBagAndSlot()) then
     return;
   end
 
