@@ -201,7 +201,7 @@ function TitanFarmBuddy_SetItemIndexOnShow(self)
     end
   end
 
-  -- Set default value for dialog editbox
+  -- Set default value for dialog edit box
   getglobal(self:GetName() .. 'EditBox'):SetText(tostring(defaultIndex));
 end
 
@@ -833,7 +833,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetItemString()
--- DESC : Gets the item strinf to diplay on the Titan Panel button.
+-- DESC : Gets the item string to display on the Titan Panel button.
 -- **************************************************************************
 function TitanFarmBuddy:GetItemString(item, showIcon)
 
@@ -984,7 +984,7 @@ end
 
 -- **************************************************************************
 -- NAME : TitanPanelRightClickMenu_PrepareFarmBuddyMenu()
--- DESC : Display rightclick menu options
+-- DESC : Display right click menu options
 -- **************************************************************************
 function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(frame, level, menuList)
 
@@ -1144,13 +1144,13 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_OnShow(self)
 
-  -- SOUNDKIT Fux for Patch 7.3
+  -- SOUNDKIT Fix for Patch 7.3
   -- Since 7.3 the sound is a number so check if we have a string
   -- from AddON version <= 1.1.6
   local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound');
   if sound ~= nil then
     if not tonumber(sound) then
-      TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.UI_WORLDQUEST_COMPLETE);
+      TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.ALARM_CLOCK_WARNING_3);
     end
   end
 
@@ -1574,7 +1574,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true);
-  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'UI_WORLDQUEST_COMPLETE');
+  	TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'ALARM_CLOCK_WARNING_3');
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5);
   	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1);
