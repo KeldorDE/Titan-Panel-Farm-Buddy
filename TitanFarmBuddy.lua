@@ -213,7 +213,7 @@ function TitanFarmBuddy_SetItemIndexOnAccept(self, data)
   local index = tonumber(getglobal(self:GetName() .. 'EditBox'):GetText());
   if TitanFarmBuddy:IsIndexValid(index) == true then
     local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data);
-    TitanFarmBuddy:SetItem(index, nil, GetItemInfo(data));
+    TitanFarmBuddy:SetItem(index, nil, data);
     TitanFarmBuddy:Print(text);
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME);
   else
@@ -802,7 +802,7 @@ function TitanFarmBuddy_GetButtonText(id)
       local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i));
       if item ~= nil and item ~= '' then
         items[i] = {
-          Name = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. tostring(i)),
+          Name = item,
           Quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. tostring(i))),
         };
       end
@@ -832,6 +832,15 @@ function TitanFarmBuddy_GetButtonText(id)
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNameFromItemLink()
+-- DESC : Gets the item link without the brackets.
+-- **************************************************************************
+function TitanFarmBuddy:GetNameFromItemLink(itemLink)
+  local itemLinkNoBrackets = itemLink:gsub("%[(.-)%]", "%1")
+  return itemLinkNoBrackets;
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:GetItemString()
 -- DESC : Gets the item string to display on the Titan Panel button.
 -- **************************************************************************
@@ -857,7 +866,7 @@ function TitanFarmBuddy:GetItemString(item, showIcon)
     end
 
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
-      str = str .. ' ' .. itemInfo.Name;
+      str = str .. ' ' .. TitanFarmBuddy:GetNameFromItemLink(item.Name);
     end
   end
 
@@ -917,7 +926,7 @@ function TitanFarmBuddy_GetItemInfo(name)
       local _, itemID = strsplit(':', itemLink);
       local info = {
         ItemID = itemID,
-        Name = itemName,
+        Name = TitanFarmBuddy:GetNameFromItemLink(itemLink),
         Link = itemLink,
         IconFileDataID = GetItemIcon(itemLink),
         CountBags = countBags,
@@ -1670,7 +1679,6 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
   if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
     if itemLink ~= nil then
-
       local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', tostring(ITEMS_AVAILABLE));
       if dialog then
         dialog.data = itemLink;
@@ -1810,6 +1818,7 @@ function TitanFarmBuddy:ChatCommand(input)
   elseif cmd == 'track' then
 
     if value ~= nil then
+      print(TitanFarmBuddy_GetItemInfo(arg1))
       local itemInfo = TitanFarmBuddy_GetItemInfo(arg1);
       if itemInfo ~= nil then
         local index = tonumber(value);
