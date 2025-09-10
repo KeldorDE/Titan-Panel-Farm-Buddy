@@ -55,6 +55,10 @@ L["FARM_BUDDY_FAST_TRACKING_SHORTCUTS_DESC"] = "Combine your desired keys as a f
 --[[Translation missing --]]
 L["FARM_BUDDY_GERMAN"] = "German"
 --[[Translation missing --]]
+L["FARM_BUDDY_ENGLISH"] = "English"
+--[[Translation missing --]]
+L["FARM_BUDDY_RUSSIAN"] = "Russian"
+--[[Translation missing --]]
 L["FARM_BUDDY_GOAL_SET"] = "The goal quantity has been set."
 --[[Translation missing --]]
 L["FARM_BUDDY_INCLUDE_BANK"] = "Include items in your bank"

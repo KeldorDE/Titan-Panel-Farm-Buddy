@@ -20,8 +20,11 @@ ignore:
   - README.md
   - CHANGES.txt
   - CHANGELOG.txt
-  - scripts
   - .github
+  - .git
+  - .gitignore
+  - .gitattributes
+  - .editorconfig
 
 required-dependencies:
   - titan-panel

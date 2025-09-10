@@ -666,9 +666,35 @@ function TitanFarmBuddy:GetConfigOption()
             order = TitanFarmBuddy:GetOptionOrder('about'),
             width = 'full',
           },
-          about_info_localization_supporters = {
+          about_info_localization_supporters_deDE = {
             type = 'description',
             name = '   • Keldor\n\n\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_enUS = {
+            type = 'description',
+            fontSize = 'small',
+            name = TitanUtils_GetGreenText(L['FARM_BUDDY_ENGLISH']) .. '\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_supporters_enUS = {
+            type = 'description',
+            name = '   • Keldor\n\n\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_ruRU = {
+            type = 'description',
+            fontSize = 'small',
+            name = TitanUtils_GetGreenText(L['FARM_BUDDY_RUSSIAN']) .. '\n',
+            order = TitanFarmBuddy:GetOptionOrder('about'),
+            width = 'full',
+          },
+          about_info_localization_supporters_ruRU = {
+            type = 'description',
+            name = '   • ZamestoTV\n\n\n',
             order = TitanFarmBuddy:GetOptionOrder('about'),
             width = 'full',
           },
