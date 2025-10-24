@@ -1,3 +1,7 @@
+1.3.7
+------------------
+- Missing classic version bump
+
 1.3.6
 ------------------
 - API update for Patch 11.2.7
