@@ -1,10 +1,10 @@
 ## Interface: 11507, 11508, 50500, 50501
-## Title: Titan Panel [|cffeda55fFarm Buddy|r] |cff00aa001.3.7|r
+## Title: Titan Panel [|cffeda55fFarm Buddy|r] |cff00aa001.3.8|r
 ## Notes: Adds the functionality to track an farmed item in the Titan Panel bar.|n|cffbbbbbbBy Keldor|r|n|nSupport:|n|cff82c5ff- patreon.com/eso_database_com|r|n|n
 ## Author: Keldor (https://www.devil-coding.de)
 ## SavedVariables: TitanFarmBuddyDB
 ## Dependencies: TitanClassic
-## Version: 1.3.7
+## Version: 1.3.8
 ## X-Child-Of: Titan
 
 embeds.xml
