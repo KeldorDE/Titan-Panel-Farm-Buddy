@@ -58,10 +58,6 @@ function TitanFarmBuddy:OnInitialize()
 
   self:RegisterDialogs();
 
-  for i = 1, ITEMS_AVAILABLE do
-    NOTIFICATION_TRIGGERED[i] = false;
-  end
-
   ITEM_DISPLAY_STYLES[1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1'];
   ITEM_DISPLAY_STYLES[2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2'];
 
@@ -69,6 +65,7 @@ function TitanFarmBuddy:OnInitialize()
   self:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand');
 
   -- Register events
+  self:RegisterEvent('PLAYER_ENTERING_WORLD', 'PlayerEnteringWorld');
   self:RegisterEvent('BAG_UPDATE', 'BagUpdate');
 end
 
@@ -142,6 +139,23 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:OnDisable()
   self:CancelAllTimers();
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:PlayerEnteringWorld()
+-- DESC : Is called when the player enters the world.
+-- **************************************************************************
+function TitanFarmBuddy:PlayerEnteringWorld()
+  self:UnregisterEvent('PLAYER_ENTERING_WORLD');
+
+  for i = 1, ITEMS_AVAILABLE do
+    local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
+    local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
+    local itemInfo = (item and item ~= '') and TitanFarmBuddy_GetItemInfo(item) or nil
+
+    NOTIFICATION_TRIGGERED[i] = itemInfo ~= nil and quantity > 0
+      and TitanFarmBuddy_GetCount(itemInfo) >= quantity
+  end
 end
 
 -- **************************************************************************
@@ -939,22 +953,19 @@ end
 -- NAME : TitanFarmBuddy_GetItemInfo()
 -- DESC : Gets information for the given item name.
 -- **************************************************************************
-function TitanFarmBuddy_GetItemInfo(name)
+function TitanFarmBuddy_GetItemInfo(item)
 
-  if name then
+  if item then
+    local itemName, itemLink = GetItemInfo(item);
 
-    local itemName, itemLink = GetItemInfo(name);
-
-    if itemLink == nil then
-      return nil;
-    else
-
+    if itemLink ~= nil then
+      local itemID = GetItemInfoInstant(item)
       local countBags = GetItemCount(itemLink);
       local countTotal = GetItemCount(itemLink, true);
-      local _, itemID = strsplit(':', itemLink);
+
       local info = {
         ItemID = itemID,
-        Name = TitanFarmBuddy:GetNameFromItemLink(itemLink),
+        Name = itemName,
         Link = itemLink,
         IconFileDataID = GetItemIcon(itemLink),
         CountBags = countBags,
@@ -978,7 +989,6 @@ function TitanFarmBuddy_GetTooltipText()
 	local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
               TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n';
   local strTmp = '';
-  local itemInfo = TitanFarmBuddy_GetItemInfo(TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item'));
   local hasItem = false;
 
   for i = 1, ITEMS_AVAILABLE do
@@ -1146,10 +1156,9 @@ function TitanFarmBuddy:BagUpdate()
         if itemInfo ~= nil then
           local count = TitanFarmBuddy_GetCount(itemInfo);
           if count >= quantity then
-            self:QueueNotification(itemInfo.ItemID, item, quantity);
+            self:QueueNotification(i, item, quantity);
           else
-            NOTIFICATION_QUEUE[itemInfo.ItemID] = nil;
-            NOTIFICATION_TRIGGERED[itemInfo.ItemID] = false;
+            NOTIFICATION_QUEUE[i] = nil;
           end
         end
       end
@@ -1846,7 +1855,6 @@ function TitanFarmBuddy:ChatCommand(input)
   elseif cmd == 'track' then
 
     if value ~= nil then
-      print(TitanFarmBuddy_GetItemInfo(arg1))
       local itemInfo = TitanFarmBuddy_GetItemInfo(arg1);
       if itemInfo ~= nil then
         local index = tonumber(value);
