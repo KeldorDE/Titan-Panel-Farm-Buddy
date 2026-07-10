@@ -1,7 +1,8 @@
 1.3.11
 ------------------
-- Fix for GetItemInfo method
-- Fix for wrong notification trigger event
+- Fixed error in the GetItemInfo method
+- Fixed notification being triggered by the wrong event
+- Improve performance by removing redundant function calls
 
 1.3.10
 ------------------
