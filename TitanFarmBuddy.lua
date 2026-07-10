@@ -228,7 +228,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_SetItemIndexOnAccept(self, data)
     local index = tonumber(getglobal(self:GetName() .. 'EditBox'):GetText())
-    if TitanFarmBuddy:IsIndexValid(index) == true then
+    if TitanFarmBuddy:IsIndexValid(index) then
         local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
         TitanFarmBuddy:SetItem(index, nil, data)
         TitanFarmBuddy:Print(text)
@@ -911,7 +911,7 @@ function TitanFarmBuddy:GetItemString(item, showIcon)
 
         if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
             local itemName
-            if showColoredText == true then
+            if showColoredText then
                 itemName = TitanFarmBuddy:GetNameFromItemLink(item.Name)
             else
                 itemName = itemInfo.Name
@@ -931,7 +931,7 @@ end
 function TitanFarmBuddy:GetIconString(icon, space)
     local fontSize = TitanPanelGetVar('FontSize') + 6
     local str = '|T' .. icon .. ':' .. fontSize .. '|t'
-    if space == true then
+    if space then
         str = str .. ' '
     end
     return str
@@ -1027,7 +1027,7 @@ function TitanFarmBuddy_GetTooltipText()
         end
     end
 
-    if hasItem == true then
+    if hasItem then
         str = str .. TitanUtils_GetHighlightText(L['FARM_BUDDY_SUMMARY'])
         str = str .. '\n------------------------------------'
         str = str .. strTmp
@@ -1186,7 +1186,7 @@ function TitanFarmBuddy_GetCount(itemInfo)
     local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
     local count = itemInfo.CountBags
 
-    if includeBank == 1 or includeBank == true then
+    if includeBank then
         count = itemInfo.CountTotal
     end
 
@@ -1619,7 +1619,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ResetConfig(itemsOnly)
 
-    if itemsOnly == false then
+    if not itemsOnly then
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false)
@@ -1692,7 +1692,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
                 conditions = not IsAltKeyDown()
             end
 
-            if (conditions == false) then
+            if (not conditions) then
                 break
             end
 
@@ -1703,7 +1703,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
                 conditions = not IsControlKeyDown()
             end
 
-            if (conditions == false) then
+            if (not conditions) then
                 break
             end
 
@@ -1714,7 +1714,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
                 conditions = not IsShiftKeyDown()
             end
 
-            if (conditions == false) then
+            if (not conditions) then
                 break
             end
         end
@@ -1749,12 +1749,12 @@ end
 function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
 
     local triggerStatus = true
-    if (NOTIFICATION_TRIGGERED[index] == nil or NOTIFICATION_TRIGGERED[index] == false) then
+    if (not NOTIFICATION_TRIGGERED[index]) then
         triggerStatus = false
     end
 
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
-    if (notificationEnabled == true and triggerStatus == false) or demo == true then
+    if (notificationEnabled and not triggerStatus) or demo then
 
         local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
         local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
@@ -1762,15 +1762,15 @@ function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
         local notificationShine = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
         local sound
 
-        if demo == true then
+        if demo then
             item = L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME']
         end
 
-        if playSound == true then
+        if playSound then
             sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
         end
 
-        if demo == false then
+        if not demo then
             NOTIFICATION_TRIGGERED[index] = true
         end
 
@@ -1783,7 +1783,7 @@ end
 -- DESC : Is called by the timer to handle the next notification.
 -- **************************************************************************
 function TitanFarmBuddy:NotificationTask()
-    if TitanFarmBuddyNotification_Shown() == false then
+    if not TitanFarmBuddyNotification_Shown() then
         for index, notification in pairs(NOTIFICATION_QUEUE) do
             TitanFarmBuddy:ShowNotification(notification.Index, notification.Item, notification.Quantity, false)
             NOTIFICATION_QUEUE[index] = nil
@@ -1825,7 +1825,7 @@ function TitanFarmBuddy:ChatCommand(input)
 
         local index = tonumber(value)
 
-        if TitanFarmBuddy:IsIndexValid(index) == true then
+        if TitanFarmBuddy:IsIndexValid(index) then
             local text = L['FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', index)
             TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
             TitanFarmBuddy:Print(text)
@@ -1841,9 +1841,9 @@ function TitanFarmBuddy:ChatCommand(input)
 
         if value ~= nil then
             local status = TitanFarmBuddy:ValidateNumber(nil, arg1)
-            if status == true then
+            if status then
                 local index = tonumber(value)
-                if TitanFarmBuddy:IsIndexValid(index) == true then
+                if TitanFarmBuddy:IsIndexValid(index) then
                     TitanFarmBuddy:SetItemQuantity(index, nil, arg1)
                     TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET'])
                     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
@@ -1864,7 +1864,7 @@ function TitanFarmBuddy:ChatCommand(input)
             local itemInfo = TitanFarmBuddy_GetItemInfo(arg1)
             if itemInfo ~= nil then
                 local index = tonumber(value)
-                if TitanFarmBuddy:IsIndexValid(index) == true then
+                if TitanFarmBuddy:IsIndexValid(index) then
                     TitanFarmBuddy:SetItem(index, nil, itemInfo.Name)
                     local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
                     TitanFarmBuddy:Print(text)

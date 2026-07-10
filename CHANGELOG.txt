@@ -1,3 +1,7 @@
+1.4.1
+------------------
+- Fixed an type check for notifications that are not trigger even if they should
+
 1.4.0
 ------------------
 - Added French translation
