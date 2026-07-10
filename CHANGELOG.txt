@@ -2,6 +2,7 @@
 ------------------
 - Fixed error in the GetItemInfo method
 - Fixed notification being triggered by the wrong event
+- Fixed notification duration has no effect
 - Improve performance by removing redundant function calls
 
 1.3.10

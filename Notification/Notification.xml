@@ -6,9 +6,9 @@
     </Size>
     <Anchors>
       <Anchor point="CENTER" relativePoint="TOP" relativeTo="UIParent">
-  			<Offset>
-  				<AbsDimension x="0" y="-70" />
-  			</Offset>
+        <Offset>
+          <AbsDimension x="0" y="-70" />
+        </Offset>
       </Anchor>
     </Anchors>
     <Layers>
@@ -94,10 +94,10 @@
     </Frames>
     <Scripts>
       <OnMouseDown>
-        TitanFarmBuddyNotification_OnMouseDown(self, button);
+        TitanFarmBuddyNotification_OnMouseDown(self, button)
       </OnMouseDown>
       <OnMouseUp>
-        TitanFarmBuddyNotification_OnMouseUp(self, button);
+        TitanFarmBuddyNotification_OnMouseUp(self, button)
       </OnMouseUp>
     </Scripts>
   </Button>
@@ -109,30 +109,30 @@
       <Anchor point="CENTER" relativePoint="CENTER" relativeTo="TitanFarmBuddyAnchor" />
     </Anchors>
     <Animations>
-			<AnimationGroup parentKey="animIn">
-				<Alpha fromAlpha="1" toAlpha="0" duration="0" order="1"/>
-				<Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="2"/>
-			</AnimationGroup>
-			<AnimationGroup parentKey="waitAndAnimOut">
-				<Alpha startDelay="4.05" fromAlpha="1" toAlpha="0" duration="1.5" parentKey="animOut">
-					<Scripts>
-						<OnFinished>
-							self:GetRegionParent():Hide();
-              TitanFarmBuddyNotification_HideNotification();
-						</OnFinished>
-					</Scripts>
-				</Alpha>
-			</AnimationGroup>
+      <AnimationGroup parentKey="animIn">
+        <Alpha fromAlpha="1" toAlpha="0" duration="0" order="1"/>
+        <Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="2"/>
+      </AnimationGroup>
+      <AnimationGroup parentKey="waitAndAnimOut">
+        <Alpha startDelay="4.05" fromAlpha="1" toAlpha="0" duration="1.5" parentKey="animOut">
+          <Scripts>
+            <OnFinished>
+              self:GetRegionParent():Hide()
+              TitanFarmBuddyNotification_HideNotification()
+            </OnFinished>
+          </Scripts>
+        </Alpha>
+      </AnimationGroup>
       <AnimationGroup parentKey="animOut">
-				<Alpha fromAlpha="1" toAlpha="0" duration="1.5" parentKey="animOut">
-					<Scripts>
-						<OnFinished>
-							self:GetRegionParent():Hide();
-						</OnFinished>
-					</Scripts>
-				</Alpha>
-			</AnimationGroup>
-		</Animations>
+        <Alpha fromAlpha="1" toAlpha="0" duration="1.5" parentKey="animOut">
+          <Scripts>
+            <OnFinished>
+              self:GetRegionParent():Hide()
+            </OnFinished>
+          </Scripts>
+        </Alpha>
+      </AnimationGroup>
+    </Animations>
     <Layers>
       <Layer level="BACKGROUND">
         <Texture name="$parentBackground" file="Interface\AchievementFrame\UI-Achievement-Alert-Background">
@@ -146,7 +146,7 @@
           <Size x="200" y="12" />
           <Anchors>
             <Anchor point="TOP">
-						  <Offset x="7" y="-23" />
+              <Offset x="7" y="-23" />
             </Anchor>
           </Anchors>
         </FontString>
@@ -163,83 +163,83 @@
         </FontString>
       </Layer>
       <Layer level="OVERLAY">
-				<Texture file="Interface\AchievementFrame\UI-Achievement-Alert-Glow" alphaMode="ADD" hidden="true" parentKey="glow">
-					<Size x="500" y="141"/>
-					<Anchors>
-						<Anchor point="CENTER" x="0" y="0"/>
-					</Anchors>
-					<Animations>
-						<AnimationGroup parentKey="animIn">
-							<Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="1"/>
-							<Alpha fromAlpha="1" toAlpha="0" duration="0.5" order="2"/>
-							<Scripts>
-								<OnFinished>
-									self:GetParent():Hide();
-								</OnFinished>
-							</Scripts>
-						</AnimationGroup>
-					</Animations>
-					<TexCoords left="0" right="0.78125" top="0" bottom="0.66796875"/>
-				</Texture>
-				<Texture file="Interface\AchievementFrame\UI-Achievement-Alert-Glow" alphaMode="ADD" hidden="true" parentKey="shine">
-					<Size x="67" y="72"/>
-					<Anchors>
-						<Anchor point="BOTTOMLEFT" x="0" y="8"/>
-					</Anchors>
-					<Animations>
-						<AnimationGroup parentKey="animIn">
-							<Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="1"/>
-							<Translation offsetX="360" offsetY="0" duration="0.85" order="2"/>
-							<Alpha startDelay="0.35" fromAlpha="1" toAlpha="0" duration="0.5" order="2"/>
-							<Scripts>
-								<OnFinished>
-									self:GetParent():Hide();
-								</OnFinished>
-							</Scripts>
-						</AnimationGroup>
-					</Animations>
-					<TexCoords left="0.78125" right="0.912109375" top="0" bottom="0.28125"/>
-				</Texture>
-			</Layer>
+        <Texture file="Interface\AchievementFrame\UI-Achievement-Alert-Glow" alphaMode="ADD" hidden="true" parentKey="glow">
+          <Size x="500" y="141"/>
+          <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+          </Anchors>
+          <Animations>
+            <AnimationGroup parentKey="animIn">
+              <Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="1"/>
+              <Alpha fromAlpha="1" toAlpha="0" duration="0.5" order="2"/>
+              <Scripts>
+                <OnFinished>
+                  self:GetParent():Hide()
+                </OnFinished>
+              </Scripts>
+            </AnimationGroup>
+          </Animations>
+          <TexCoords left="0" right="0.78125" top="0" bottom="0.66796875"/>
+        </Texture>
+        <Texture file="Interface\AchievementFrame\UI-Achievement-Alert-Glow" alphaMode="ADD" hidden="true" parentKey="shine">
+          <Size x="67" y="72"/>
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" x="0" y="8"/>
+          </Anchors>
+          <Animations>
+            <AnimationGroup parentKey="animIn">
+              <Alpha fromAlpha="0" toAlpha="1" duration="0.2" order="1"/>
+              <Translation offsetX="360" offsetY="0" duration="0.85" order="2"/>
+              <Alpha startDelay="0.35" fromAlpha="1" toAlpha="0" duration="0.5" order="2"/>
+              <Scripts>
+                <OnFinished>
+                  self:GetParent():Hide()
+                </OnFinished>
+              </Scripts>
+            </AnimationGroup>
+          </Animations>
+          <TexCoords left="0.78125" right="0.912109375" top="0" bottom="0.28125"/>
+        </Texture>
+      </Layer>
     </Layers>
     <Frames>
       <Frame name="$parentIcon" parentKey="Icon">
-				<Size x="124" y="124"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" x="-26" y="16"/>
-				</Anchors>
-				<Layers>
-					<Layer level="BORDER">
-						<Texture name="$parentBling" parentKey="Bling" file="Interface\AchievementFrame\UI-Achievement-Bling" hidden="true">
-							<Anchors>
-								<Anchor point="CENTER" x="-1" y="1"/>
-							</Anchors>
-							<Size x="116" y="116"/>
-						</Texture>
-					</Layer>
-					<Layer level="ARTWORK">
-						<Texture name="$parentTexture" parentKey="Texture">
-							<Anchors>
-								<Anchor point="CENTER" x="0" y="3"/>
-							</Anchors>
-							<Size x="50" y="50"/>
-						</Texture>
-					</Layer>
-					<Layer level="OVERLAY">
-						<Texture name="$parentOverlay" parentKey="Overlay" file="Interface\AchievementFrame\UI-Achievement-IconFrame">
-							<Anchors>
-								<Anchor point="CENTER" x="-1" y="2"/>
-							</Anchors>
-							<Size x="72" y="72"/>
-							<TexCoords left="0" right="0.5625" top="0" bottom="0.5625"/>
-						</Texture>
-					</Layer>
-				</Layers>
-			</Frame>
+        <Size x="124" y="124"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" x="-26" y="16"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BORDER">
+            <Texture name="$parentBling" parentKey="Bling" file="Interface\AchievementFrame\UI-Achievement-Bling" hidden="true">
+              <Anchors>
+                <Anchor point="CENTER" x="-1" y="1"/>
+              </Anchors>
+              <Size x="116" y="116"/>
+            </Texture>
+          </Layer>
+          <Layer level="ARTWORK">
+            <Texture name="$parentTexture" parentKey="Texture">
+              <Anchors>
+                <Anchor point="CENTER" x="0" y="3"/>
+              </Anchors>
+              <Size x="50" y="50"/>
+            </Texture>
+          </Layer>
+          <Layer level="OVERLAY">
+            <Texture name="$parentOverlay" parentKey="Overlay" file="Interface\AchievementFrame\UI-Achievement-IconFrame">
+              <Anchors>
+                <Anchor point="CENTER" x="-1" y="2"/>
+              </Anchors>
+              <Size x="72" y="72"/>
+              <TexCoords left="0" right="0.5625" top="0" bottom="0.5625"/>
+            </Texture>
+          </Layer>
+        </Layers>
+      </Frame>
     </Frames>
     <Scripts>
       <OnMouseDown>
-        TitanFarmBuddyNotification_HideNotification(true);
+        TitanFarmBuddyNotification_HideNotification(true)
       </OnMouseDown>
     </Scripts>
   </Button>
