@@ -1,5 +1,8 @@
-1.3.11
+1.4.0
 ------------------
+- Added French translation
+- Added Italian translation
+- Added Spanish translation
 - Fixed error in the GetItemInfo method
 - Fixed notification being triggered by the wrong event
 - Fixed notification duration has no effect
