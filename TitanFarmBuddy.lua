@@ -15,6 +15,7 @@ local ITEM_DISPLAY_STYLES = {}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
 local ADDON_SETTING_PANEL
+local ITEM_DATA_INIT_COMPLETE = false
 local CHAT_COMMAND = 'fb'
 local CHAT_COMMANDS = {
     track = {
@@ -66,7 +67,7 @@ function TitanFarmBuddy:OnInitialize()
 
     -- Register events
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'PlayerEnteringWorld')
-    self:RegisterEvent('BAG_UPDATE', 'BagUpdate')
+    self:RegisterEvent('BAG_UPDATE_DELAYED', 'BagUpdateDelayed')
 end
 
 -- **************************************************************************
@@ -138,6 +139,7 @@ end
 -- DESC : Is called when the Plugin gets disabled.
 -- **************************************************************************
 function TitanFarmBuddy:OnDisable()
+    ITEM_DATA_INIT_COMPLETE = false
     self:CancelAllTimers()
 end
 
@@ -148,13 +150,19 @@ end
 function TitanFarmBuddy:PlayerEnteringWorld()
     self:UnregisterEvent('PLAYER_ENTERING_WORLD')
 
-    for i = 1, ITEMS_AVAILABLE do
-        local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
-        local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
-        local itemInfo = (item and item ~= '') and TitanFarmBuddy_GetItemInfo(item) or nil
+    -- Delayed data fetching to prevent login timing issues
+    C_Timer.After(1, function()
+        for i = 1, ITEMS_AVAILABLE do
+            local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
+            local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
+            local itemInfo = (item and item ~= '') and TitanFarmBuddy_GetItemInfo(item) or nil
 
-        NOTIFICATION_TRIGGERED[i] = itemInfo ~= nil and quantity > 0 and TitanFarmBuddy_GetCount(itemInfo) >= quantity
-    end
+            NOTIFICATION_TRIGGERED[i] = itemInfo ~= nil and quantity > 0 and TitanFarmBuddy_GetCount(itemInfo) >= quantity
+        end
+
+        TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+        ITEM_DATA_INIT_COMPLETE = true
+    end)
 end
 
 -- **************************************************************************
@@ -1152,20 +1160,21 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(_, level, menuList)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:BagUpdate()
--- DESC : Parse events registered to plugin and act on them.
+-- NAME : TitanFarmBuddy:BagUpdateDelayed()
+-- DESC : Checks if the item count has reached the goal and triggers a notification if it has.
 -- **************************************************************************
-function TitanFarmBuddy:BagUpdate()
+function TitanFarmBuddy:BagUpdateDelayed()
+
     for i = 1, ITEMS_AVAILABLE do
-        local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
-        if item ~= nil and item ~= '' then
-            local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
-            if quantity > 0 then
-                local itemInfo = TitanFarmBuddy_GetItemInfo(item)
-                if itemInfo ~= nil then
-                    local count = TitanFarmBuddy_GetCount(itemInfo)
-                    if count >= quantity then
-                        self:QueueNotification(i, item, quantity)
+        local trackedItem = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
+        local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
+
+        if trackedItem ~= nil and trackedItem ~= '' and quantity ~= nil and quantity > 0 then
+            local itemInfo = TitanFarmBuddy_GetItemInfo(trackedItem)
+            if itemInfo ~= nil then
+                if TitanFarmBuddy_GetCount(itemInfo) >= quantity then
+                    if ITEM_DATA_INIT_COMPLETE then
+                        self:QueueNotification(i, itemInfo.Name, quantity)
                     else
                         NOTIFICATION_QUEUE[i] = nil
                     end
@@ -1748,13 +1757,13 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
 
-    local triggerStatus = true
-    if (not NOTIFICATION_TRIGGERED[index]) then
-        triggerStatus = false
+    local itemIndexTriggered = true
+    if NOTIFICATION_TRIGGERED[index] == nil or NOTIFICATION_TRIGGERED[index] == false then
+        itemIndexTriggered = false
     end
 
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
-    if (notificationEnabled and not triggerStatus) or demo then
+    if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
 
         local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
         local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))

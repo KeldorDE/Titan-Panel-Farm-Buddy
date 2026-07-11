@@ -1,3 +1,9 @@
+1.4.2
+------------------
+- Fixed notifications being incorrectly triggered on login by delaying the initial item data fetch
+- Fixed false notifications caused by an incorrect trigger status check
+- Switched to the BAG_UPDATE_DELAYED event to improve performance and reliability
+
 1.4.1
 ------------------
 - Fixed an type check for notifications that are not trigger even if they should
