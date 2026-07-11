@@ -3,6 +3,7 @@
 - Some performance optimizations
 - Reduced the number of notification sounds to prevent UI lag in the settings panel
 - Fixed another login issue where notifications were incorrectly triggered, by delaying the initial item data fetch
+- Fixed an issue where the notification position could not be saved
 
 1.4.2
 ------------------
