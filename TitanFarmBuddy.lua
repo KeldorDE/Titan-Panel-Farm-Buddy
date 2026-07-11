@@ -47,6 +47,18 @@ local CHAT_COMMANDS = {
         Description = L['FARM_BUDDY_COMMAND_HELP_DESC']
     }
 }
+local NOTIFICATION_SOUNDS = {
+    [SOUNDKIT.ALARM_CLOCK_WARNING_1]        = L['FARM_BUDDY_SOUND_ALARM_1'],
+    [SOUNDKIT.ALARM_CLOCK_WARNING_2]        = L['FARM_BUDDY_SOUND_ALARM_2'],
+    [SOUNDKIT.ALARM_CLOCK_WARNING_3]        = L['FARM_BUDDY_SOUND_ALARM_3'],
+    [SOUNDKIT.READY_CHECK]                  = L['FARM_BUDDY_SOUND_READY_CHECK'],
+    [SOUNDKIT.RAID_WARNING]                 = L['FARM_BUDDY_SOUND_RAID_WARNING'],
+    [SOUNDKIT.AUCTION_WINDOW_OPEN]          = L['FARM_BUDDY_SOUND_AUCTION'],
+    [SOUNDKIT.IG_QUEST_LIST_COMPLETE]       = L['FARM_BUDDY_SOUND_QUEST_COMPLETE'],
+    [SOUNDKIT.LFG_REWARDS]                  = L['FARM_BUDDY_SOUND_DUNGEON_REWARD'],
+    [SOUNDKIT.UI_EPICLOOT_TOAST]            = L['FARM_BUDDY_SOUND_EPIC_LOOT'],
+    [SOUNDKIT.UI_LEGENDARY_LOOT_TOAST]      = L['FARM_BUDDY_SOUND_LEGENDARY_LOOT'],
+}
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
@@ -547,7 +559,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'select',
                         name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
                         style = 'dropdown',
-                        values = TitanFarmBuddy:GetSounds(),
+                        values = TitanFarmBuddy:GetNotificationSounds(),
                         set = 'SetNotificationSound',
                         get = 'GetNotificationSound',
                         width = 'double',
@@ -1198,10 +1210,6 @@ end
 -- DESC : Display button when plugin is visible.
 -- **************************************************************************
 function TitanFarmBuddy_OnShow(self)
-
-    -- SOUNDKIT Fix for Patch 7.3
-    -- Since 7.3 the sound is a number so check if we have a string
-    -- from AddON version <= 1.1.6
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
     if sound then
         if not tonumber(sound) then
@@ -1448,7 +1456,12 @@ end
 -- DESC : Gets the notification sound.
 -- **************************************************************************
 function TitanFarmBuddy:GetNotificationSound()
-    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
+    local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
+    if not sound or NOTIFICATION_SOUNDS[sound] == nil then
+        return SOUNDKIT.ALARM_CLOCK_WARNING_3
+    end
+
+    return sound
 end
 
 -- **************************************************************************
@@ -1810,7 +1823,7 @@ function TitanFarmBuddy:ChatCommand(input)
     elseif cmd == 'version' then
         TitanFarmBuddy:Print(ADDON_VERSION)
 
-        -- Reset AddOn settings
+    -- Reset AddOn settings
     elseif cmd == 'reset' then
 
         if value == 'all' then
@@ -1836,7 +1849,7 @@ function TitanFarmBuddy:ChatCommand(input)
             TitanFarmBuddy:Print(text)
         end
 
-        -- Set goal quantity
+    -- Set goal quantity
     elseif cmd == 'quantity' then
 
         if value then
@@ -1857,7 +1870,7 @@ function TitanFarmBuddy:ChatCommand(input)
             TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
         end
 
-        -- Set tracked item
+    -- Set tracked item
     elseif cmd == 'track' then
 
         if value then
@@ -1920,16 +1933,15 @@ function TitanFarmBuddy:IsIndexValid(index)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy:GetSounds()
+-- NAME : TitanFarmBuddy:GetNotificationSounds()
 -- DESC : Get a list of available sounds.
 -- **************************************************************************
-function TitanFarmBuddy:GetSounds()
+function TitanFarmBuddy:GetNotificationSounds()
 
-    -- TODO: Limit the number of available entries to reduce UI hanging
     local sounds = {}
 
-    for k, v in pairs(SOUNDKIT) do
-        sounds[v] = k
+    for k, v in pairs(NOTIFICATION_SOUNDS) do
+        sounds[k] = v
     end
 
     return sounds
