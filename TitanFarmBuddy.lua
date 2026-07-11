@@ -560,6 +560,7 @@ function TitanFarmBuddy:GetConfigOption()
                         name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
                         style = 'dropdown',
                         values = TitanFarmBuddy:GetNotificationSounds(),
+                        sorting = TitanFarmBuddy:GetNotificationSoundsSorting(),
                         set = 'SetNotificationSound',
                         get = 'GetNotificationSound',
                         width = 'double',
@@ -1945,4 +1946,23 @@ function TitanFarmBuddy:GetNotificationSounds()
     end
 
     return sounds
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetNotificationSoundsSorting()
+-- DESC : Get the sound keys sorted by their label ascending.
+-- **************************************************************************
+function TitanFarmBuddy:GetNotificationSoundsSorting()
+
+    local sorting = {}
+
+    for k in pairs(NOTIFICATION_SOUNDS) do
+        table.insert(sorting, k)
+    end
+
+    table.sort(sorting, function(a, b)
+        return NOTIFICATION_SOUNDS[a] < NOTIFICATION_SOUNDS[b]
+    end)
+
+    return sorting
 end
