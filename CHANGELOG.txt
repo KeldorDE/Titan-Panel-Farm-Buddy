@@ -1,7 +1,7 @@
 1.4.3
 ------------------
 - Some performance optimizations
-- Reduced the number of notification sounds to reduce UI lag in setting
+- Reduced the number of notification sounds to prevent UI lag in the settings panel
 - Fixed another login issue where notifications were incorrectly triggered, by delaying the initial item data fetch
 
 1.4.2
@@ -21,8 +21,8 @@
 - Added Spanish translation
 - Fixed error in the GetItemInfo method
 - Fixed notification being triggered by the wrong event
-- Fixed notification duration has no effect
-- Improve performance by removing redundant function calls
+- Fixed an issue where the notification duration had no effect
+- Improved performance by removing redundant function calls
 
 1.3.10
 ------------------
@@ -31,7 +31,7 @@
 1.3.9
 ------------------
 - API update for Patch 12.0.0
-- Fixed left click to open setting panel error message
+- Fixed error message when left-clicking to open the settings panel
 
 1.3.8
 ------------------
@@ -47,7 +47,7 @@
 
 1.3.5
 ------------------
-- Add russian translation by ZamestoTV
+- Added Russian translation by ZamestoTV
 
 1.3.4
 ------------------
@@ -89,7 +89,7 @@
 
 1.2.19
 ------------------
-- Refactored some parts of the recently changed code parts
+- Refactored some recently changed code
 
 1.2.18
 ------------------
@@ -200,7 +200,7 @@
 
 1.1.3
 ------------------
-- Fixed a bug that no button text will appear if the game language has changed
+- Fixed a bug where no button text appeared after the game language changed
 
 1.1.2
 ------------------
@@ -209,13 +209,13 @@
 
 1.1.0
 ------------------
-- Feature: Track up to 4 items at once. Show only one choosed primary item or show all items on the bar.
+- Feature: Track up to 4 items at once. Show only one chosen primary item or show all items on the bar.
 - Feature: New notification effect. (Glow and Shine)
 - Feature: Added new action button "Reset settings to default values".
 - Feature: Added new settings to the right click menu.
-- Feature: Notifications are now queued in case there is more then one notification at the same time.
+- Feature: Notifications are now queued in case there is more than one notification at the same time.
 - Improvement: Redesign of the options window. (Tab style)
-- Bugfix: Reset notification status to avoid hidden notificatons.
+- Bugfix: Reset notification status to avoid hidden notifications.
 
 1.0.2
 ------------------
