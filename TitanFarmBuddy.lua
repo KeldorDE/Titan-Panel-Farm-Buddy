@@ -151,13 +151,13 @@ function TitanFarmBuddy:PlayerEnteringWorld()
     self:UnregisterEvent('PLAYER_ENTERING_WORLD')
 
     -- Delayed data fetching to prevent login timing issues
-    C_Timer.After(1, function()
+    C_Timer.After(4, function()
         for i = 1, ITEMS_AVAILABLE do
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
             local itemInfo = (item and item ~= '') and TitanFarmBuddy_GetItemInfo(item) or nil
 
-            NOTIFICATION_TRIGGERED[i] = itemInfo ~= nil and quantity > 0 and TitanFarmBuddy_GetCount(itemInfo) >= quantity
+            NOTIFICATION_TRIGGERED[i] = itemInfo and quantity > 0 and TitanFarmBuddy_GetCount(itemInfo) >= quantity
         end
 
         TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
@@ -842,31 +842,22 @@ end
 function TitanFarmBuddy_GetButtonText()
 
     local str = ''
-    local items = {}
     local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
     local itemDisplayStyle = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle'))
     local activeIndex = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')
 
-    -- Create item table
     for i = 1, ITEMS_AVAILABLE do
-        if (itemDisplayStyle == 1 and activeIndex == i) or (itemDisplayStyle == 2 or itemDisplayStyle == 3) then
+        if (itemDisplayStyle == 1 and activeIndex == i) or itemDisplayStyle > 1 then
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
-            if item ~= nil and item ~= '' then
-                items[i] = {
-                    Name = item,
-                    Quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)),
-                }
+            if item and item ~= '' then
+                local itemStr = TitanFarmBuddy:GetItemString(item, tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)), showIcon)
+                if itemStr ~= nil and itemStr ~= '' then
+                    if str ~= '' then
+                        str = str .. '   '
+                    end
+                    str = str .. itemStr
+                end
             end
-        end
-    end
-
-    for i, item in pairs(items) do
-        local itemStr = TitanFarmBuddy:GetItemString(item, showIcon)
-        if itemStr ~= nil and itemStr ~= '' then
-            if i > 1 then
-                str = str .. '   '
-            end
-            str = str .. itemStr
         end
     end
 
@@ -887,22 +878,20 @@ end
 -- DESC : Gets the item link without the brackets.
 -- **************************************************************************
 function TitanFarmBuddy:GetNameFromItemLink(itemLink)
-    -- Strip the brackets to keep the item color
-    local itemLinkNoBrackets = itemLink:gsub("%[(.-)%]", "%1")
-    return itemLinkNoBrackets
+    return (itemLink:gsub("%[(.-)%]", "%1"))
 end
 
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:GetItemString()
 -- DESC : Gets the item string to display on the Titan Panel button.
 -- **************************************************************************
-function TitanFarmBuddy:GetItemString(item, showIcon)
+function TitanFarmBuddy:GetItemString(itemName, itemQuantity, showIcon)
 
     local str = ''
-    local itemInfo = TitanFarmBuddy_GetItemInfo(item.Name)
+    local itemInfo = TitanFarmBuddy_GetItemInfo(itemName)
 
     -- Invalid item or no item defined
-    if itemInfo ~= nil then
+    if itemInfo then
 
         local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
         local itemCount = TitanFarmBuddy_GetCount(itemInfo)
@@ -913,19 +902,19 @@ function TitanFarmBuddy:GetItemString(item, showIcon)
 
         str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText)
 
-        if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity') and item.Quantity > 0 then
-            str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(item.Quantity, showColoredText)
+        if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity') and itemQuantity > 0 then
+            str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(itemQuantity, showColoredText)
         end
 
         if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
-            local itemName
+            local buttonItemName
             if showColoredText then
-                itemName = TitanFarmBuddy:GetNameFromItemLink(item.Name)
+                buttonItemName = TitanFarmBuddy:GetNameFromItemLink(itemName)
             else
-                itemName = itemInfo.Name
+                buttonItemName = itemInfo.Name
             end
 
-            str = str .. ' ' .. itemName
+            str = str .. ' ' .. buttonItemName
         end
     end
 
@@ -975,7 +964,7 @@ function TitanFarmBuddy_GetItemInfo(item)
     if item then
         local itemName, itemLink = GetItemInfo(item)
 
-        if itemLink ~= nil then
+        if itemLink then
             local itemID = GetItemInfoInstant(item)
             local countBags = GetItemCount(itemLink)
             local countTotal = GetItemCount(itemLink, true)
@@ -1012,11 +1001,11 @@ function TitanFarmBuddy_GetTooltipText()
         local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
 
         -- No item set for this index
-        if item ~= nil and item ~= '' then
+        if item and item ~= '' then
             local itemInfo = TitanFarmBuddy_GetItemInfo(item)
 
             -- Invalid item or no item defined
-            if itemInfo ~= nil then
+            if itemInfo then
                 local goalValue = L['FARM_BUDDY_NO_GOAL']
                 local goal = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
 
@@ -1165,19 +1154,21 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:BagUpdateDelayed()
 
+    if not ITEM_DATA_INIT_COMPLETE then
+        return
+    end
+
     for i = 1, ITEMS_AVAILABLE do
         local trackedItem = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
         local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
 
-        if trackedItem ~= nil and trackedItem ~= '' and quantity ~= nil and quantity > 0 then
+        if trackedItem and trackedItem ~= '' and quantity and quantity > 0 then
             local itemInfo = TitanFarmBuddy_GetItemInfo(trackedItem)
-            if itemInfo ~= nil then
+            if itemInfo then
                 if TitanFarmBuddy_GetCount(itemInfo) >= quantity then
-                    if ITEM_DATA_INIT_COMPLETE then
-                        self:QueueNotification(i, itemInfo.Name, quantity)
-                    else
-                        NOTIFICATION_QUEUE[i] = nil
-                    end
+                    self:QueueNotification(i, itemInfo.Name, quantity)
+                else
+                    NOTIFICATION_QUEUE[i] = nil
                 end
             end
         end
@@ -1212,7 +1203,7 @@ function TitanFarmBuddy_OnShow(self)
     -- Since 7.3 the sound is a number so check if we have a string
     -- from AddON version <= 1.1.6
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
-    if sound ~= nil then
+    if sound then
         if not tonumber(sound) then
             TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.ALARM_CLOCK_WARNING_3)
         end
@@ -1229,7 +1220,7 @@ function TitanFarmBuddy:ValidateItem(_, input)
 
     local _, itemLink = GetItemInfo(input)
 
-    if itemLink ~= nil then
+    if itemLink then
         return true
     end
 
@@ -1380,7 +1371,7 @@ function TitanFarmBuddy:SetKeySetting(_, key, state)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
-    if (options[key] ~= nil) then
+    if (options[key]) then
         options[key] = state
     end
 
@@ -1395,7 +1386,7 @@ function TitanFarmBuddy:GetKeySetting(_, key)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
-    if (options[key] ~= nil) then
+    if (options[key]) then
         return options[key]
     end
 
@@ -1730,7 +1721,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
     end
 
     if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
-        if itemLink ~= nil then
+        if itemLink then
             local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', ITEMS_AVAILABLE)
             if dialog then
                 dialog.data = itemLink
@@ -1848,7 +1839,7 @@ function TitanFarmBuddy:ChatCommand(input)
         -- Set goal quantity
     elseif cmd == 'quantity' then
 
-        if value ~= nil then
+        if value then
             local status = TitanFarmBuddy:ValidateNumber(nil, arg1)
             if status then
                 local index = tonumber(value)
@@ -1869,9 +1860,9 @@ function TitanFarmBuddy:ChatCommand(input)
         -- Set tracked item
     elseif cmd == 'track' then
 
-        if value ~= nil then
+        if value then
             local itemInfo = TitanFarmBuddy_GetItemInfo(arg1)
-            if itemInfo ~= nil then
+            if itemInfo then
                 local index = tonumber(value)
                 if TitanFarmBuddy:IsIndexValid(index) then
                     TitanFarmBuddy:SetItem(index, nil, itemInfo.Name)
@@ -1922,7 +1913,7 @@ end
 -- DESC : Returns the index status.
 -- **************************************************************************
 function TitanFarmBuddy:IsIndexValid(index)
-    if index ~= nil and index > 0 and index <= ITEMS_AVAILABLE then
+    if index and index > 0 and index <= ITEMS_AVAILABLE then
         return true
     end
     return false

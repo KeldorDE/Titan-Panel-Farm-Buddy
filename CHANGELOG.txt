@@ -1,3 +1,8 @@
+1.4.3
+------------------
+- Some performance optimizations
+- Fixed another issue with notifications being incorrectly triggered on login by delaying the initial item data fetch
+
 1.4.2
 ------------------
 - Fixed notifications being incorrectly triggered on login by delaying the initial item data fetch
