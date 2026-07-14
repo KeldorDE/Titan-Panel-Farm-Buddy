@@ -1,7 +1,9 @@
 NOT RELEASED
 ------------------
+- Increased the number of tracked items from 4 to 16
 - Optimized data fetching for notifications
 - Optimized different parts of the code
+- Changed the behaviour of the set item function to always save a item link
 
 1.4.3
 ------------------

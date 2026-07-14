@@ -10,7 +10,7 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0')
 local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = {}
-local ITEMS_AVAILABLE = 4
+local ITEMS_AVAILABLE = 16
 local ITEM_DISPLAY_STYLES = {}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
@@ -117,14 +117,6 @@ function TitanFarmBuddy_OnLoad(button)
 			ShowLabelText = true,
 			ShowColoredText = true,
 			DisplayOnRightSide = false,
-			Item1 = '',
-			Item2 = '',
-			Item3 = '',
-			Item4 = '',
-			ItemQuantity1 = 0,
-			ItemQuantity2 = 0,
-			ItemQuantity3 = 0,
-			ItemQuantity4 = 0,
             ItemShowInBarIndex = 1,
             ItemDisplayStyle = 2,
 			GoalNotification = true,
@@ -143,6 +135,11 @@ function TitanFarmBuddy_OnLoad(button)
             },
 		}
 	}
+
+    for i = 1, ITEMS_AVAILABLE do
+        button.registry.savedVariables['Item' .. i] = ''
+        button.registry.savedVariables['ItemQuantity' .. i] = 0
+    end
 end
 
 -- **************************************************************************
@@ -348,7 +345,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('general'),
                     },
-                    general_space_4 = {
+                    general_space_s = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('general'),
@@ -431,49 +428,7 @@ function TitanFarmBuddy:GetConfigOption()
                 name = L['FARM_BUDDY_ITEMS'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
-                args = {
-                    items_tracking_description = {
-                        type = 'description',
-                        name = L['FARM_BUDDY_TRACKING_DESC'],
-                        order = self:GetOptionOrder('items'),
-                    },
-                    items_space_1 = {
-                        type = 'description',
-                        name = '',
-                        order = self:GetOptionOrder('items'),
-                    },
-                    items_track_1 = self:GetTrackedItemField(1),
-                    items_track_count_1 = self:GetTrackedItemQuantityField(1),
-                    items_track_show_bar_1 = self:GetTrackedItemShowBarField(1),
-                    items_clear_button_1 = self:GetTrackedItemClearButton(1),
-                    items_space_2 = {
-                        type = 'description',
-                        name = '',
-                        order = self:GetOptionOrder('items'),
-                    },
-                    items_track_2 = self:GetTrackedItemField(2),
-                    items_track_count_2 = self:GetTrackedItemQuantityField(2),
-                    items_track_show_bar_2 = self:GetTrackedItemShowBarField(2),
-                    items_clear_button_2 = self:GetTrackedItemClearButton(2),
-                    items_space_3 = {
-                        type = 'description',
-                        name = '',
-                        order = self:GetOptionOrder('items'),
-                    },
-                    items_track_3 = self:GetTrackedItemField(3),
-                    items_track_count_3 = self:GetTrackedItemQuantityField(3),
-                    items_track_show_bar_3 = self:GetTrackedItemShowBarField(3),
-                    items_clear_button_3 = self:GetTrackedItemClearButton(3),
-                    items_space_4 = {
-                        type = 'description',
-                        name = '',
-                        order = self:GetOptionOrder('items'),
-                    },
-                    items_track_4 = self:GetTrackedItemField(4),
-                    items_track_count_4 = self:GetTrackedItemQuantityField(4),
-                    items_track_show_bar_4 = self:GetTrackedItemShowBarField(4),
-                    items_clear_button_4 = self:GetTrackedItemClearButton(4),
-                },
+                args = self:GetTrackedItemsArgs(),
             },
             tab_notifications = {
                 name = L['FARM_BUDDY_NOTIFICATIONS'],
@@ -762,6 +717,34 @@ function TitanFarmBuddy:GetConfigOption()
             },
         }
     }
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetTrackedItemsArgs()
+-- DESC : Dynamically builds the tracked item option fields based on ITEMS_AVAILABLE.
+-- **************************************************************************
+function TitanFarmBuddy:GetTrackedItemsArgs()
+    local args = {
+        items_tracking_description = {
+            type = 'description',
+            name = L['FARM_BUDDY_TRACKING_DESC'],
+            order = self:GetOptionOrder('items'),
+        },
+    }
+
+    for i = 1, ITEMS_AVAILABLE do
+        args['items_space_' .. i] = {
+            type = 'description',
+            name = '',
+            order = self:GetOptionOrder('items'),
+        }
+        args['items_track_' .. i] = self:GetTrackedItemField(i)
+        args['items_track_count_' .. i] = self:GetTrackedItemQuantityField(i)
+        args['items_track_show_bar_' .. i] = self:GetTrackedItemShowBarField(i)
+        args['items_clear_button_' .. i] = self:GetTrackedItemClearButton(i)
+    end
+
+    return args
 end
 
 -- **************************************************************************
@@ -1257,11 +1240,34 @@ function TitanFarmBuddy:GetItem(index)
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:GetItemLink()
+-- DESC : Resolves the given input to an item link. If the input is already an
+--        item link it is returned unchanged, otherwise it is treated as an
+--        item id or item name and converted into an item link.
+-- **************************************************************************
+function TitanFarmBuddy:GetItemLink(input)
+    if not input or input == '' then
+        return nil
+    end
+
+    -- Input is already an item link
+    if type(input) == 'string' and input:find('|Hitem:') then
+        return input
+    end
+
+    -- Input is an item id or item name, resolve it to an item link
+    local _, itemLink = GetItemInfo(input)
+    return itemLink
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:SetItem()
 -- DESC : Sets the item.
 -- **************************************************************************
 function TitanFarmBuddy:SetItem(index, _, input)
-    TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, input)
+    local itemLink = self:GetItemLink(input)
+
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, itemLink or input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     NOTIFICATION_TRIGGERED[index] = false
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
