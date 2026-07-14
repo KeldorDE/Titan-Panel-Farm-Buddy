@@ -1,10 +1,10 @@
-NOT RELEASED
+1.4.4
 ------------------
 - Added a new setting to hide notifications in combat
 - Increased the number of tracked items from 4 to 16
 - Optimized data fetching for notifications
 - Optimized different parts of the code
-- Changed the behaviour of the set item function to always save a item link
+- Changed the behavior of the set item function to always save an item link
 
 1.4.3
 ------------------
