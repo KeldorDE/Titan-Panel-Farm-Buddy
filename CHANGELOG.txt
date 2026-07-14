@@ -1,5 +1,6 @@
 NOT RELEASED
 ------------------
+- Added a new setting to hide notifications in combat
 - Increased the number of tracked items from 4 to 16
 - Optimized data fetching for notifications
 - Optimized different parts of the code

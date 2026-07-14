@@ -117,3 +117,5 @@ L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Bist du sicher, dass du alle beobachteten
 L["TITAN_FARM_BUDDY_NO"] = "Nein"
 L["TITAN_FARM_BUDDY_OK"] = "OK"
 L["TITAN_FARM_BUDDY_YES"] = "Ja"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT"] = "Zeige keine Benachrichtigungen im Kampf an"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC"] = "Wenn diese Option aktiviert ist, werden Benachrichtigungen während des Kampfes ausgeblendet."

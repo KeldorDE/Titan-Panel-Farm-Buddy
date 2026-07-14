@@ -16,6 +16,7 @@ local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
 local ADDON_SETTING_PANEL
 local ITEM_DATA_INIT_COMPLETE = false
+local PLAYER_IN_COMBAT = false
 local CHAT_COMMAND = 'fb'
 local CHAT_COMMANDS = {
     track = {
@@ -88,6 +89,10 @@ function TitanFarmBuddy:OnInitialize()
     -- Register events
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'PlayerEnteringWorld')
     self:RegisterEvent('BAG_UPDATE_DELAYED', 'BagUpdateDelayed')
+    self:RegisterEvent('PLAYER_REGEN_DISABLED', 'PlayerRegenDisabled')
+    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'PlayerRegenEnabled')
+    self:RegisterEvent('PET_BATTLE_OPENING_START', 'PlayerRegenDisabled')
+    self:RegisterEvent('PET_BATTLE_CLOSE', 'PlayerRegenEnabled')
 end
 
 -- **************************************************************************
@@ -127,6 +132,7 @@ function TitanFarmBuddy_OnLoad(button)
             NotificationDisplayDuration = 5,
             NotificationGlow = true,
             NotificationShine = true,
+            HideNotificationInCombat = false,
             FastTrackingMouseButton = 'RightButton',
             FastTrackingKeys = {
                 ctrl = false,
@@ -449,6 +455,20 @@ function TitanFarmBuddy:GetConfigOption()
                         name = '',
                         order = self:GetOptionOrder('notifications'),
                     },
+                    notifications_hide_in_combat = {
+                        type = 'toggle',
+                        name = L['FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT'],
+                        desc = L['FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC'],
+                        get = 'GetHideNotificationInCombat',
+                        set = 'SetHideNotificationInCombat',
+                        width = 'full',
+                        order = self:GetOptionOrder('notifications'),
+                    },
+                    notifications_space_2 = {
+                        type = 'description',
+                        name = '',
+                        order = self:GetOptionOrder('notifications'),
+                    },
                     notifications_notification_display_duration = {
                         type = 'input',
                         name = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
@@ -459,7 +479,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'double',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_2 = {
+                    notifications_space_3 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -473,7 +493,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_3 = {
+                    notifications_space_4 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -487,7 +507,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_4 = {
+                    notifications_space_5 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -501,7 +521,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_5 = {
+                    notifications_space_6 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -517,7 +537,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'double',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_6 = {
+                    notifications_space_7 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -1170,6 +1190,22 @@ function TitanFarmBuddy:BagUpdateDelayed()
 end
 
 -- **************************************************************************
+-- NAME : FarmBuddy:PlayerRegenDisabled()
+-- DESC : Fires when the player enters combat.
+-- **************************************************************************
+function TitanFarmBuddy:PlayerRegenDisabled()
+    PLAYER_IN_COMBAT = true
+end
+
+-- **************************************************************************
+-- NAME : FarmBuddy:PlayerRegenDisabled()
+-- DESC : Fires if the player leaves combat.
+-- **************************************************************************
+function TitanFarmBuddy:PlayerRegenEnabled()
+    PLAYER_IN_COMBAT = false
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy_GetCount()
 -- DESC : Gets the item count.
 -- **************************************************************************
@@ -1500,6 +1536,22 @@ function TitanFarmBuddy:GetNotificationShine()
 end
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy:SetHideNotificationInCombat()
+-- DESC : Sets the hide notification in combat status.
+-- **************************************************************************
+function TitanFarmBuddy:SetHideNotificationInCombat(_, input)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat', input)
+end
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy:GetHideNotificationInCombat()
+-- DESC : Gets the hide notification in combat status.
+-- **************************************************************************
+function TitanFarmBuddy:GetHideNotificationInCombat()
+    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat')
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy_ToggleGoalNotification()
 -- DESC : Sets the notification status.
 -- **************************************************************************
@@ -1649,6 +1701,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', 2)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', true)
+        TitanSetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat', false)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton', 'RightButton')
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys', {
             ctrl = false,
@@ -1799,7 +1852,9 @@ end
 function TitanFarmBuddy:NotificationTask()
     if not TitanFarmBuddyNotification_Shown() then
         for index, notification in pairs(NOTIFICATION_QUEUE) do
-            self:ShowNotification(notification.Index, notification.Name, notification.Icon, notification.Quantity, false)
+            if not TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat') or not PLAYER_IN_COMBAT then
+                self:ShowNotification(notification.Index, notification.Name, notification.Icon, notification.Quantity, false)
+            end
             NOTIFICATION_QUEUE[index] = nil
             break
         end

@@ -117,3 +117,5 @@ L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Are you sure you want to reset all items?
 L["TITAN_FARM_BUDDY_NO"] = "No"
 L["TITAN_FARM_BUDDY_OK"] = "OK"
 L["TITAN_FARM_BUDDY_YES"] = "Yes"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT"] = "Hide notifications in combat"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC"] = "If enabled notifications are hidden while in combat."

@@ -117,3 +117,5 @@ L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "¿Seguro que quieres restablecer todos lo
 L["TITAN_FARM_BUDDY_NO"] = "No"
 L["TITAN_FARM_BUDDY_OK"] = "Aceptar"
 L["TITAN_FARM_BUDDY_YES"] = "Sí"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT"] = "Ocultar notificaciones en combate"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC"] = "Si está activado, las notificaciones se ocultan durante el combate."

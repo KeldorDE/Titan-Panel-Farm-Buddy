@@ -117,3 +117,5 @@ L["TITAN_FARM_BUDDY_CONFIRM_RESET"] = "Вы уверены, что хотите 
 L["TITAN_FARM_BUDDY_NO"] = "Нет"
 L["TITAN_FARM_BUDDY_OK"] = "ОК"
 L["TITAN_FARM_BUDDY_YES"] = "Да"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT"] = "Скрывать уведомления в бою"
+L["FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC"] = "Если включено, уведомления скрываются во время боя."
