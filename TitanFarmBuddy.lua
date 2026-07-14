@@ -61,11 +61,19 @@ local NOTIFICATION_SOUNDS = {
 }
 
 -- **************************************************************************
+-- NAME : TitanFarmBuddy_GetAddOnName()
+-- DESC : Gets the Titan Plugin AdOn name.
+-- **************************************************************************
+function TitanFarmBuddy_GetAddOnName()
+    return ADDON_NAME
+end
+
+-- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
 -- DESC : Is called by AceAddon when the addon is first loaded.
 -- **************************************************************************
 function TitanFarmBuddy:OnInitialize()
-    LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, TitanFarmBuddy:GetConfigOption())
+    LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, self:GetConfigOption())
     local _, category = LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME)
     ADDON_SETTING_PANEL = category
 
@@ -86,13 +94,13 @@ end
 -- NAME : TitanFarmBuddy_OnLoad()
 -- DESC : Registers the plugin upon it loading.
 -- **************************************************************************
-function TitanFarmBuddy_OnLoad(self)
-	self.registry = {
+function TitanFarmBuddy_OnLoad(button)
+    button.registry = {
 		id = TITAN_FARM_BUDDY_ID,
 		category = 'Information',
 		version = TITAN_VERSION,
 		menuText = ADDON_NAME,
-		buttonTextFunction = 'TitanFarmBuddy_GetButtonText',
+		buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
 		tooltipTitle = ADDON_NAME,
 		tooltipTextFunction = 'TitanFarmBuddy_GetTooltipText',
 		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
@@ -188,7 +196,7 @@ function TitanFarmBuddy:RegisterDialogs()
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
         OnAccept = function()
-            TitanFarmBuddy:ResetConfig(false)
+            self:ResetConfig(false)
         end,
         timeout = 0,
         whileDead = true,
@@ -201,7 +209,7 @@ function TitanFarmBuddy:RegisterDialogs()
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
         OnAccept = function()
-            TitanFarmBuddy:ResetConfig(true)
+            self:ResetConfig(true)
         end,
         timeout = 0,
         whileDead = true,
@@ -214,8 +222,12 @@ function TitanFarmBuddy:RegisterDialogs()
         button1 = L['TITAN_FARM_BUDDY_OK'],
         button2 = L['TITAN_FARM_BUDDY_CANCEL'],
         hasEditBox = true,
-        OnShow = TitanFarmBuddy_SetItemIndexOnShow,
-        OnAccept = TitanFarmBuddy_SetItemIndexOnAccept,
+        OnShow = function(frame)
+            self:SetItemIndexOnShow(frame)
+        end,
+        OnAccept = function(frame, data)
+            self:SetItemIndexOnAccept(frame, data)
+        end,
         timeout = 0,
         whileDead = true,
         hideOnEscape = true,
@@ -224,10 +236,10 @@ function TitanFarmBuddy:RegisterDialogs()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetItemIndexOnShow()
+-- NAME : TitanFarmBuddy:SetItemIndexOnShow()
 -- DESC : Callback function for the SetItemIndex OnShow event.
 -- **************************************************************************
-function TitanFarmBuddy_SetItemIndexOnShow(self)
+function TitanFarmBuddy:SetItemIndexOnShow(frame)
 
     -- Get first position without an item as preferred default value
     local defaultIndex = 1
@@ -239,40 +251,24 @@ function TitanFarmBuddy_SetItemIndexOnShow(self)
     end
 
     -- Set default value for dialog edit box
-    getglobal(self:GetName() .. 'EditBox'):SetText(defaultIndex)
+    getglobal(frame:GetName() .. 'EditBox'):SetText(defaultIndex)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_SetItemIndexOnAccept()
+-- NAME : TitanFarmBuddy:SetItemIndexOnAccept()
 -- DESC : Callback function for the SetItemIndex OnAccept event.
 -- **************************************************************************
-function TitanFarmBuddy_SetItemIndexOnAccept(self, data)
-    local index = tonumber(getglobal(self:GetName() .. 'EditBox'):GetText())
-    if TitanFarmBuddy:IsIndexValid(index) then
+function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
+    local index = tonumber(getglobal(frame:GetName() .. 'EditBox'):GetText())
+    if self:IsIndexValid(index) then
         local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
-        TitanFarmBuddy:SetItem(index, nil, data)
-        TitanFarmBuddy:Print(text)
+        self:SetItem(index, nil, data)
+        self:Print(text)
         LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
     else
         local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-        TitanFarmBuddy:Print(text)
+        self:Print(text)
     end
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_GetID()
--- DESC : Gets the Titan Plugin ID.
--- **************************************************************************
-function TitanFarmBuddy_GetID()
-    return TITAN_FARM_BUDDY_ID
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_GetAddOnName()
--- DESC : Gets the Titan Plugin AdOn name.
--- **************************************************************************
-function TitanFarmBuddy_GetAddOnName()
-    return ADDON_NAME
 end
 
 -- **************************************************************************
@@ -446,37 +442,37 @@ function TitanFarmBuddy:GetConfigOption()
                         name = '',
                         order = self:GetOptionOrder('items'),
                     },
-                    items_track_1 = TitanFarmBuddy:GetTrackedItemField(1),
-                    items_track_count_1 = TitanFarmBuddy:GetTrackedItemQuantityField(1),
-                    items_track_show_bar_1 = TitanFarmBuddy:GetTrackedItemShowBarField(1),
-                    items_clear_button_1 = TitanFarmBuddy:GetTrackedItemClearButton(1),
+                    items_track_1 = self:GetTrackedItemField(1),
+                    items_track_count_1 = self:GetTrackedItemQuantityField(1),
+                    items_track_show_bar_1 = self:GetTrackedItemShowBarField(1),
+                    items_clear_button_1 = self:GetTrackedItemClearButton(1),
                     items_space_2 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('items'),
                     },
-                    items_track_2 = TitanFarmBuddy:GetTrackedItemField(2),
-                    items_track_count_2 = TitanFarmBuddy:GetTrackedItemQuantityField(2),
-                    items_track_show_bar_2 = TitanFarmBuddy:GetTrackedItemShowBarField(2),
-                    items_clear_button_2 = TitanFarmBuddy:GetTrackedItemClearButton(2),
+                    items_track_2 = self:GetTrackedItemField(2),
+                    items_track_count_2 = self:GetTrackedItemQuantityField(2),
+                    items_track_show_bar_2 = self:GetTrackedItemShowBarField(2),
+                    items_clear_button_2 = self:GetTrackedItemClearButton(2),
                     items_space_3 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('items'),
                     },
-                    items_track_3 = TitanFarmBuddy:GetTrackedItemField(3),
-                    items_track_count_3 = TitanFarmBuddy:GetTrackedItemQuantityField(3),
-                    items_track_show_bar_3 = TitanFarmBuddy:GetTrackedItemShowBarField(3),
-                    items_clear_button_3 = TitanFarmBuddy:GetTrackedItemClearButton(3),
+                    items_track_3 = self:GetTrackedItemField(3),
+                    items_track_count_3 = self:GetTrackedItemQuantityField(3),
+                    items_track_show_bar_3 = self:GetTrackedItemShowBarField(3),
+                    items_clear_button_3 = self:GetTrackedItemClearButton(3),
                     items_space_4 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('items'),
                     },
-                    items_track_4 = TitanFarmBuddy:GetTrackedItemField(4),
-                    items_track_count_4 = TitanFarmBuddy:GetTrackedItemQuantityField(4),
-                    items_track_show_bar_4 = TitanFarmBuddy:GetTrackedItemShowBarField(4),
-                    items_clear_button_4 = TitanFarmBuddy:GetTrackedItemClearButton(4),
+                    items_track_4 = self:GetTrackedItemField(4),
+                    items_track_count_4 = self:GetTrackedItemQuantityField(4),
+                    items_track_show_bar_4 = self:GetTrackedItemShowBarField(4),
+                    items_clear_button_4 = self:GetTrackedItemClearButton(4),
                 },
             },
             tab_notifications = {
@@ -559,8 +555,8 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'select',
                         name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
                         style = 'dropdown',
-                        values = TitanFarmBuddy:GetNotificationSounds(),
-                        sorting = TitanFarmBuddy:GetNotificationSoundsSorting(),
+                        values = self:GetNotificationSounds(),
+                        sorting = self:GetNotificationSoundsSorting(),
                         set = 'SetNotificationSound',
                         get = 'GetNotificationSound',
                         width = 'double',
@@ -758,7 +754,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_chat_commands = {
                         type = 'description',
-                        name = TitanFarmBuddy:GetChatCommandsHelp(false),
+                        name = self:GetChatCommandsHelp(false),
                         order = self:GetOptionOrder('about'),
                         width = 'full',
                     },
@@ -777,8 +773,8 @@ function TitanFarmBuddy:GetTrackedItemField(index)
         type = 'input',
         name = L['FARM_BUDDY_ITEM'],
         desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
-        get = function() return TitanFarmBuddy:GetItem(index) end,
-        set = function(info, input) TitanFarmBuddy:SetItem(index, info, input) end,
+        get = function() return self:GetItem(index) end,
+        set = function(info, input) self:SetItem(index, info, input) end,
         validate = 'ValidateItem',
         usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
         width = 'double',
@@ -795,8 +791,8 @@ function TitanFarmBuddy:GetTrackedItemQuantityField(index)
         type = 'input',
         name = L['FARM_BUDDY_QUANTITY'],
         desc = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
-        get = function() return TitanFarmBuddy:GetItemQuantity(index) end,
-        set = function(info, input) TitanFarmBuddy:SetItemQuantity(index, info, input) end,
+        get = function() return self:GetItemQuantity(index) end,
+        set = function(info, input) self:SetItemQuantity(index, info, input) end,
         validate = 'ValidateNumber',
         usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
         width = 'half',
@@ -813,8 +809,8 @@ function TitanFarmBuddy:GetTrackedItemShowBarField(index)
         type = 'toggle',
         name = L['FARM_BUDDY_SHOW_IN_BAR'],
         desc = L['FARM_BUDDY_SHOW_IN_BAR_DESC'],
-        get = function() return TitanFarmBuddy:GetItemShowInBar(index) end,
-        set = function(info, input) TitanFarmBuddy:SetItemShowInBar(index, info, input) end,
+        get = function() return self:GetItemShowInBar(index) end,
+        set = function(info, input) self:SetItemShowInBar(index, info, input) end,
         width = 'half',
         order = self:GetOptionOrder('items'),
     }
@@ -829,7 +825,7 @@ function TitanFarmBuddy:GetTrackedItemClearButton(index)
         type = 'execute',
         name = L['FARM_BUDDY_RESET'],
         desc = L['FARM_BUDDY_RESET_DESC'],
-        func = function() TitanFarmBuddy:ResetItem(index) end,
+        func = function() self:ResetItem(index) end,
         order = self:GetOptionOrder('items'),
     }
 end
@@ -849,10 +845,10 @@ function TitanFarmBuddy:GetOptionOrder(category)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_GetButtonText()
+-- NAME : TitanFarmBuddy:GetButtonText()
 -- DESC : Calculate the item count of the tracked farm item and displays it.
 -- **************************************************************************
-function TitanFarmBuddy_GetButtonText()
+function TitanFarmBuddy:GetButtonText()
 
     local str = ''
     local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
@@ -863,7 +859,7 @@ function TitanFarmBuddy_GetButtonText()
         if (itemDisplayStyle == 1 and activeIndex == i) or itemDisplayStyle > 1 then
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             if item and item ~= '' then
-                local itemStr = TitanFarmBuddy:GetItemString(item, tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)), showIcon)
+                local itemStr = self:GetItemString(item, tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)), showIcon)
                 if itemStr ~= nil and itemStr ~= '' then
                     if str ~= '' then
                         str = str .. '   '
@@ -877,7 +873,7 @@ function TitanFarmBuddy_GetButtonText()
     -- No item found
     if str == '' then
         if showIcon then
-            str = str .. TitanFarmBuddy:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true)
+            str = str .. self:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true)
         end
 
         str = str .. ADDON_NAME
@@ -910,19 +906,19 @@ function TitanFarmBuddy:GetItemString(itemName, itemQuantity, showIcon)
         local itemCount = TitanFarmBuddy_GetCount(itemInfo)
 
         if showIcon then
-            str = str .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true)
+            str = str .. self:GetIconString(itemInfo.IconFileDataID, true)
         end
 
-        str = str .. TitanFarmBuddy:GetBarValue(itemCount, showColoredText)
+        str = str .. self:GetBarValue(itemCount, showColoredText)
 
         if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity') and itemQuantity > 0 then
-            str = str .. ' / ' .. TitanFarmBuddy:GetBarValue(itemQuantity, showColoredText)
+            str = str .. ' / ' .. self:GetBarValue(itemQuantity, showColoredText)
         end
 
         if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
             local buttonItemName
             if showColoredText then
-                buttonItemName = TitanFarmBuddy:GetNameFromItemLink(itemName)
+                buttonItemName = self:GetNameFromItemLink(itemName)
             else
                 buttonItemName = itemInfo.Name
             end
@@ -1179,7 +1175,7 @@ function TitanFarmBuddy:BagUpdateDelayed()
             local itemInfo = TitanFarmBuddy_GetItemInfo(trackedItem)
             if itemInfo then
                 if TitanFarmBuddy_GetCount(itemInfo) >= quantity then
-                    self:QueueNotification(i, itemInfo.Name, quantity)
+                    self:QueueNotification(i, itemInfo.Name, itemInfo.IconFileDataID, quantity)
                 else
                     NOTIFICATION_QUEUE[i] = nil
                 end
@@ -1233,7 +1229,7 @@ function TitanFarmBuddy:ValidateItem(_, input)
         return true
     end
 
-    TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+    self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
     return false
 end
 
@@ -1245,7 +1241,7 @@ function TitanFarmBuddy:ValidateNumber(_, input)
 
     local number = tonumber(input)
     if not number or number < 0 then
-        TitanFarmBuddy:Print(L['FARM_BUDDY_INVALID_NUMBER'])
+        self:Print(L['FARM_BUDDY_INVALID_NUMBER'])
         return false
     end
 
@@ -1679,7 +1675,8 @@ end
 -- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
-    TitanFarmBuddy:ShowNotification(0, L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'], 200, true)
+    local itemInfo = TitanFarmBuddy_GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
+    self:ShowNotification(0, itemInfo.Name, itemInfo.IconFileDataID, 200, true)
 end
 
 -- **************************************************************************
@@ -1748,10 +1745,11 @@ end
 -- NAME : TitanFarmBuddy:QueueNotification()
 -- DESC : Queues a notification.
 -- **************************************************************************
-function TitanFarmBuddy:QueueNotification(index, item, quantity)
+function TitanFarmBuddy:QueueNotification(index, itemName, itemIconFileDataID, quantity)
     NOTIFICATION_QUEUE[index] = {
         Index = index,
-        Item = item,
+        Name = itemName,
+        Icon = itemIconFileDataID,
         Quantity = quantity,
     }
 end
@@ -1760,7 +1758,7 @@ end
 -- NAME : TitanFarmBuddy:ShowNotification()
 -- DESC : Raises a notification.
 -- **************************************************************************
-function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
+function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
 
     local itemIndexTriggered = true
     if NOTIFICATION_TRIGGERED[index] == nil or NOTIFICATION_TRIGGERED[index] == false then
@@ -1776,10 +1774,6 @@ function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
         local notificationShine = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
         local sound
 
-        if demo then
-            item = L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME']
-        end
-
         if playSound then
             sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
         end
@@ -1788,7 +1782,7 @@ function TitanFarmBuddy:ShowNotification(index, item, quantity, demo)
             NOTIFICATION_TRIGGERED[index] = true
         end
 
-        TitanFarmBuddyNotification_Show(item, quantity, sound, notificationDisplayDuration, notificationGlow, notificationShine)
+        TitanFarmBuddyNotification_Show(name, icon, quantity, sound, notificationDisplayDuration, notificationGlow, notificationShine)
     end
 end
 
@@ -1799,7 +1793,7 @@ end
 function TitanFarmBuddy:NotificationTask()
     if not TitanFarmBuddyNotification_Shown() then
         for index, notification in pairs(NOTIFICATION_QUEUE) do
-            TitanFarmBuddy:ShowNotification(notification.Index, notification.Item, notification.Quantity, false)
+            self:ShowNotification(notification.Index, notification.Name, notification.Icon, notification.Quantity, false)
             NOTIFICATION_QUEUE[index] = nil
             break
         end
@@ -1812,63 +1806,63 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ChatCommand(input)
 
-    local cmd, value, arg1 = TitanFarmBuddy:GetArgs(input, 3)
+    local cmd, value, arg1 = self:GetArgs(input, 3)
 
     -- Show help
     if not cmd or cmd == 'help' then
 
-        TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n')
-        TitanFarmBuddy:GetChatCommandsHelp(true)
+        self:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n')
+        self:GetChatCommandsHelp(true)
 
         -- Prints version information
     elseif cmd == 'version' then
-        TitanFarmBuddy:Print(ADDON_VERSION)
+        self:Print(ADDON_VERSION)
 
     -- Reset AddOn settings
     elseif cmd == 'reset' then
 
         if value == 'all' then
-            TitanFarmBuddy:ResetConfig(false)
+            self:ResetConfig(false)
         else
-            TitanFarmBuddy:ResetConfig(true)
+            self:ResetConfig(true)
         end
 
-        TitanFarmBuddy:Print(L['FARM_BUDDY_CONFIG_RESET_MSG'])
+        self:Print(L['FARM_BUDDY_CONFIG_RESET_MSG'])
 
     elseif cmd == 'primary' then
 
         local index = tonumber(value)
 
-        if TitanFarmBuddy:IsIndexValid(index) then
+        if self:IsIndexValid(index) then
             local text = L['FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', index)
             TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
-            TitanFarmBuddy:Print(text)
+            self:Print(text)
             TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
             LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
         else
             local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-            TitanFarmBuddy:Print(text)
+            self:Print(text)
         end
 
     -- Set goal quantity
     elseif cmd == 'quantity' then
 
         if value then
-            local status = TitanFarmBuddy:ValidateNumber(nil, arg1)
+            local status = self:ValidateNumber(nil, arg1)
             if status then
                 local index = tonumber(value)
-                if TitanFarmBuddy:IsIndexValid(index) then
-                    TitanFarmBuddy:SetItemQuantity(index, nil, arg1)
-                    TitanFarmBuddy:Print(L['FARM_BUDDY_GOAL_SET'])
+                if self:IsIndexValid(index) then
+                    self:SetItemQuantity(index, nil, arg1)
+                    self:Print(L['FARM_BUDDY_GOAL_SET'])
                     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
                     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
                 else
                     local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-                    TitanFarmBuddy:Print(text)
+                    self:Print(text)
                 end
             end
         else
-            TitanFarmBuddy:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
+            self:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
         end
 
     -- Set tracked item
@@ -1878,19 +1872,19 @@ function TitanFarmBuddy:ChatCommand(input)
             local itemInfo = TitanFarmBuddy_GetItemInfo(arg1)
             if itemInfo then
                 local index = tonumber(value)
-                if TitanFarmBuddy:IsIndexValid(index) then
-                    TitanFarmBuddy:SetItem(index, nil, itemInfo.Name)
+                if self:IsIndexValid(index) then
+                    self:SetItem(index, nil, itemInfo.Name)
                     local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
-                    TitanFarmBuddy:Print(text)
+                    self:Print(text)
                 else
                     local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-                    TitanFarmBuddy:Print(text)
+                    self:Print(text)
                 end
             else
-                TitanFarmBuddy:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+                self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
             end
         else
-            TitanFarmBuddy:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING'])
+            self:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING'])
         end
     elseif cmd == 'settings' then
         Settings.OpenToCategory(ADDON_SETTING_PANEL)

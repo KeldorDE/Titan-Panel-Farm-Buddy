@@ -15,56 +15,52 @@ local FRAME_HIDDEN = true
 -- NAME : TitanFarmBuddyNotification_Show()
 -- DESC : Shows a notification frame for the given item link.
 -- **************************************************************************
-function TitanFarmBuddyNotification_Show(itemName, goal, sound, duration, glow, shine)
+function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow, shine)
 
     TitanFarmBuddyNotification_HideNotification(false)
 
-    local itemInfo = TitanFarmBuddy_GetItemInfo(itemName)
-    if itemInfo ~= nil then
+    TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
+    TitanFarmBuddyNotification_SetWidth(400)
+    TitanFarmBuddyNotification_SetText(goal .. ' ' .. name)
+    TitanFarmBuddyNotification_SetIcon(icon)
 
-        TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
-        TitanFarmBuddyNotification_SetWidth(400)
-        TitanFarmBuddyNotification_SetText(goal .. ' ' .. itemInfo.Name)
-        TitanFarmBuddyNotification_SetIcon(itemInfo.IconFileDataID)
-
-        if sound ~= nil and sound ~= '' then
-            PlaySound(sound)
-        end
-
-        if glow then
-            FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
-            FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375)
-            FRAME.glow:SetVertexColor(1,1,1)
-            FRAME.glow:Show()
-        else
-            FRAME.glow:Hide()
-        end
-
-        if shine then
-            FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
-            FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500)
-            FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16)
-            FRAME.shine:Show()
-        else
-            FRAME.shine:Hide()
-        end
-
-        FRAME_HIDDEN = false
-
-        FRAME:Show()
-        FRAME.animIn:Play()
-
-        if glow then
-            FRAME.glow.animIn:Play()
-        end
-
-        if shine then
-            FRAME.shine.animIn:Play()
-        end
-
-        FRAME.waitAndAnimOut.animOut:SetStartDelay(duration)
-        FRAME.waitAndAnimOut:Play()
+    if sound ~= nil and sound ~= '' then
+        PlaySound(sound)
     end
+
+    if glow then
+        FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
+        FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375)
+        FRAME.glow:SetVertexColor(1,1,1)
+        FRAME.glow:Show()
+    else
+        FRAME.glow:Hide()
+    end
+
+    if shine then
+        FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
+        FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500)
+        FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16)
+        FRAME.shine:Show()
+    else
+        FRAME.shine:Hide()
+    end
+
+    FRAME_HIDDEN = false
+
+    FRAME:Show()
+    FRAME.animIn:Play()
+
+    if glow then
+        FRAME.glow.animIn:Play()
+    end
+
+    if shine then
+        FRAME.shine.animIn:Play()
+    end
+
+    FRAME.waitAndAnimOut.animOut:SetStartDelay(duration)
+    FRAME.waitAndAnimOut:Play()
 end
 
 -- **************************************************************************
