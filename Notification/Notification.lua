@@ -112,15 +112,15 @@ end
 -- NAME : TitanFarmBuddyNotification_OnMouseDown()
 -- DESC : Handles the OnMouseDown event for the TitanFarmBuddyAnchor frame.
 -- **************************************************************************
-function TitanFarmBuddyNotification_OnMouseDown(self, button)
+function TitanFarmBuddyNotification_OnMouseDown(frame, button)
 
-    if button == 'LeftButton' and not self.isMoving then
-        self:StartMoving()
-        self.isMoving = true
+    if button == 'LeftButton' and not frame.isMoving then
+        frame:StartMoving()
+        frame.isMoving = true
     end
 
-    if button == 'RightButton' and not self.isMoving then
-        self:Hide()
+    if button == 'RightButton' and not frame.isMoving then
+        frame:Hide()
         Settings.OpenToCategory(ADDON_SETTING_PANEL)
     end
 end
@@ -129,11 +129,11 @@ end
 -- NAME : TitanFarmBuddyNotification_OnMouseUp()
 -- DESC : Handles the OnMouseUp event for the TitanFarmBuddyAnchor frame.
 -- **************************************************************************
-function TitanFarmBuddyNotification_OnMouseUp(self, button)
+function TitanFarmBuddyNotification_OnMouseUp(frame, button)
 
-    if button == 'LeftButton' and self.isMoving then
-        self:StopMovingOrSizing()
-        self.isMoving = false
+    if button == 'LeftButton' and frame.isMoving then
+        frame:StopMovingOrSizing()
+        frame.isMoving = false
     end
 end
 
