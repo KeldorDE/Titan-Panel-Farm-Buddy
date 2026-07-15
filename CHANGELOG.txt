@@ -2,6 +2,7 @@ NOT_YET_RELEASED
 ------------------
 - Optimized different parts of the code
 - Replaced deprecated getglobal with _G[]
+- Updated item info retrieval to use C_Item API
 
 1.4.4
 ------------------
