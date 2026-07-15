@@ -986,18 +986,17 @@ end
 function TitanFarmBuddy_GetItemInfo(item)
 
     if item then
-        local itemName, itemLink = GetItemInfo(item)
-
+        local itemName, itemLink = C_Item.GetItemInfo(item)
         if itemLink then
-            local itemID = GetItemInfoInstant(item)
-            local countBags = GetItemCount(itemLink)
-            local countTotal = GetItemCount(itemLink, true)
+            local itemID = C_Item.GetItemIDForItemInfo(item)
+            local countBags = C_Item.GetItemCount(itemLink)
+            local countTotal = C_Item.GetItemCount(itemLink, true)
 
             local info = {
                 ItemID = itemID,
                 Name = itemName,
                 Link = itemLink,
-                IconFileDataID = GetItemIcon(itemLink),
+                IconFileDataID = C_Item.GetItemIconByID(itemID),
                 CountBags = countBags,
                 CountTotal = countTotal,
                 CountBank = (countTotal - countBags),
@@ -1254,7 +1253,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:ValidateItem(_, input)
 
-    local _, itemLink = GetItemInfo(input)
+    local _, itemLink = C_Item.GetItemInfo(input)
 
     if itemLink then
         return true
@@ -1304,7 +1303,7 @@ function TitanFarmBuddy:GetItemLink(input)
     end
 
     -- Input is an item id or item name, resolve it to an item link
-    local _, itemLink = GetItemInfo(input)
+    local _, itemLink = C_Item.GetItemInfo(input)
     return itemLink
 end
 
