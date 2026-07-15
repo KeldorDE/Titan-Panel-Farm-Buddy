@@ -946,11 +946,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetIconString(icon, space)
     local fontSize = TitanPanelGetVar('FontSize') + 6
-    local str = '|T' .. icon .. ':' .. fontSize .. '|t'
-    if space then
-        str = str .. ' '
-    end
-    return str
+    return string.format('|T%s:%d|t%s', icon, fontSize, space and ' ' or '')
 end
 
 -- **************************************************************************
