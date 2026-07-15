@@ -121,7 +121,7 @@ function TitanFarmBuddyNotification_OnMouseDown(frame, button)
 
     if button == 'RightButton' and not frame.isMoving then
         frame:Hide()
-        Settings.OpenToCategory(ADDON_SETTING_PANEL)
+        Settings.OpenToCategory(TitanFarmBuddy_GetAddOnSettingsPanel())
     end
 end
 

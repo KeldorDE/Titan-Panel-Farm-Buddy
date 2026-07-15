@@ -72,6 +72,15 @@ function TitanFarmBuddy_GetAddOnName()
     return ADDON_NAME
 end
 
+
+-- **************************************************************************
+-- NAME : TitanFarmBuddy_GetAddOnSettingsPanel()
+-- DESC : Gets the Titan Plugin AdOn settings panel.
+-- **************************************************************************
+function TitanFarmBuddy_GetAddOnSettingsPanel()
+    return ADDON_SETTING_PANEL
+end
+
 -- **************************************************************************
 -- NAME : TitanFarmBuddy:OnInitialize()
 -- DESC : Is called by AceAddon when the addon is first loaded.
