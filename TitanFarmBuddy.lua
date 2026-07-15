@@ -867,15 +867,19 @@ end
 function TitanFarmBuddy:GetButtonText()
 
     local str = ''
-    local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
     local itemDisplayStyle = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle'))
     local activeIndex = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')
+    local showIcon = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
+    local showQuantity = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
+    local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
+    local showLabelText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
 
     for i = 1, ITEMS_AVAILABLE do
         if (itemDisplayStyle == 1 and activeIndex == i) or itemDisplayStyle > 1 then
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             if item and item ~= '' then
-                local itemStr = self:GetItemString(item, tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)), showIcon)
+                local itemQuantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
+                local itemStr = self:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
                 if itemStr ~= nil and itemStr ~= '' then
                     if str ~= '' then
                         str = str .. '   '
@@ -910,37 +914,27 @@ end
 -- NAME : TitanFarmBuddy:GetItemString()
 -- DESC : Gets the item string to display on the Titan Panel button.
 -- **************************************************************************
-function TitanFarmBuddy:GetItemString(itemName, itemQuantity, showIcon)
+function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
+
+    local itemInfo = TitanFarmBuddy_GetItemInfo(item)
+    if not itemInfo then
+        return ''
+    end
 
     local str = ''
-    local itemInfo = TitanFarmBuddy_GetItemInfo(itemName)
 
-    -- Invalid item or no item defined
-    if itemInfo then
+    if showIcon then
+        str = str .. self:GetIconString(itemInfo.IconFileDataID, true)
+    end
 
-        local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
-        local itemCount = TitanFarmBuddy_GetCount(itemInfo)
+    str = str .. self:GetBarValue(TitanFarmBuddy_GetCount(itemInfo), showColoredText)
 
-        if showIcon then
-            str = str .. self:GetIconString(itemInfo.IconFileDataID, true)
-        end
+    if showQuantity and itemQuantity > 0 then
+        str = str .. ' / ' .. self:GetBarValue(itemQuantity, showColoredText)
+    end
 
-        str = str .. self:GetBarValue(itemCount, showColoredText)
-
-        if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity') and itemQuantity > 0 then
-            str = str .. ' / ' .. self:GetBarValue(itemQuantity, showColoredText)
-        end
-
-        if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText') then
-            local buttonItemName
-            if showColoredText then
-                buttonItemName = self:GetNameFromItemLink(itemName)
-            else
-                buttonItemName = itemInfo.Name
-            end
-
-            str = str .. ' ' .. buttonItemName
-        end
+    if showLabelText then
+        str = str .. ' ' .. (showColoredText and self:GetNameFromItemLink(item) or itemInfo.Name)
     end
 
     return str
