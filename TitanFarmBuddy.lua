@@ -1241,10 +1241,8 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_OnShow(self)
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
-    if sound then
-        if not tonumber(sound) then
-            TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.ALARM_CLOCK_WARNING_3)
-        end
+    if sound and not tonumber(sound) then
+        TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.ALARM_CLOCK_WARNING_3)
     end
 
     TitanPanelButton_OnShow(self)
