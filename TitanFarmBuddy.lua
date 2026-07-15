@@ -17,6 +17,9 @@ local NOTIFICATION_TRIGGERED = {}
 local ADDON_SETTING_PANEL
 local ITEM_DATA_INIT_COMPLETE = false
 local PLAYER_IN_COMBAT = false
+local POPUP_KEY_RESET_ALL_CONFIRM = ADDON_NAME .. 'ResetAllConfirm'
+local POPUP_KEY_RESET_ALL_ITEMS_CONFIRM = ADDON_NAME .. 'ResetAllItemsConfirm'
+local POPUP_KEY_SET_ITEM_INDEX = ADDON_NAME .. 'SetItemIndex'
 local CHAT_COMMAND = 'fb'
 local CHAT_COMMANDS = {
     track = {
@@ -194,7 +197,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:RegisterDialogs()
 
-    StaticPopupDialogs[ADDON_NAME .. 'ResetAllConfirm'] = {
+    StaticPopupDialogs[POPUP_KEY_RESET_ALL_CONFIRM] = {
         text = L['TITAN_FARM_BUDDY_CONFIRM_ALL_RESET'],
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
@@ -207,7 +210,7 @@ function TitanFarmBuddy:RegisterDialogs()
         preferredIndex = 3,
     }
 
-    StaticPopupDialogs[ADDON_NAME .. 'ResetAllItemsConfirm'] = {
+    StaticPopupDialogs[POPUP_KEY_RESET_ALL_ITEMS_CONFIRM] = {
         text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
@@ -220,7 +223,7 @@ function TitanFarmBuddy:RegisterDialogs()
         preferredIndex = 3,
     }
 
-    StaticPopupDialogs[ADDON_NAME .. 'SetItemIndex'] = {
+    StaticPopupDialogs[POPUP_KEY_SET_ITEM_INDEX] = {
         text = L['TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX'],
         button1 = L['TITAN_FARM_BUDDY_OK'],
         button2 = L['TITAN_FARM_BUDDY_CANCEL'],
@@ -591,7 +594,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'execute',
                         name = L['FARM_BUDDY_RESET_ALL_ITEMS'],
                         desc = L['FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
-                        func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllItemsConfirm') end,
+                        func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end,
                         width = 'double',
                         order = self:GetOptionOrder('actions'),
                     },
@@ -611,7 +614,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'execute',
                         name = L['FARM_BUDDY_RESET_ALL'],
                         desc = L['FARM_BUDDY_RESET_ALL_DESC'],
-                        func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm') end,
+                        func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end,
                         width = 'double',
                         order = self:GetOptionOrder('actions'),
                     },
@@ -1147,14 +1150,14 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(_, level, menuList)
                 text = L['FARM_BUDDY_RESET_ALL_ITEMS'],
                 value = '',
                 notCheckable = true,
-                func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllItemsConfirm') end,
+                func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end,
             }, level)
 
             UIDropDownMenu_AddButton({
                 text = L['FARM_BUDDY_RESET_ALL'],
                 value = '',
                 notCheckable = true,
-                func = function() StaticPopup_Show(ADDON_NAME .. 'ResetAllConfirm') end,
+                func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end,
             }, level)
         end
     end
@@ -1792,7 +1795,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
     if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
         if itemLink then
-            local dialog = StaticPopup_Show(ADDON_NAME .. 'SetItemIndex', ITEMS_AVAILABLE)
+            local dialog = StaticPopup_Show(POPUP_KEY_SET_ITEM_INDEX, ITEMS_AVAILABLE)
             if dialog then
                 dialog.data = itemLink
             end
