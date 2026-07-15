@@ -159,6 +159,10 @@ function TitanFarmBuddy_OnLoad(button)
         button.registry.savedVariables['Item' .. i] = ''
         button.registry.savedVariables['ItemQuantity' .. i] = 0
     end
+
+    if Titan_Menu then
+        button.registry.menuContextFunction = TitanFarmBuddy_MenuGenerator
+    end
 end
 
 -- **************************************************************************
@@ -1066,116 +1070,36 @@ function TitanFarmBuddy_GetTooltipText()
 end
 
 -- **************************************************************************
--- NAME : TitanPanelRightClickMenu_PrepareFarmBuddyMenu()
--- DESC : Display right click menu options
+-- NAME : TitanFarmBuddy_MenuGenerator()
+-- DESC : Builds the right click menu using the modern Titan_Menu (Blizzard_Menu)
+--        API. Titan automatically adds the title, the control variables and the
+--        hide command, so they are not added here.
 -- **************************************************************************
-function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(_, level, menuList)
+function TitanFarmBuddy_MenuGenerator(_, root)
+    local id = TITAN_FARM_BUDDY_ID
 
-    if level == 1 then
+    -- Options
+    local options = Titan_Menu.AddButton(root, L['TITAN_PANEL_OPTIONS'])
+    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_SHOW_GOAL'], 'ShowQuantity')
+    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_INCLUDE_BANK'], 'IncludeBank')
 
-        TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
+    -- Notifications
+    local notifications = Titan_Menu.AddButton(root, L['FARM_BUDDY_NOTIFICATIONS'])
+    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION'], 'GoalNotification')
+    Titan_Menu.AddDivider(notifications)
+    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_GLOW'], 'NotificationGlow')
+    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_SHINE'], 'NotificationShine')
+    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'], 'PlayNotificationSound')
 
-        UIDropDownMenu_AddButton({
-            text = L['TITAN_PANEL_OPTIONS'],
-            menuList = 'Options',
-            hasArrow = true,
-            notCheckable = true,
-        })
+    -- Actions
+    local actions = Titan_Menu.AddButton(root, L['FARM_BUDDY_ACTIONS'])
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_TEST_NOTIFICATION'], function() TitanFarmBuddy:TestNotification() end)
+    Titan_Menu.AddDivider(actions)
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end)
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end)
 
-        UIDropDownMenu_AddButton({
-            text = L['FARM_BUDDY_NOTIFICATIONS'],
-            menuList = 'Notifications',
-            hasArrow = true,
-            notCheckable = true,
-        })
-
-        UIDropDownMenu_AddButton({
-            text = L['FARM_BUDDY_ACTIONS'],
-            menuList = 'Actions',
-            hasArrow = true,
-            notCheckable = true,
-        })
-
-        TitanPanelRightClickMenu_AddSpacer()
-        TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID)
-        TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID)
-        TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID)
-        TitanPanelRightClickMenu_AddSpacer()
-        TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanFarmBuddy_ResetConfig')
-        TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE)
-
-    elseif level == 2 then
-
-        if menuList == 'Options' then
-
-            TitanPanelRightClickMenu_AddTitle(L['TITAN_PANEL_OPTIONS'], level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_SHOW_GOAL'],
-                func = TitanFarmBuddy_ToggleShowQuantity,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity'),
-            }, level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_INCLUDE_BANK'],
-                func = TitanFarmBuddy_ToggleIncludeBank,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank'),
-            }, level)
-
-        elseif menuList == 'Notifications' then
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_NOTIFICATION'],
-                func = TitanFarmBuddy_ToggleGoalNotification,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification'),
-            }, level)
-
-            UIDropDownMenu_AddSeparator(level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_NOTIFICATION_GLOW'],
-                func = TitanFarmBuddy_ToggleNotificationGlow,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow'),
-            }, level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_NOTIFICATION_SHINE'],
-                func = TitanFarmBuddy_ToggleNotificationShine,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine'),
-            }, level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
-                func = TitanFarmBuddy_TogglePlayNotificationSound,
-                checked = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound'),
-            }, level)
-
-        elseif menuList == 'Actions' then
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_TEST_NOTIFICATION'],
-                value = 'SettingsCustom',
-                notCheckable = true,
-                func = function() TitanFarmBuddy:TestNotification() end,
-            }, level)
-
-            UIDropDownMenu_AddSeparator(level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_RESET_ALL_ITEMS'],
-                value = '',
-                notCheckable = true,
-                func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end,
-            }, level)
-
-            UIDropDownMenu_AddButton({
-                text = L['FARM_BUDDY_RESET_ALL'],
-                value = '',
-                notCheckable = true,
-                func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end,
-            }, level)
-        end
-    end
+    -- Reset all settings
+    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() TitanFarmBuddy_ResetConfig() end)
 end
 
 -- **************************************************************************
