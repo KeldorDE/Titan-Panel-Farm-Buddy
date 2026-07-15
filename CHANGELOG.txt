@@ -3,6 +3,7 @@ NOT_YET_RELEASED
 - Optimized different parts of the code
 - Replaced deprecated getglobal with _G[]
 - Updated item info retrieval to use C_Item API
+- Improved performance when displaying tracked items
 
 1.4.4
 ------------------

@@ -14,6 +14,7 @@ local ITEMS_AVAILABLE = 16
 local ITEM_DISPLAY_STYLES = {}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
+local ITEM_INFO_CACHE = {}
 local ADDON_SETTING_PANEL
 local ITEM_DATA_INIT_COMPLETE = false
 local PLAYER_IN_COMBAT = false
@@ -986,17 +987,33 @@ end
 function TitanFarmBuddy_GetItemInfo(item)
 
     if item then
-        local itemName, itemLink = C_Item.GetItemInfo(item)
-        if itemLink then
-            local itemID = C_Item.GetItemIDForItemInfo(item)
-            local countBags = C_Item.GetItemCount(itemLink)
-            local countTotal = C_Item.GetItemCount(itemLink, true)
+        -- Static item data (name, link, icon, id) never changes, so cache it.
+        local static = ITEM_INFO_CACHE[item]
+        if not static then
+            local itemName, itemLink = C_Item.GetItemInfo(item)
+            if itemLink then
+                local itemID = C_Item.GetItemIDForItemInfo(item)
+
+                static = {
+                    ItemID = itemID,
+                    Name = itemName,
+                    Link = itemLink,
+                    IconFileDataID = C_Item.GetItemIconByID(itemID),
+                }
+                ITEM_INFO_CACHE[item] = static
+            end
+        end
+
+        if static then
+            -- Counts are volatile and always queried live
+            local countBags = C_Item.GetItemCount(static.Link)
+            local countTotal = C_Item.GetItemCount(static.Link, true)
 
             local info = {
-                ItemID = itemID,
-                Name = itemName,
-                Link = itemLink,
-                IconFileDataID = C_Item.GetItemIconByID(itemID),
+                ItemID = static.ItemID,
+                Name = static.Name,
+                Link = static.Link,
+                IconFileDataID = static.IconFileDataID,
                 CountBags = countBags,
                 CountTotal = countTotal,
                 CountBank = (countTotal - countBags),
