@@ -1228,15 +1228,11 @@ end
 -- DESC : Gets the item count.
 -- **************************************************************************
 function TitanFarmBuddy_GetCount(itemInfo)
-
-    local includeBank = TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
-    local count = itemInfo.CountBags
-
-    if includeBank then
-        count = itemInfo.CountTotal
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
+        return itemInfo.CountTotal
     end
 
-    return count
+    return itemInfo.CountBags
 end
 
 -- **************************************************************************
