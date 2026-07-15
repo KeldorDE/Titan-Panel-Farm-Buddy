@@ -1,3 +1,8 @@
+NOT_YET_RELEASED
+------------------
+- Optimized different parts of the code
+- Replaced deprecated getglobal with _G[]
+
 1.4.4
 ------------------
 - Added a new setting to hide notifications in combat

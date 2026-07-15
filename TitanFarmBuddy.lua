@@ -257,7 +257,7 @@ function TitanFarmBuddy:SetItemIndexOnShow(frame)
     end
 
     -- Set default value for dialog edit box
-    getglobal(frame:GetName() .. 'EditBox'):SetText(defaultIndex)
+    _G[frame:GetName() .. 'EditBox']:SetText(defaultIndex)
 end
 
 -- **************************************************************************
@@ -265,7 +265,7 @@ end
 -- DESC : Callback function for the SetItemIndex OnAccept event.
 -- **************************************************************************
 function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
-    local index = tonumber(getglobal(frame:GetName() .. 'EditBox'):GetText())
+    local index = tonumber(_G[frame:GetName() .. 'EditBox']:GetText())
     if self:IsIndexValid(index) then
         local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
         self:SetItem(index, nil, data)
