@@ -25,6 +25,8 @@ ignore:
   - .gitignore
   - .gitattributes
   - .editorconfig
+  - .idea
+  - assets
 
 required-dependencies:
   - titan-panel
