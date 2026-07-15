@@ -155,9 +155,5 @@ end
 -- DESC : Gets the notification is currently shown status.
 -- **************************************************************************
 function TitanFarmBuddyNotification_Shown()
-    if not FRAME_HIDDEN then
-        return true
-    end
-
-    return false
+    return not FRAME_HIDDEN
 end
