@@ -1762,46 +1762,25 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
     local fastTrackingMouseButton = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton')
     local fastTrackingKeys = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
+    local modifierChecks = {
+        alt = IsAltKeyDown,
+        ctrl = IsControlKeyDown,
+        shift = IsShiftKeyDown,
+    }
     local conditions = false
 
     -- Check modifier keys
     for key, state in pairs(fastTrackingKeys) do
-        if (key == 'alt') then
-            if (state == true) then
-                conditions = IsAltKeyDown()
-            else
-                conditions = not IsAltKeyDown()
-            end
-
-            if (not conditions) then
-                break
-            end
-
-        elseif (key == 'ctrl') then
-            if (state == true) then
-                conditions = IsControlKeyDown()
-            else
-                conditions = not IsControlKeyDown()
-            end
-
-            if (not conditions) then
-                break
-            end
-
-        elseif (key == 'shift') then
-            if (state == true) then
-                conditions = IsShiftKeyDown()
-            else
-                conditions = not IsShiftKeyDown()
-            end
-
-            if (not conditions) then
+        local isKeyDown = modifierChecks[key]
+        if isKeyDown then
+            conditions = isKeyDown() == (state == true)
+            if not conditions then
                 break
             end
         end
     end
 
-    if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions == true then
+    if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions then
         if itemLink then
             local dialog = StaticPopup_Show(POPUP_KEY_SET_ITEM_INDEX, ITEMS_AVAILABLE)
             if dialog then
