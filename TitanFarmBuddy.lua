@@ -101,34 +101,34 @@ end
 -- **************************************************************************
 function TitanFarmBuddy_OnLoad(button)
     button.registry = {
-		id = TITAN_FARM_BUDDY_ID,
-		category = 'Information',
-		version = TITAN_VERSION,
-		menuText = ADDON_NAME,
-		buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
-		tooltipTitle = ADDON_NAME,
-		tooltipTextFunction = 'TitanFarmBuddy_GetTooltipText',
-		icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
-		iconWidth = 0,
-		controlVariables = {
-			ShowIcon = true,
-			ShowLabelText = true,
-			ShowRegularText = false,
-			ShowColoredText = true,
-			DisplayOnRightSide = true
-		},
-		savedVariables = {
-			ShowIcon = true,
-			ShowLabelText = true,
-			ShowColoredText = true,
-			DisplayOnRightSide = false,
+        id = TITAN_FARM_BUDDY_ID,
+        category = 'Information',
+        version = TITAN_VERSION,
+        menuText = ADDON_NAME,
+        buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
+        tooltipTitle = ADDON_NAME,
+        tooltipTextFunction = 'TitanFarmBuddy_GetTooltipText',
+        icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
+        iconWidth = 0,
+        controlVariables = {
+            ShowIcon = true,
+            ShowLabelText = true,
+            ShowRegularText = false,
+            ShowColoredText = true,
+            DisplayOnRightSide = true
+        },
+        savedVariables = {
+            ShowIcon = true,
+            ShowLabelText = true,
+            ShowColoredText = true,
+            DisplayOnRightSide = false,
             ItemShowInBarIndex = 1,
             ItemDisplayStyle = 2,
-			GoalNotification = true,
-			IncludeBank = false,
-			ShowQuantity = true,
-			GoalNotificationSound = SOUNDKIT.ALARM_CLOCK_WARNING_3,
-			PlayNotificationSound = true,
+            GoalNotification = true,
+            IncludeBank = false,
+            ShowQuantity = true,
+            GoalNotificationSound = SOUNDKIT.ALARM_CLOCK_WARNING_3,
+            PlayNotificationSound = true,
             NotificationDisplayDuration = 5,
             NotificationGlow = true,
             NotificationShine = true,
@@ -139,8 +139,8 @@ function TitanFarmBuddy_OnLoad(button)
                 shift = false,
                 alt = true,
             },
-		}
-	}
+        }
+    }
 
     for i = 1, ITEMS_AVAILABLE do
         button.registry.savedVariables['Item' .. i] = ''
@@ -1055,7 +1055,7 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(_, level, menuList)
 
     if level == 1 then
 
-		TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
+        TitanPanelRightClickMenu_AddTitle(TitanPlugins[TITAN_FARM_BUDDY_ID].menuText, level)
 
         UIDropDownMenu_AddButton({
             text = L['TITAN_PANEL_OPTIONS'],
@@ -1078,13 +1078,13 @@ function TitanPanelRightClickMenu_PrepareFarmBuddyMenu(_, level, menuList)
             notCheckable = true,
         })
 
-		TitanPanelRightClickMenu_AddSpacer()
-		TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID)
-		TitanPanelRightClickMenu_AddSpacer()
-		TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanFarmBuddy_ResetConfig')
-		TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE)
+        TitanPanelRightClickMenu_AddSpacer()
+        TitanPanelRightClickMenu_AddToggleIcon(TITAN_FARM_BUDDY_ID)
+        TitanPanelRightClickMenu_AddToggleLabelText(TITAN_FARM_BUDDY_ID)
+        TitanPanelRightClickMenu_AddToggleColoredText(TITAN_FARM_BUDDY_ID)
+        TitanPanelRightClickMenu_AddSpacer()
+        TitanPanelRightClickMenu_AddCommand(L['FARM_BUDDY_RESET'], TITAN_FARM_BUDDY_ID, 'TitanFarmBuddy_ResetConfig')
+        TitanPanelRightClickMenu_AddCommand(L['TITAN_PANEL_MENU_HIDE'], TITAN_FARM_BUDDY_ID, TITAN_PANEL_MENU_FUNC_HIDE)
 
     elseif level == 2 then
 
@@ -1600,8 +1600,8 @@ end
 -- DESC : Sets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowItemName(_, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input)
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1609,7 +1609,7 @@ end
 -- DESC : Gets the show item name status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowItemName()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
+    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
 end
 
 -- **************************************************************************
@@ -1617,8 +1617,8 @@ end
 -- DESC : Sets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowColoredText(_, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input)
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1626,7 +1626,7 @@ end
 -- DESC : Gets the show colored text status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowColoredText()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
+    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
 end
 
 -- **************************************************************************
@@ -1634,8 +1634,8 @@ end
 -- DESC : Sets the show goal status.
 -- **************************************************************************
 function TitanFarmBuddy:SetShowQuantity(_, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input)
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1643,7 +1643,7 @@ end
 -- DESC : Gets the show goal status.
 -- **************************************************************************
 function TitanFarmBuddy:GetShowQuantity()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
+    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
 end
 
 -- **************************************************************************
@@ -1651,8 +1651,8 @@ end
 -- DESC : Sets the show goal status.
 -- **************************************************************************
 function TitanFarmBuddy_ToggleShowQuantity()
-	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1660,8 +1660,8 @@ end
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:SetIncludeBank(_, input)
-	TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input)
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input)
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1669,7 +1669,7 @@ end
 -- DESC : Gets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy:GetIncludeBank()
-	return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
+    return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
 end
 
 -- **************************************************************************
@@ -1677,8 +1677,8 @@ end
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
 function TitanFarmBuddy_ToggleIncludeBank()
-	TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
-	TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
+    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
+    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1726,7 +1726,7 @@ end
 -- DESC : Resets the saved config to the default values.
 -- **************************************************************************
 function TitanFarmBuddy_ResetConfig()
-	TitanFarmBuddy:ResetConfig(false)
+    TitanFarmBuddy:ResetConfig(false)
 end
 
 -- **************************************************************************
