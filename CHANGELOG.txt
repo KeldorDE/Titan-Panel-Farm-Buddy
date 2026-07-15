@@ -4,6 +4,7 @@ NOT_YET_RELEASED
 - Replaced deprecated getglobal with _G[]
 - Updated item info retrieval to use C_Item API
 - Improved performance when displaying tracked items
+- Implemented modern menu generation for right-click options
 
 1.4.4
 ------------------
