@@ -118,7 +118,7 @@ function TitanFarmBuddy_OnLoad(button)
         category = 'Information',
         version = TITAN_VERSION,
         menuText = ADDON_NAME,
-        menuContextFunction = TitanFarmBuddy_MenuGenerator,
+        menuContextFunction = function(_, root) return TitanFarmBuddy:MenuGenerator(_, root) end,
         buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
         tooltipTitle = ADDON_NAME,
         tooltipTextFunction = function() return TitanFarmBuddy:GetTooltipText() end,
@@ -1067,12 +1067,12 @@ function TitanFarmBuddy:GetTooltipText()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_MenuGenerator()
+-- NAME : TitanFarmBuddy:MenuGenerator()
 -- DESC : Builds the right click menu using the modern Titan_Menu (Blizzard_Menu)
 --        API. Titan automatically adds the title, the control variables and the
 --        hide command, so they are not added here.
 -- **************************************************************************
-function TitanFarmBuddy_MenuGenerator(_, root)
+function TitanFarmBuddy:MenuGenerator(_, root)
     local id = TITAN_FARM_BUDDY_ID
 
     -- Options
@@ -1090,13 +1090,13 @@ function TitanFarmBuddy_MenuGenerator(_, root)
 
     -- Actions
     local actions = Titan_Menu.AddButton(root, L['FARM_BUDDY_ACTIONS'])
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_TEST_NOTIFICATION'], function() TitanFarmBuddy:TestNotification() end)
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_TEST_NOTIFICATION'], function() self:TestNotification() end)
     Titan_Menu.AddDivider(actions)
     Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end)
     Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end)
 
     -- Reset all settings
-    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() TitanFarmBuddy_ResetConfig() end)
+    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() self:ResetConfig() end)
 end
 
 -- **************************************************************************
@@ -1406,15 +1406,6 @@ function TitanFarmBuddy:GetNotificationDisplayDuration()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_TogglePlayNotificationSound()
--- DESC : Sets the play notification sound status.
--- **************************************************************************
-function TitanFarmBuddy_TogglePlayNotificationSound()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-end
-
--- **************************************************************************
 -- NAME : TitanFarmBuddy:SetNotificationSound()
 -- DESC : Sets the notification sound.
 -- **************************************************************************
@@ -1482,33 +1473,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetHideNotificationInCombat()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat')
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleGoalNotification()
--- DESC : Sets the notification status.
--- **************************************************************************
-function TitanFarmBuddy_ToggleGoalNotification()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleNotificationGlow()
--- DESC : Sets the notification glow effect status.
--- **************************************************************************
-function TitanFarmBuddy_ToggleNotificationGlow()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleNotificationShine()
--- DESC : Sets the notification shine effect status.
--- **************************************************************************
-function TitanFarmBuddy_ToggleNotificationShine()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1580,15 +1544,6 @@ function TitanFarmBuddy:GetShowQuantity()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleShowQuantity()
--- DESC : Sets the show goal status.
--- **************************************************************************
-function TitanFarmBuddy_ToggleShowQuantity()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-end
-
--- **************************************************************************
 -- NAME : TitanFarmBuddy:SetTrackBank()
 -- DESC : Sets the track items in bank status.
 -- **************************************************************************
@@ -1603,15 +1558,6 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetIncludeBank()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_ToggleIncludeBank()
--- DESC : Sets the track items in bank status.
--- **************************************************************************
-function TitanFarmBuddy_ToggleIncludeBank()
-    TitanToggleVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
-    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
 -- **************************************************************************
@@ -1652,14 +1598,6 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
 
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
-end
-
--- **************************************************************************
--- NAME : TitanFarmBuddy_ResetConfig()
--- DESC : Resets the saved config to the default values.
--- **************************************************************************
-function TitanFarmBuddy_ResetConfig()
-    TitanFarmBuddy:ResetConfig(false)
 end
 
 -- **************************************************************************
