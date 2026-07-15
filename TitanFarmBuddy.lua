@@ -118,9 +118,10 @@ function TitanFarmBuddy_OnLoad(button)
         category = 'Information',
         version = TITAN_VERSION,
         menuText = ADDON_NAME,
+        menuContextFunction = TitanFarmBuddy_MenuGenerator,
         buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
         tooltipTitle = ADDON_NAME,
-        tooltipTextFunction = 'TitanFarmBuddy_GetTooltipText',
+        tooltipTextFunction = function() return TitanFarmBuddy:GetTooltipText() end,
         icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
         iconWidth = 0,
         controlVariables = {
@@ -159,10 +160,6 @@ function TitanFarmBuddy_OnLoad(button)
         button.registry.savedVariables['Item' .. i] = ''
         button.registry.savedVariables['ItemQuantity' .. i] = 0
     end
-
-    if Titan_Menu then
-        button.registry.menuContextFunction = TitanFarmBuddy_MenuGenerator
-    end
 end
 
 -- **************************************************************************
@@ -195,9 +192,9 @@ function TitanFarmBuddy:PlayerEnteringWorld()
         for i = 1, ITEMS_AVAILABLE do
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
-            local itemInfo = (item and item ~= '') and TitanFarmBuddy_GetItemInfo(item) or nil
+            local itemInfo = (item and item ~= '') and self:GetItemInfo(item) or nil
 
-            NOTIFICATION_TRIGGERED[i] = itemInfo and quantity > 0 and TitanFarmBuddy_GetCount(itemInfo) >= quantity
+            NOTIFICATION_TRIGGERED[i] = itemInfo and quantity > 0 and self:GetCount(itemInfo) >= quantity
         end
 
         TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
@@ -920,7 +917,7 @@ end
 -- **************************************************************************
 function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
 
-    local itemInfo = TitanFarmBuddy_GetItemInfo(item)
+    local itemInfo = self:GetItemInfo(item)
     if not itemInfo then
         return ''
     end
@@ -931,7 +928,7 @@ function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity
         str = str .. self:GetIconString(itemInfo.IconFileDataID, true)
     end
 
-    str = str .. self:GetBarValue(TitanFarmBuddy_GetCount(itemInfo), showColoredText)
+    str = str .. self:GetBarValue(self:GetCount(itemInfo), showColoredText)
 
     if showQuantity and itemQuantity > 0 then
         str = str .. ' / ' .. self:GetBarValue(itemQuantity, showColoredText)
@@ -975,10 +972,10 @@ function TitanFarmBuddy_OnClick(_, button)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_GetItemInfo()
+-- NAME : TitanFarmBuddy:GetItemInfo()
 -- DESC : Gets information for the given item name.
 -- **************************************************************************
-function TitanFarmBuddy_GetItemInfo(item)
+function TitanFarmBuddy:GetItemInfo(item)
 
     if item then
         -- Static item data (name, link, icon, id) never changes, so cache it.
@@ -1021,10 +1018,10 @@ function TitanFarmBuddy_GetItemInfo(item)
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_GetTooltipText()
+-- NAME : TitanFarmBuddy:GetTooltipText()
 -- DESC : Display tooltip text.
 -- **************************************************************************
-function TitanFarmBuddy_GetTooltipText()
+function TitanFarmBuddy:GetTooltipText()
 
     local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
         TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n'
@@ -1036,7 +1033,7 @@ function TitanFarmBuddy_GetTooltipText()
 
         -- No item set for this index
         if item and item ~= '' then
-            local itemInfo = TitanFarmBuddy_GetItemInfo(item)
+            local itemInfo = self:GetItemInfo(item)
 
             -- Invalid item or no item defined
             if itemInfo then
@@ -1117,9 +1114,9 @@ function TitanFarmBuddy:BagUpdateDelayed()
         local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
 
         if trackedItem and trackedItem ~= '' and quantity and quantity > 0 then
-            local itemInfo = TitanFarmBuddy_GetItemInfo(trackedItem)
+            local itemInfo = self:GetItemInfo(trackedItem)
             if itemInfo then
-                if TitanFarmBuddy_GetCount(itemInfo) >= quantity then
+                if self:GetCount(itemInfo) >= quantity then
                     self:QueueNotification(i, itemInfo.Name, itemInfo.IconFileDataID, quantity)
                 else
                     NOTIFICATION_QUEUE[i] = nil
@@ -1148,10 +1145,10 @@ function TitanFarmBuddy:PlayerRegenEnabled()
 end
 
 -- **************************************************************************
--- NAME : TitanFarmBuddy_GetCount()
+-- NAME : TitanFarmBuddy:GetCount()
 -- DESC : Gets the item count.
 -- **************************************************************************
-function TitanFarmBuddy_GetCount(itemInfo)
+function TitanFarmBuddy:GetCount(itemInfo)
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
         return itemInfo.CountTotal
     end
@@ -1670,7 +1667,7 @@ end
 -- DESC : Raises a test notification.
 -- **************************************************************************
 function TitanFarmBuddy:TestNotification()
-    local itemInfo = TitanFarmBuddy_GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
+    local itemInfo = self:GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
     self:ShowNotification(0, itemInfo.Name, itemInfo.IconFileDataID, 200, true)
 end
 
@@ -1839,7 +1836,7 @@ function TitanFarmBuddy:ChatCommand(input)
     elseif cmd == 'track' then
 
         if value then
-            local itemInfo = TitanFarmBuddy_GetItemInfo(arg1)
+            local itemInfo = self:GetItemInfo(arg1)
             if itemInfo then
                 local index = tonumber(value)
                 if self:IsIndexValid(index) then
