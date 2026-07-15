@@ -1,4 +1,4 @@
-NOT_YET_RELEASED
+1.4.5
 ------------------
 - Optimized different parts of the code
 - Replaced deprecated getglobal with _G[]
