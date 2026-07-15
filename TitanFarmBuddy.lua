@@ -65,27 +65,20 @@ local NOTIFICATION_SOUNDS = {
     [SOUNDKIT.UI_LEGENDARY_LOOT_TOAST]      = L['FARM_BUDDY_SOUND_LEGENDARY_LOOT'],
 }
 
--- **************************************************************************
--- NAME : TitanFarmBuddy_GetAddOnName()
--- DESC : Gets the Titan Plugin AdOn name.
--- **************************************************************************
+---Gets the Titan Plugin AddOn name.
+---@return string name
 function TitanFarmBuddy_GetAddOnName()
     return ADDON_NAME
 end
 
 
--- **************************************************************************
--- NAME : TitanFarmBuddy_GetAddOnSettingsPanel()
--- DESC : Gets the Titan Plugin AdOn settings panel.
--- **************************************************************************
+---Gets the Titan Plugin AddOn settings panel.
+---@return table category
 function TitanFarmBuddy_GetAddOnSettingsPanel()
     return ADDON_SETTING_PANEL
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:OnInitialize()
--- DESC : Is called by AceAddon when the addon is first loaded.
--- **************************************************************************
+---Is called by AceAddon when the addon is first loaded.
 function TitanFarmBuddy:OnInitialize()
     LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, self:GetConfigOption())
     local _, category = LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME)
@@ -108,10 +101,8 @@ function TitanFarmBuddy:OnInitialize()
     self:RegisterEvent('PET_BATTLE_CLOSE', 'PlayerRegenEnabled')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy_OnLoad()
--- DESC : Registers the plugin upon it loading.
--- **************************************************************************
+---Registers the plugin upon it loading.
+---@param button Button The Titan plugin button.
 function TitanFarmBuddy_OnLoad(button)
     button.registry = {
         id = TITAN_FARM_BUDDY_ID,
@@ -162,28 +153,19 @@ function TitanFarmBuddy_OnLoad(button)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:OnEnable()
--- DESC : Is called when the Plugin gets enabled.
--- **************************************************************************
+---Is called when the plugin gets enabled.
 function TitanFarmBuddy:OnEnable()
     self:SecureHook('HandleModifiedItemClick', 'ModifiedClick')
     self:ScheduleRepeatingTimer('NotificationTask', 1)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:OnDisable()
--- DESC : Is called when the Plugin gets disabled.
--- **************************************************************************
+---Is called when the plugin gets disabled.
 function TitanFarmBuddy:OnDisable()
     ITEM_DATA_INIT_COMPLETE = false
     self:CancelAllTimers()
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:PlayerEnteringWorld()
--- DESC : Is called when the player enters the world.
--- **************************************************************************
+---Is called when the player enters the world.
 function TitanFarmBuddy:PlayerEnteringWorld()
     self:UnregisterEvent('PLAYER_ENTERING_WORLD')
 
@@ -202,10 +184,7 @@ function TitanFarmBuddy:PlayerEnteringWorld()
     end)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:RegisterDialogs()
--- DESC : Registers the addons dialog boxes.
--- **************************************************************************
+---Registers the addon's dialog boxes.
 function TitanFarmBuddy:RegisterDialogs()
 
     StaticPopupDialogs[POPUP_KEY_RESET_ALL_CONFIRM] = {
@@ -252,10 +231,8 @@ function TitanFarmBuddy:RegisterDialogs()
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItemIndexOnShow()
--- DESC : Callback function for the SetItemIndex OnShow event.
--- **************************************************************************
+---Callback function for the SetItemIndex OnShow event.
+---@param frame table The static popup frame.
 function TitanFarmBuddy:SetItemIndexOnShow(frame)
 
     -- Get first position without an item as preferred default value
@@ -271,10 +248,9 @@ function TitanFarmBuddy:SetItemIndexOnShow(frame)
     _G[frame:GetName() .. 'EditBox']:SetText(defaultIndex)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItemIndexOnAccept()
--- DESC : Callback function for the SetItemIndex OnAccept event.
--- **************************************************************************
+---Callback function for the SetItemIndex OnAccept event.
+---@param frame table The static popup frame.
+---@param data string The item link passed to the dialog.
 function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
     local index = tonumber(_G[frame:GetName() .. 'EditBox']:GetText())
     if self:IsIndexValid(index) then
@@ -288,10 +264,8 @@ function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetConfigOption()
--- DESC : Gets the configuration array for the AceConfig lib.
--- **************************************************************************
+---Gets the configuration table for the AceConfig lib.
+---@return table options
 function TitanFarmBuddy:GetConfigOption()
     return {
         name = ADDON_NAME,
@@ -753,10 +727,8 @@ function TitanFarmBuddy:GetConfigOption()
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemsArgs()
--- DESC : Dynamically builds the tracked item option fields based on ITEMS_AVAILABLE.
--- **************************************************************************
+---Dynamically builds the tracked item option fields based on ITEMS_AVAILABLE.
+---@return table args
 function TitanFarmBuddy:GetTrackedItemsArgs()
     local args = {
         items_tracking_description = {
@@ -781,10 +753,9 @@ function TitanFarmBuddy:GetTrackedItemsArgs()
     return args
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemField()
--- DESC : A helper function to generate a item input field for the blizzard option panel.
--- **************************************************************************
+---A helper function to generate an item input field for the Blizzard option panel.
+---@param index number The tracked item slot index.
+---@return table field
 function TitanFarmBuddy:GetTrackedItemField(index)
     return {
         type = 'input',
@@ -799,10 +770,9 @@ function TitanFarmBuddy:GetTrackedItemField(index)
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemQuantityField()
--- DESC : A helper function to generate a item count input field for the blizzard option panel.
--- **************************************************************************
+---A helper function to generate an item count input field for the Blizzard option panel.
+---@param index number The tracked item slot index.
+---@return table field
 function TitanFarmBuddy:GetTrackedItemQuantityField(index)
     return {
         type = 'input',
@@ -817,10 +787,9 @@ function TitanFarmBuddy:GetTrackedItemQuantityField(index)
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemShowBarField()
--- DESC : A helper function to generate a item show in Titan bar checkbox for the blizzard option panel.
--- **************************************************************************
+---A helper function to generate an item "show in Titan bar" checkbox for the Blizzard option panel.
+---@param index number The tracked item slot index.
+---@return table field
 function TitanFarmBuddy:GetTrackedItemShowBarField(index)
     return {
         type = 'toggle',
@@ -833,10 +802,9 @@ function TitanFarmBuddy:GetTrackedItemShowBarField(index)
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackedItemClearButton()
--- DESC : A helper function to generate a button for the blizzard option panel to reset the tracked item.
--- **************************************************************************
+---A helper function to generate a button for the Blizzard option panel to reset the tracked item.
+---@param index number The tracked item slot index.
+---@return table field
 function TitanFarmBuddy:GetTrackedItemClearButton(index)
     return {
         type = 'execute',
@@ -847,10 +815,9 @@ function TitanFarmBuddy:GetTrackedItemClearButton(index)
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetOptionOrder()
--- DESC : A helper function to order the option items in the order as listed in the array.
--- **************************************************************************
+---A helper function to order the option items in the order as listed in the array.
+---@param category string The option category to order within.
+---@return number order
 function TitanFarmBuddy:GetOptionOrder(category)
     if not OPTION_ORDER[category] then
         OPTION_ORDER[category] = 0
@@ -861,10 +828,8 @@ function TitanFarmBuddy:GetOptionOrder(category)
     return OPTION_ORDER[category]
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetButtonText()
--- DESC : Calculate the item count of the tracked farm item and displays it.
--- **************************************************************************
+---Calculates the item count of the tracked farm item and displays it.
+---@return string text
 function TitanFarmBuddy:GetButtonText()
 
     local str = ''
@@ -903,18 +868,21 @@ function TitanFarmBuddy:GetButtonText()
     return str
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNameFromItemLink()
--- DESC : Gets the item link without the brackets.
--- **************************************************************************
+---Gets the item link without the brackets.
+---@param itemLink string The item link.
+---@return string name
 function TitanFarmBuddy:GetNameFromItemLink(itemLink)
     return (itemLink:gsub("%[(.-)%]", "%1"))
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemString()
--- DESC : Gets the item string to display on the Titan Panel button.
--- **************************************************************************
+---Gets the item string to display on the Titan Panel button.
+---@param item string The item link or name.
+---@param itemQuantity number The goal quantity (0 means none).
+---@param showIcon boolean Whether to prepend the item icon.
+---@param showQuantity boolean Whether to append the goal quantity.
+---@param showColoredText boolean Whether to color the text.
+---@param showLabelText boolean Whether to append the item name.
+---@return string text
 function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
 
     local itemInfo = self:GetItemInfo(item)
@@ -941,19 +909,19 @@ function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity
     return str
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetIconString()
--- DESC : Gets an icon string.
--- **************************************************************************
+---Gets an icon string.
+---@param icon string|number The icon file path or file data ID.
+---@param space boolean Whether to append a trailing space.
+---@return string text
 function TitanFarmBuddy:GetIconString(icon, space)
     local fontSize = TitanPanelGetVar('FontSize') + 6
     return string.format('|T%s:%d|t%s', icon, fontSize, space and ' ' or '')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetBarValue()
--- DESC : Gets a value with highlighted color for the Titan Bar.
--- **************************************************************************
+---Gets a value with highlighted color for the Titan bar.
+---@param value string|number The value to display.
+---@param colored boolean Whether to apply the highlight color.
+---@return string|number value
 function TitanFarmBuddy:GetBarValue(value, colored)
     if colored then
         value = TitanUtils_GetHighlightText(value)
@@ -961,20 +929,17 @@ function TitanFarmBuddy:GetBarValue(value, colored)
     return value
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy_OnClick()
--- DESC : Handles click events to the Titan Button.
--- **************************************************************************
+---Handles click events on the Titan button.
+---@param button string The mouse button that was clicked.
 function TitanFarmBuddy_OnClick(_, button)
     if (button == 'LeftButton') then
         Settings.OpenToCategory(ADDON_SETTING_PANEL)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemInfo()
--- DESC : Gets information for the given item name.
--- **************************************************************************
+---Gets information for the given item name.
+---@param item string The item link, name or id.
+---@return table|nil itemInfo Item info table, or nil if the item could not be resolved.
 function TitanFarmBuddy:GetItemInfo(item)
 
     if item then
@@ -1017,10 +982,8 @@ function TitanFarmBuddy:GetItemInfo(item)
     return nil
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTooltipText()
--- DESC : Display tooltip text.
--- **************************************************************************
+---Displays the tooltip text.
+---@return string text
 function TitanFarmBuddy:GetTooltipText()
 
     local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
@@ -1066,12 +1029,10 @@ function TitanFarmBuddy:GetTooltipText()
     return str
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:MenuGenerator()
--- DESC : Builds the right click menu using the modern Titan_Menu (Blizzard_Menu)
---        API. Titan automatically adds the title, the control variables and the
---        hide command, so they are not added here.
--- **************************************************************************
+---Builds the right click menu using the modern Titan_Menu (Blizzard_Menu) API.
+---Titan automatically adds the title, the control variables and the hide
+---command, so they are not added here.
+---@param root table The Titan_Menu root node.
 function TitanFarmBuddy:MenuGenerator(_, root)
     local id = TITAN_FARM_BUDDY_ID
 
@@ -1099,10 +1060,7 @@ function TitanFarmBuddy:MenuGenerator(_, root)
     Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() self:ResetConfig() end)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:BagUpdateDelayed()
--- DESC : Checks if the item count has reached the goal and triggers a notification if it has.
--- **************************************************************************
+---Checks if the item count has reached the goal and triggers a notification if it has.
 function TitanFarmBuddy:BagUpdateDelayed()
 
     if not ITEM_DATA_INIT_COMPLETE then
@@ -1128,26 +1086,19 @@ function TitanFarmBuddy:BagUpdateDelayed()
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : FarmBuddy:PlayerRegenDisabled()
--- DESC : Fires when the player enters combat.
--- **************************************************************************
+---Fires when the player enters combat.
 function TitanFarmBuddy:PlayerRegenDisabled()
     PLAYER_IN_COMBAT = true
 end
 
--- **************************************************************************
--- NAME : FarmBuddy:PlayerRegenDisabled()
--- DESC : Fires if the player leaves combat.
--- **************************************************************************
+---Fires when the player leaves combat.
 function TitanFarmBuddy:PlayerRegenEnabled()
     PLAYER_IN_COMBAT = false
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetCount()
--- DESC : Gets the item count.
--- **************************************************************************
+---Gets the item count.
+---@param itemInfo table The item info table.
+---@return number count
 function TitanFarmBuddy:GetCount(itemInfo)
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
         return itemInfo.CountTotal
@@ -1156,10 +1107,8 @@ function TitanFarmBuddy:GetCount(itemInfo)
     return itemInfo.CountBags
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy_OnShow()
--- DESC : Display button when plugin is visible.
--- **************************************************************************
+---Displays the button when the plugin is visible.
+---@param self Button The Titan plugin button.
 function TitanFarmBuddy_OnShow(self)
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
     if sound and not tonumber(sound) then
@@ -1169,10 +1118,9 @@ function TitanFarmBuddy_OnShow(self)
     TitanPanelButton_OnShow(self)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ValidateItem()
--- DESC : Checks if the entered item name is valid.
--- **************************************************************************
+---Checks if the entered item name is valid.
+---@param input string The item name or link to validate.
+---@return boolean valid
 function TitanFarmBuddy:ValidateItem(_, input)
 
     local _, itemLink = C_Item.GetItemInfo(input)
@@ -1185,10 +1133,9 @@ function TitanFarmBuddy:ValidateItem(_, input)
     return false
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ValidateNumber()
--- DESC : Checks if the entered value a valid and positive number.
--- **************************************************************************
+---Checks if the entered value is a valid and positive number.
+---@param input string The value to validate.
+---@return boolean valid
 function TitanFarmBuddy:ValidateNumber(_, input)
 
     local number = tonumber(input)
@@ -1200,20 +1147,18 @@ function TitanFarmBuddy:ValidateNumber(_, input)
     return true
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItem()
--- DESC : Gets the item.
--- **************************************************************************
+---Gets the item.
+---@param index number The tracked item slot index.
+---@return string item
 function TitanFarmBuddy:GetItem(index)
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemLink()
--- DESC : Resolves the given input to an item link. If the input is already an
---        item link it is returned unchanged, otherwise it is treated as an
---        item id or item name and converted into an item link.
--- **************************************************************************
+---Resolves the given input to an item link. If the input is already an item link
+---it is returned unchanged, otherwise it is treated as an item id or item name
+---and converted into an item link.
+---@param input string The item link, id or name.
+---@return string|nil itemLink
 function TitanFarmBuddy:GetItemLink(input)
     if not input or input == '' then
         return nil
@@ -1229,10 +1174,9 @@ function TitanFarmBuddy:GetItemLink(input)
     return itemLink
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItem()
--- DESC : Sets the item.
--- **************************************************************************
+---Sets the item.
+---@param index number The tracked item slot index.
+---@param input string The item link, id or name.
 function TitanFarmBuddy:SetItem(index, _, input)
     local itemLink = self:GetItemLink(input)
 
@@ -1242,10 +1186,8 @@ function TitanFarmBuddy:SetItem(index, _, input)
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ResetItem()
--- DESC : Resets the item with the given index.
--- **************************************************************************
+---Resets the item with the given index.
+---@param index number The tracked item slot index.
 function TitanFarmBuddy:ResetItem(index)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, '')
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, '0')
@@ -1259,94 +1201,76 @@ function TitanFarmBuddy:ResetItem(index)
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemQuantity()
--- DESC : Gets the item goal.
--- **************************************************************************
+---Gets the item goal.
+---@param index number The tracked item slot index.
+---@return string quantity
 function TitanFarmBuddy:GetItemQuantity(index)
     return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index))
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItemQuantity()
--- DESC : Sets the item goal.
--- **************************************************************************
+---Sets the item goal.
+---@param index number The tracked item slot index.
+---@param input string|number The goal quantity.
 function TitanFarmBuddy:SetItemQuantity(index, _, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, tonumber(input))
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     NOTIFICATION_TRIGGERED[index] = false
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemShowInBar()
--- DESC : Gets the item show in bar status.
--- **************************************************************************
+---Gets the item show in bar status.
+---@param index number The tracked item slot index.
+---@return boolean showInBar
 function TitanFarmBuddy:GetItemShowInBar(index)
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex') == index
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItemShowInBar()
--- DESC : Sets the item show in bar status.
--- **************************************************************************
+---Sets the item show in bar status.
+---@param index number The tracked item slot index.
 function TitanFarmBuddy:SetItemShowInBar(index)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetNotificationStatus()
--- DESC : Sets the notification status.
--- **************************************************************************
+---Sets the notification status.
+---@param input boolean Whether goal notifications are enabled.
 function TitanFarmBuddy:SetNotificationStatus(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationStatus()
--- DESC : Gets the notification status.
--- **************************************************************************
+---Gets the notification status.
+---@return boolean enabled
 function TitanFarmBuddy:GetNotificationStatus()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetItemDisplayStyle()
--- DESC : Sets the item display style.
--- **************************************************************************
+---Sets the item display style.
+---@param input number The item display style.
 function TitanFarmBuddy:SetItemDisplayStyle(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetItemDisplayStyle()
--- DESC : Gets the item display style.
--- **************************************************************************
+---Gets the item display style.
+---@return number style
 function TitanFarmBuddy:GetItemDisplayStyle()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetFastTrackingMouseButton()
--- DESC : Sets the fast tracking mouse button.
--- **************************************************************************
+---Sets the fast tracking mouse button.
+---@param input string The mouse button.
 function TitanFarmBuddy:SetFastTrackingMouseButton(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetFastTrackingMouseButton()
--- DESC : Gets the fast tracking mouse button.
--- **************************************************************************
+---Gets the fast tracking mouse button.
+---@return string button
 function TitanFarmBuddy:GetFastTrackingMouseButton()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetKeySetting()
--- DESC : Sets the fast tracking shortcut key.
--- **************************************************************************
+---Sets the fast tracking shortcut key.
+---@param key string The modifier key.
+---@param state boolean Whether the modifier key is required.
 function TitanFarmBuddy:SetKeySetting(_, key, state)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
@@ -1358,10 +1282,9 @@ function TitanFarmBuddy:SetKeySetting(_, key, state)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys', options)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetKeySetting()
--- DESC : Gets the fast tracking shortcut key.
--- **************************************************************************
+---Gets the fast tracking shortcut key.
+---@param key string The modifier key.
+---@return boolean state
 function TitanFarmBuddy:GetKeySetting(_, key)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
@@ -1373,51 +1296,39 @@ function TitanFarmBuddy:GetKeySetting(_, key)
     return false
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetPlayNotificationSoundStatus()
--- DESC : Sets the play notification sound status.
--- **************************************************************************
+---Sets the play notification sound status.
+---@param input boolean Whether the notification sound is played.
 function TitanFarmBuddy:SetPlayNotificationSoundStatus(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetPlayNotificationSoundStatus()
--- DESC : Gets the play notification sound status.
--- **************************************************************************
+---Gets the play notification sound status.
+---@return boolean enabled
 function TitanFarmBuddy:GetPlayNotificationSoundStatus()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetNotificationDisplayDuration()
--- DESC : Sets the notification display duration.
--- **************************************************************************
+---Sets the notification display duration.
+---@param input string|number The display duration in seconds.
 function TitanFarmBuddy:SetNotificationDisplayDuration(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationDisplayDuration()
--- DESC : Gets the notification display duration.
--- **************************************************************************
+---Gets the notification display duration.
+---@return string duration
 function TitanFarmBuddy:GetNotificationDisplayDuration()
     return tostring(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetNotificationSound()
--- DESC : Sets the notification sound.
--- **************************************************************************
+---Sets the notification sound.
+---@param input number The sound kit id.
 function TitanFarmBuddy:SetNotificationSound(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', input)
     PlaySound(input, 'master')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationSound()
--- DESC : Gets the notification sound.
--- **************************************************************************
+---Gets the notification sound.
+---@return number sound
 function TitanFarmBuddy:GetNotificationSound()
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
     if not sound or NOTIFICATION_SOUNDS[sound] == nil then
@@ -1427,143 +1338,109 @@ function TitanFarmBuddy:GetNotificationSound()
     return sound
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetNotificationGlow()
--- DESC : Sets the notification glow effect status.
--- **************************************************************************
+---Sets the notification glow effect status.
+---@param input boolean Whether the glow effect is enabled.
 function TitanFarmBuddy:SetNotificationGlow(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationGlow()
--- DESC : Gets the notification glow effect status.
--- **************************************************************************
+---Gets the notification glow effect status.
+---@return boolean enabled
 function TitanFarmBuddy:GetNotificationGlow()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetNotificationShine()
--- DESC : Sets the notification shine effect status.
--- **************************************************************************
+---Sets the notification shine effect status.
+---@param input boolean Whether the shine effect is enabled.
 function TitanFarmBuddy:SetNotificationShine(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationShine()
--- DESC : Gets the notification shine effect status.
--- **************************************************************************
+---Gets the notification shine effect status.
+---@return boolean enabled
 function TitanFarmBuddy:GetNotificationShine()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetHideNotificationInCombat()
--- DESC : Sets the hide notification in combat status.
--- **************************************************************************
+---Sets the hide notification in combat status.
+---@param input boolean Whether notifications are hidden in combat.
 function TitanFarmBuddy:SetHideNotificationInCombat(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat', input)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetHideNotificationInCombat()
--- DESC : Gets the hide notification in combat status.
--- **************************************************************************
+---Gets the hide notification in combat status.
+---@return boolean enabled
 function TitanFarmBuddy:GetHideNotificationInCombat()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetShowItemIcon()
--- DESC : Sets the show item icon status.
--- **************************************************************************
+---Sets the show item icon status.
+---@param input boolean Whether the item icon is shown.
 function TitanFarmBuddy:SetShowItemIcon(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetShowItemIcon()
--- DESC : Gets the show item icon status.
--- **************************************************************************
+---Gets the show item icon status.
+---@return boolean enabled
 function TitanFarmBuddy:GetShowItemIcon()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetShowItemName()
--- DESC : Sets the show item name status.
--- **************************************************************************
+---Sets the show item name status.
+---@param input boolean Whether the item name is shown.
 function TitanFarmBuddy:SetShowItemName(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetShowItemName()
--- DESC : Gets the show item name status.
--- **************************************************************************
+---Gets the show item name status.
+---@return boolean enabled
 function TitanFarmBuddy:GetShowItemName()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetShowColoredText()
--- DESC : Sets the show colored text status.
--- **************************************************************************
+---Sets the show colored text status.
+---@param input boolean Whether the text is colored.
 function TitanFarmBuddy:SetShowColoredText(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetShowColoredText()
--- DESC : Gets the show colored text status.
--- **************************************************************************
+---Gets the show colored text status.
+---@return boolean enabled
 function TitanFarmBuddy:GetShowColoredText()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetShowQuantity()
--- DESC : Sets the show goal status.
--- **************************************************************************
+---Sets the show goal status.
+---@param input boolean Whether the goal quantity is shown.
 function TitanFarmBuddy:SetShowQuantity(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetShowQuantity()
--- DESC : Gets the show goal status.
--- **************************************************************************
+---Gets the show goal status.
+---@return boolean enabled
 function TitanFarmBuddy:GetShowQuantity()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:SetTrackBank()
--- DESC : Sets the track items in bank status.
--- **************************************************************************
+---Sets the include items in bank status.
+---@param input boolean Whether bank items are included in the count.
 function TitanFarmBuddy:SetIncludeBank(_, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetTrackBank()
--- DESC : Gets the track items in bank status.
--- **************************************************************************
+---Gets the include items in bank status.
+---@return boolean enabled
 function TitanFarmBuddy:GetIncludeBank()
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank')
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ResetConfig()
--- DESC : Resets the saved config to the default values.
--- **************************************************************************
+---Resets the saved config to the default values.
+---@param itemsOnly boolean If true, only the tracked items are reset.
 function TitanFarmBuddy:ResetConfig(itemsOnly)
 
     if not itemsOnly then
@@ -1600,19 +1477,15 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
     LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:TestNotification()
--- DESC : Raises a test notification.
--- **************************************************************************
+---Raises a test notification.
 function TitanFarmBuddy:TestNotification()
     local itemInfo = self:GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
     self:ShowNotification(0, itemInfo.Name, itemInfo.IconFileDataID, 200, true)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ModifiedClick()
--- DESC : Is called when an item is clicked with modifier key.
--- **************************************************************************
+---Is called when an item is clicked with a modifier key.
+---@param itemLink string The clicked item link.
+---@param itemLocation table|nil The item location, or nil for bags/bank/mail.
 function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
     -- item location can be nil for bags/bank/mail and is not nil for inventory slots, make an explicit check
@@ -1650,10 +1523,11 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:QueueNotification()
--- DESC : Queues a notification.
--- **************************************************************************
+---Queues a notification.
+---@param index number The tracked item slot index.
+---@param itemName string The item name.
+---@param itemIconFileDataID number The item icon file data ID.
+---@param quantity number The reached goal quantity.
 function TitanFarmBuddy:QueueNotification(index, itemName, itemIconFileDataID, quantity)
     NOTIFICATION_QUEUE[index] = {
         Index = index,
@@ -1663,10 +1537,12 @@ function TitanFarmBuddy:QueueNotification(index, itemName, itemIconFileDataID, q
     }
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ShowNotification()
--- DESC : Raises a notification.
--- **************************************************************************
+---Raises a notification.
+---@param index number The tracked item slot index.
+---@param name string The item name.
+---@param icon number The item icon file data ID.
+---@param quantity number The reached goal quantity.
+---@param demo boolean Whether this is a demo/test notification.
 function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
     if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
@@ -1689,10 +1565,7 @@ function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:NotificationTask()
--- DESC : Is called by the timer to handle the next notification.
--- **************************************************************************
+---Is called by the timer to handle the next notification.
 function TitanFarmBuddy:NotificationTask()
     if not TitanFarmBuddyNotification_Shown() then
         for index, notification in pairs(NOTIFICATION_QUEUE) do
@@ -1705,10 +1578,8 @@ function TitanFarmBuddy:NotificationTask()
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:ChatCommand()
--- DESC : Handles AddOn commands.
--- **************************************************************************
+---Handles AddOn commands.
+---@param input string The raw chat command input.
 function TitanFarmBuddy:ChatCommand(input)
 
     local cmd, value, arg1 = self:GetArgs(input, 3)
@@ -1796,10 +1667,9 @@ function TitanFarmBuddy:ChatCommand(input)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetChatCommandsHelp()
--- DESC : Returns the help text of the chat commands.
--- **************************************************************************
+---Returns the help text of the chat commands.
+---@param printOut boolean If true, each line is printed to the chat frame.
+---@return string helpText
 function TitanFarmBuddy:GetChatCommandsHelp(printOut)
 
     local helpStr = ''
@@ -1821,18 +1691,15 @@ function TitanFarmBuddy:GetChatCommandsHelp(printOut)
     return helpStr
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:IsIndexValid()
--- DESC : Returns the index status.
--- **************************************************************************
+---Returns the index status.
+---@param index number The tracked item slot index.
+---@return boolean valid
 function TitanFarmBuddy:IsIndexValid(index)
     return index and index > 0 and index <= ITEMS_AVAILABLE
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationSounds()
--- DESC : Get a list of available sounds.
--- **************************************************************************
+---Gets a list of available sounds.
+---@return table sounds
 function TitanFarmBuddy:GetNotificationSounds()
 
     local sounds = {}
@@ -1844,10 +1711,8 @@ function TitanFarmBuddy:GetNotificationSounds()
     return sounds
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddy:GetNotificationSoundsSorting()
--- DESC : Get the sound keys sorted by their label ascending.
--- **************************************************************************
+---Gets the sound keys sorted by their label ascending.
+---@return table sorting
 function TitanFarmBuddy:GetNotificationSoundsSorting()
 
     local sorting = {}

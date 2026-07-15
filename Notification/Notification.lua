@@ -11,10 +11,14 @@ local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
 local FRAME_HIDDEN = true
 
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_Show()
--- DESC : Shows a notification frame for the given item link.
--- **************************************************************************
+---Shows a notification frame for the given item.
+---@param name string The item name.
+---@param icon number|string The item icon file data ID or path.
+---@param goal number The reached goal quantity.
+---@param sound number|string|nil The sound to play, or nil/empty for none.
+---@param duration number The display duration in seconds.
+---@param glow boolean Whether to show the glow effect.
+---@param shine boolean Whether to show the shine effect.
 function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow, shine)
 
     TitanFarmBuddyNotification_HideNotification(false)
@@ -63,10 +67,8 @@ function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow
     FRAME.waitAndAnimOut:Play()
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_HideNotification()
--- DESC : Resets the timer and hides the notification.
--- **************************************************************************
+---Resets the timer and hides the notification.
+---@param click boolean If true, the notification was dismissed by a click.
 function TitanFarmBuddyNotification_HideNotification(click)
     FRAME_HIDDEN = true
     FRAME.waitAndAnimOut:Stop()
@@ -76,42 +78,33 @@ function TitanFarmBuddyNotification_HideNotification(click)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_SetTitle()
--- DESC : Sets the notification title.
--- **************************************************************************
+---Sets the notification title.
+---@param title string The title text.
 function TitanFarmBuddyNotification_SetTitle(title)
     FRAME.unlocked:SetText(title)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_SetText()
--- DESC : Sets the notification text.
--- **************************************************************************
+---Sets the notification text.
+---@param text string The notification text.
 function TitanFarmBuddyNotification_SetText(text)
     FRAME.Name:SetText(text)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_SetIcon()
--- DESC : Sets the notification icon.
--- **************************************************************************
+---Sets the notification icon.
+---@param icon number|string The icon file data ID or path.
 function TitanFarmBuddyNotification_SetIcon(icon)
     FRAME.Icon.Texture:SetTexture(icon)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_SetWidth()
--- DESC : Sets the notification frame width.
--- **************************************************************************
+---Sets the notification frame width.
+---@param width number The frame width.
 function TitanFarmBuddyNotification_SetWidth(width)
     FRAME:SetWidth(width)
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_OnMouseDown()
--- DESC : Handles the OnMouseDown event for the TitanFarmBuddyAnchor frame.
--- **************************************************************************
+---Handles the OnMouseDown event for the TitanFarmBuddyAnchor frame.
+---@param frame table The anchor frame.
+---@param button string The mouse button that was pressed.
 function TitanFarmBuddyNotification_OnMouseDown(frame, button)
 
     if button == 'LeftButton' and not frame.isMoving then
@@ -125,10 +118,9 @@ function TitanFarmBuddyNotification_OnMouseDown(frame, button)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_OnMouseUp()
--- DESC : Handles the OnMouseUp event for the TitanFarmBuddyAnchor frame.
--- **************************************************************************
+---Handles the OnMouseUp event for the TitanFarmBuddyAnchor frame.
+---@param frame table The anchor frame.
+---@param button string The mouse button that was released.
 function TitanFarmBuddyNotification_OnMouseUp(frame, button)
 
     if button == 'LeftButton' and frame.isMoving then
@@ -137,10 +129,7 @@ function TitanFarmBuddyNotification_OnMouseUp(frame, button)
     end
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_ShowAnchor()
--- DESC : Shows the Notification Anchor frame.
--- **************************************************************************
+---Shows the notification anchor frame.
 function TitanFarmBuddyNotification_ShowAnchor()
 
     -- Set Scale for Anchor frame
@@ -150,10 +139,8 @@ function TitanFarmBuddyNotification_ShowAnchor()
     TitanFarmBuddyAnchor:Show()
 end
 
--- **************************************************************************
--- NAME : TitanFarmBuddyNotification_Shown()
--- DESC : Gets the notification is currently shown status.
--- **************************************************************************
+---Gets whether the notification is currently shown.
+---@return boolean shown
 function TitanFarmBuddyNotification_Shown()
     return not FRAME_HIDDEN
 end
