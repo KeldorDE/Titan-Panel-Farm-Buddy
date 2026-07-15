@@ -14,7 +14,7 @@ You can also enter the name of the desired Item in the AddOn settings.
 * Track up to 16 farmed Items in the Titan Panel Bar
 * Track inventory or inventory and bank quantity
 * Show item icon in the Titan Panel Bar
-* Define a optional quantity for the farmed item
+* Define an optional quantity for the farmed item
 * Shows a notification if the item quantity has reached
 * Select an optional sound for the notification
 * Customize notification effects
@@ -42,7 +42,7 @@ Please use the [CurseForge](https://wow.curseforge.com/projects/titan-panel-farm
 # Links
 **Github:** https://github.com/KeldorDE/Titan-Panel-Farm-Buddy  
 **Curse:** https://mods.curse.com/addons/wow/274538-titan-panel-farm-buddy  
-**Curseforge:** https://wow.curseforge.com/projects/titan-panel-farm-buddy
+**CurseForge:** https://wow.curseforge.com/projects/titan-panel-farm-buddy
 
 ---
 # Usefully Links for Development
