@@ -1818,12 +1818,6 @@ end
 -- DESC : Raises a notification.
 -- **************************************************************************
 function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
-
-    local itemIndexTriggered = true
-    if NOTIFICATION_TRIGGERED[index] == nil or NOTIFICATION_TRIGGERED[index] == false then
-        itemIndexTriggered = false
-    end
-
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
     if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
 
@@ -1982,10 +1976,7 @@ end
 -- DESC : Returns the index status.
 -- **************************************************************************
 function TitanFarmBuddy:IsIndexValid(index)
-    if index and index > 0 and index <= ITEMS_AVAILABLE then
-        return true
-    end
-    return false
+    return index and index > 0 and index <= ITEMS_AVAILABLE
 end
 
 -- **************************************************************************
