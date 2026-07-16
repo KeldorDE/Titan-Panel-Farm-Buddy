@@ -1,3 +1,7 @@
+1.4.6
+------------------
+- Optimized fetching item information
+
 1.4.5
 ------------------
 - Optimized different parts of the code

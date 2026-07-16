@@ -941,45 +941,39 @@ end
 ---@param item string The item link, name or id.
 ---@return table|nil itemInfo Item info table, or nil if the item could not be resolved.
 function TitanFarmBuddy:GetItemInfo(item)
-
-    if item then
-        -- Static item data (name, link, icon, id) never changes, so cache it.
-        local static = ITEM_INFO_CACHE[item]
-        if not static then
-            local itemName, itemLink = C_Item.GetItemInfo(item)
-            if itemLink then
-                local itemID = C_Item.GetItemIDForItemInfo(item)
-
-                static = {
-                    ItemID = itemID,
-                    Name = itemName,
-                    Link = itemLink,
-                    IconFileDataID = C_Item.GetItemIconByID(itemID),
-                }
-                ITEM_INFO_CACHE[item] = static
-            end
-        end
-
-        if static then
-            -- Counts are volatile and always queried live
-            local countBags = C_Item.GetItemCount(static.Link)
-            local countTotal = C_Item.GetItemCount(static.Link, true)
-
-            local info = {
-                ItemID = static.ItemID,
-                Name = static.Name,
-                Link = static.Link,
-                IconFileDataID = static.IconFileDataID,
-                CountBags = countBags,
-                CountTotal = countTotal,
-                CountBank = (countTotal - countBags),
-            }
-
-            return info
-        end
+    if not item then
+        return nil
     end
 
-    return nil
+    local static = ITEM_INFO_CACHE[item]
+    if not static then
+        local itemName, itemLink = C_Item.GetItemInfo(item)
+        if not itemLink then
+            return nil
+        end
+
+        local itemID, _, _, _, itemIcon = C_Item.GetItemInfoInstant(item)
+        static = {
+            ItemID = itemID,
+            Name = itemName,
+            Link = itemLink,
+            IconFileDataID = itemIcon,
+        }
+        ITEM_INFO_CACHE[item] = static
+    end
+
+    local countBags = C_Item.GetItemCount(static.ItemID)
+    local countTotal = C_Item.GetItemCount(static.ItemID, true)
+
+    return {
+        ItemID = static.ItemID,
+        Name = static.Name,
+        Link = static.Link,
+        IconFileDataID = static.IconFileDataID,
+        CountBags = countBags,
+        CountTotal = countTotal,
+        CountBank = (countTotal - countBags),
+    }
 end
 
 ---Displays the tooltip text.
