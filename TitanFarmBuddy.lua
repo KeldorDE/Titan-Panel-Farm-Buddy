@@ -1325,7 +1325,7 @@ end
 ---@return number sound
 function TitanFarmBuddy:GetNotificationSound()
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
-    if not sound or NOTIFICATION_SOUNDS[sound] == nil then
+    if not sound or not NOTIFICATION_SOUNDS[sound] then
         return SOUNDKIT.ALARM_CLOCK_WARNING_3
     end
 
