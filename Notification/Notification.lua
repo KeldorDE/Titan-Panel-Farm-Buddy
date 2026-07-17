@@ -73,7 +73,7 @@ function TitanFarmBuddyNotification_HideNotification(click)
     FRAME_HIDDEN = true
     FRAME.waitAndAnimOut:Stop()
 
-    if click == true then
+    if click then
         FRAME.animOut:Play()
     end
 end
