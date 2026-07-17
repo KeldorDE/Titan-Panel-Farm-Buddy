@@ -932,7 +932,7 @@ end
 ---Handles click events on the Titan button.
 ---@param button string The mouse button that was clicked.
 function TitanFarmBuddy_OnClick(_, button)
-    if (button == 'LeftButton') then
+    if button == 'LeftButton' then
         Settings.OpenToCategory(ADDON_SETTING_PANEL)
     end
 end
@@ -1269,7 +1269,7 @@ function TitanFarmBuddy:SetKeySetting(_, key, state)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
-    if (options[key]) then
+    if options[key] then
         options[key] = state
     end
 
@@ -1283,7 +1283,7 @@ function TitanFarmBuddy:GetKeySetting(_, key)
 
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
-    if (options[key]) then
+    if options[key] then
         return options[key]
     end
 
