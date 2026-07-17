@@ -28,7 +28,7 @@ function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow
     TitanFarmBuddyNotification_SetText(goal .. ' ' .. name)
     TitanFarmBuddyNotification_SetIcon(icon)
 
-    if sound ~= nil and sound ~= '' then
+    if sound and sound ~= '' then
         PlaySound(sound)
     end
 

@@ -846,7 +846,7 @@ function TitanFarmBuddy:GetButtonText()
             if item and item ~= '' then
                 local itemQuantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
                 local itemStr = self:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
-                if itemStr ~= nil and itemStr ~= '' then
+                if itemStr and itemStr ~= '' then
                     if str ~= '' then
                         str = str .. '   '
                     end
