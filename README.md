@@ -1,54 +1,59 @@
-# Titan-Panel-Farm-Buddy
+# Titan Panel \[Farm Buddy\]
 
 <p align="center">
   <img width="380" src="assets/logo.png" alt="Projekt Logo">
 </p>
 
-A World of Warcraft AddOn that extends the famous Titan Panel with the functionality to Track up to four Farmed Items in the Titan Panel Bar. A notification will appear if the defined goal quantity for an item has reached.
+**Titan Panel \[Farm Buddy\]** is a plugin for **Titan Panel** that lets you track up to 16 farmed items directly in your Titan Panel bar.
 
-**Quickstart**  
-Alt + Right-click on an Item in your Bags or Bank to start tracking.
-You can also enter the name of the desired Item in the AddOn settings.
+Keep an eye on your farming progress without constantly opening your bags or bank. Track item counts from your inventory, or from both your inventory and bank, set optional target quantities, and receive a notification when you reach a goal.
 
-**Features**  
-* Track up to 16 farmed Items in the Titan Panel Bar
-* Track inventory or inventory and bank quantity
-* Show item icon in the Titan Panel Bar
-* Define an optional quantity for the farmed item
-* Shows a notification if the item quantity has reached
-* Select an optional sound for the notification
-* Customize notification effects
-* Show colored item count and quantity
-* Localized (English and German)
-* Define a shortcut for fast tracking (Default: ALT + right click)
-* Toggle item display modes
+> **Quickstart:** Hold **Alt** and **right-click** an item in your bags or bank to start tracking it.  
+> You can change this shortcut in the AddOn settings.
 
-**Please note:** Through the limitation of the API functions it is currently only possible to track known items by name. That means the items have to be in your data cache (Inventory or Bank)
-The item name will be validated if you set it if the item name is invalid or not known by the API you will see a notification.
+## Features
 
-**Chat Commands**  
-* /fb track < Item Slot 1-16 > < Item ID | Item Name | Item Link > - Sets the tracked item.
-* /fb quantity < Item Slot 1-16 > < Quantity > - Sets the goal quantity.
-* /fb primary < Item Slot 1-16 > - Sets the items position that would be shown in the Titan Panel bar.
-* /fb reset < all | items > - Resets Farm Buddy to its default settings.
-* /fb settings - Open up the AddOn settings page.
-* /fb version - Show the current used Farm Buddy Version.
-* /fb help - Shows the available chat commands.
+*   Track up to 16 items directly in the Titan Panel bar
+*   Count items in your inventory only, or in your inventory and bank
+*   Display item icons in the Titan Panel bar
+*   Set an optional target quantity for each tracked item
+*   Receive a notification when a target quantity is reached
+*   Select an optional notification sound
+*   Customize notification effects
+*   Display colored item counts and target quantities
+*   Choose between different item display modes
+*   Configure a custom shortcut for fast tracking (default: **Alt + right-click**)
+*   Available in English and German
 
-**Bug Reports and Feature Requests**  
-Please use the [CurseForge](https://wow.curseforge.com/projects/titan-panel-farm-buddy/issues) ticketing systems to submit bug reports and feature requests.
+## How to Use
 
----
-# Links
-**Github:** https://github.com/KeldorDE/Titan-Panel-Farm-Buddy  
-**Curse:** https://mods.curse.com/addons/wow/274538-titan-panel-farm-buddy  
-**CurseForge:** https://wow.curseforge.com/projects/titan-panel-farm-buddy
+1.  Install **Titan Panel** and **Titan Panel \[Farm Buddy\]**, then log in to the game.
+2.  Hold **Alt** and right-click an item in your bags or bank to add it to a tracking slot.
+3.  Alternatively, open the Farm Buddy settings and enter an item name manually.
+4.  Choose whether the item count should include your inventory only or both inventory and bank.
+5.  Optionally set a target quantity, notification effect, and notification sound.
+6.  Monitor your progress directly in the Titan Panel bar while farming.
 
----
-# Usefully Links for Development
-**World of Warcraft Icon List:** http://www.wowhead.com/icons  
-**WowAce Documentation:** https://www.wowace.com/projects/ace3/pages/  
-**AddOn API Documentation:**
-* http://wowwiki.wikia.com/wiki/Category:World_of_Warcraft_API
-* https://wow.gamepedia.com/World_of_Warcraft_API
-* https://www.townlong-yak.com/framexml/live
+## Important Note
+
+Due to World of Warcraft API limitations, Farm Buddy can only track items that are already known to your game client.
+
+An item is usually known after you have seen it in a tooltip, your inventory, or your bank. If you enter an unknown or invalid item name, Farm Buddy will show a notification.
+
+## Chat Commands
+
+*   `/fb track <slot 1-16> <item ID | item name | item link>` — Sets the tracked item for a slot
+*   `/fb quantity <slot 1-16> <quantity>` — Sets the target quantity for a slot
+*   `/fb primary <slot 1-16>` — Sets which tracked item is displayed as the primary Titan Panel entry
+*   `/fb settings` — Opens the AddOn settings
+*   `/fb reset <all | items>` — Resets Farm Buddy settings or tracked items
+*   `/fb version` — Shows the installed Farm Buddy version
+*   `/fb help` — Shows all available chat commands
+
+## Bug Reports and Feature Requests
+
+Please use the [CurseForge issue tracker](https://wow.curseforge.com/projects/titan-panel-farm-buddy/issues) to report bugs or request features.
+
+## Support
+
+If you would like to support the development of Farm Buddy, you can do so on [Patreon](https://www.patreon.com/c/keldor).
