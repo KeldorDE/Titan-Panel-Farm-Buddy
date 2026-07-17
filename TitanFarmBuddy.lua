@@ -186,7 +186,6 @@ end
 
 ---Registers the addon's dialog boxes.
 function TitanFarmBuddy:RegisterDialogs()
-
     StaticPopupDialogs[POPUP_KEY_RESET_ALL_CONFIRM] = {
         text = L['TITAN_FARM_BUDDY_CONFIRM_ALL_RESET'],
         button1 = L['TITAN_FARM_BUDDY_YES'],
@@ -234,7 +233,6 @@ end
 ---Callback function for the SetItemIndex OnShow event.
 ---@param frame table The static popup frame.
 function TitanFarmBuddy:SetItemIndexOnShow(frame)
-
     -- Get first position without an item as preferred default value
     local defaultIndex = 1
     for i = 1, ITEMS_AVAILABLE do
@@ -831,7 +829,6 @@ end
 ---Calculates the item count of the tracked farm item and displays it.
 ---@return string text
 function TitanFarmBuddy:GetButtonText()
-
     local str = ''
     local itemDisplayStyle = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemDisplayStyle'))
     local activeIndex = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex')
@@ -884,7 +881,6 @@ end
 ---@param showLabelText boolean Whether to append the item name.
 ---@return string text
 function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
-
     local itemInfo = self:GetItemInfo(item)
     if not itemInfo then
         return ''
@@ -979,7 +975,6 @@ end
 ---Displays the tooltip text.
 ---@return string text
 function TitanFarmBuddy:GetTooltipText()
-
     local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
         TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n'
     local strTmp = ''
@@ -1056,7 +1051,6 @@ end
 
 ---Checks if the item count has reached the goal and triggers a notification if it has.
 function TitanFarmBuddy:BagUpdateDelayed()
-
     if not ITEM_DATA_INIT_COMPLETE then
         return
     end
@@ -1116,7 +1110,6 @@ end
 ---@param input string The item name or link to validate.
 ---@return boolean valid
 function TitanFarmBuddy:ValidateItem(_, input)
-
     local _, itemLink = C_Item.GetItemInfo(input)
 
     if itemLink then
@@ -1131,7 +1124,6 @@ end
 ---@param input string The value to validate.
 ---@return boolean valid
 function TitanFarmBuddy:ValidateNumber(_, input)
-
     local number = tonumber(input)
     if not number or number < 0 then
         self:Print(L['FARM_BUDDY_INVALID_NUMBER'])
@@ -1266,7 +1258,6 @@ end
 ---@param key string The modifier key.
 ---@param state boolean Whether the modifier key is required.
 function TitanFarmBuddy:SetKeySetting(_, key, state)
-
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
     if options[key] then
@@ -1280,14 +1271,8 @@ end
 ---@param key string The modifier key.
 ---@return boolean state
 function TitanFarmBuddy:GetKeySetting(_, key)
-
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
-
-    if options[key] then
-        return options[key]
-    end
-
-    return false
+    return options[key] or false
 end
 
 ---Sets the play notification sound status.
@@ -1436,7 +1421,6 @@ end
 ---Resets the saved config to the default values.
 ---@param itemsOnly boolean If true, only the tracked items are reset.
 function TitanFarmBuddy:ResetConfig(itemsOnly)
-
     if not itemsOnly then
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true)
@@ -1481,7 +1465,6 @@ end
 ---@param itemLink string The clicked item link.
 ---@param itemLocation table|nil The item location, or nil for bags/bank/mail.
 function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
-
     -- item location can be nil for bags/bank/mail and is not nil for inventory slots, make an explicit check
     if itemLocation and itemLocation.IsBagAndSlot and (not itemLocation:IsBagAndSlot()) then
         return
@@ -1575,7 +1558,6 @@ end
 ---Handles AddOn commands.
 ---@param input string The raw chat command input.
 function TitanFarmBuddy:ChatCommand(input)
-
     local cmd, value, arg1 = self:GetArgs(input, 3)
 
     -- Show help
@@ -1584,7 +1566,7 @@ function TitanFarmBuddy:ChatCommand(input)
         self:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n')
         self:GetChatCommandsHelp(true)
 
-        -- Prints version information
+    -- Prints version information
     elseif cmd == 'version' then
         self:Print(ADDON_VERSION)
 
@@ -1665,7 +1647,6 @@ end
 ---@param printOut boolean If true, each line is printed to the chat frame.
 ---@return string helpText
 function TitanFarmBuddy:GetChatCommandsHelp(printOut)
-
     local helpStr = ''
 
     for command, info in pairs(CHAT_COMMANDS) do
@@ -1695,7 +1676,6 @@ end
 ---Gets a list of available sounds.
 ---@return table sounds
 function TitanFarmBuddy:GetNotificationSounds()
-
     local sounds = {}
 
     for k, v in pairs(NOTIFICATION_SOUNDS) do
@@ -1708,7 +1688,6 @@ end
 ---Gets the sound keys sorted by their label ascending.
 ---@return table sorting
 function TitanFarmBuddy:GetNotificationSoundsSorting()
-
     local sorting = {}
 
     for k in pairs(NOTIFICATION_SOUNDS) do

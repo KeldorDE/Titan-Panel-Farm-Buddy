@@ -6,7 +6,7 @@
 
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate'
-local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, 'TitanFarmBuddyAlertFrameTemplate')
+local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, FRAME_NAME)
 local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
 local FRAME_HIDDEN = true
 
@@ -20,7 +20,6 @@ local FRAME_HIDDEN = true
 ---@param glow boolean Whether to show the glow effect.
 ---@param shine boolean Whether to show the shine effect.
 function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow, shine)
-
     TitanFarmBuddyNotification_HideNotification(false)
 
     TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
@@ -33,18 +32,18 @@ function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow
     end
 
     if glow then
-        FRAME.glow:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
+        FRAME.glow:SetTexture('Interface\\AchievementFrame\\UI-Achievement-Guild')
         FRAME.glow:SetTexCoord(0.00195313, 0.74804688, 0.19531250, 0.49609375)
-        FRAME.glow:SetVertexColor(1,1,1)
+        FRAME.glow:SetVertexColor(1, 1, 1)
         FRAME.glow:Show()
     else
         FRAME.glow:Hide()
     end
 
     if shine then
-        FRAME.shine:SetTexture("Interface\\AchievementFrame\\UI-Achievement-Guild")
+        FRAME.shine:SetTexture('Interface\\AchievementFrame\\UI-Achievement-Guild')
         FRAME.shine:SetTexCoord(0.75195313, 0.91601563, 0.19531250, 0.35937500)
-        FRAME.shine:SetPoint("BOTTOMLEFT", 0, 16)
+        FRAME.shine:SetPoint('BOTTOMLEFT', 0, 16)
         FRAME.shine:Show()
     else
         FRAME.shine:Hide()
@@ -106,7 +105,6 @@ end
 ---@param frame table The anchor frame.
 ---@param button string The mouse button that was pressed.
 function TitanFarmBuddyNotification_OnMouseDown(frame, button)
-
     if button == 'LeftButton' and not frame.isMoving then
         frame:StartMoving()
         frame.isMoving = true
@@ -122,7 +120,6 @@ end
 ---@param frame table The anchor frame.
 ---@param button string The mouse button that was released.
 function TitanFarmBuddyNotification_OnMouseUp(frame, button)
-
     if button == 'LeftButton' and frame.isMoving then
         frame:StopMovingOrSizing()
         frame.isMoving = false
@@ -131,7 +128,6 @@ end
 
 ---Shows the notification anchor frame.
 function TitanFarmBuddyNotification_ShowAnchor()
-
     -- Set Scale for Anchor frame
     TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale())
     TitanFarmBuddyAnchor.Name:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT'])
