@@ -843,7 +843,7 @@ function TitanFarmBuddy:GetButtonText()
             if item and item ~= '' then
                 local itemQuantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
                 local itemStr = self:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
-                if itemStr and itemStr ~= '' then
+                if itemStr ~= nil and itemStr ~= '' then
                     if str ~= '' then
                         str = str .. '   '
                     end
@@ -1260,7 +1260,7 @@ end
 function TitanFarmBuddy:SetKeySetting(_, key, state)
     local options = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys')
 
-    if options[key] then
+    if options[key] ~= nil then
         options[key] = state
     end
 
