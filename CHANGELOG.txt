@@ -1,3 +1,9 @@
+1.4.9
+------------------
+- Fixed outdated API version for Classic version
+- Fixed missing AddOn icon in AddOn overview menu
+- Fixed missing Titan Panel Category assignment in AddOn overview menu
+
 1.4.8
 ------------------
 - Fixed hotkey setting not being saved
