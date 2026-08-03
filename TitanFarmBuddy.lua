@@ -223,6 +223,15 @@ function TitanFarmBuddy:RegisterDialogs()
         OnAccept = function(frame, data)
             self:SetItemIndexOnAccept(frame, data)
         end,
+        EditBoxOnEnterPressed = function(editBox)
+            local dialog = editBox:GetParent()
+
+            self:SetItemIndexOnAccept(dialog, dialog.data)
+            dialog:Hide()
+        end,
+        EditBoxOnEscapePressed = function(editBox)
+            editBox:GetParent():Hide()
+        end,
         timeout = 0,
         whileDead = true,
         hideOnEscape = true,

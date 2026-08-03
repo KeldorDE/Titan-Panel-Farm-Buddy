@@ -1,3 +1,7 @@
+1.4.10
+------------------
+- Added the ability to confirm the add item dialog with Enter and close it with ESC
+
 1.4.9
 ------------------
 - Fixed outdated API version for Classic version
