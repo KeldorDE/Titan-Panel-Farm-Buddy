@@ -1,6 +1,7 @@
 NO_RELEASE
 ------------------
 - Fixed issue where duplicate items could be added
+- Fixed goal notification firing again when setting a goal that was already reached
 - Optimized different parts of the code
 
 1.4.10

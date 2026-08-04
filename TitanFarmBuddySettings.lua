@@ -668,9 +668,14 @@ end
 ---@param index number The tracked item slot index.
 ---@param input string|number The goal quantity.
 function TitanFarmBuddy:SetItemQuantity(index, _, input)
-    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, tonumber(input))
+    local quantity = tonumber(input)
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, quantity)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-    self:SetNotificationTriggered(index, false)
+
+    local item = self:GetItem(index)
+    local itemInfo = (item and item ~= '') and self:GetItemInfo(item) or nil
+
+    self:SetNotificationTriggered(index, itemInfo and quantity and quantity > 0 and self:GetCount(itemInfo) >= quantity)
 end
 
 ---Gets the item show in bar status.
