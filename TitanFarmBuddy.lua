@@ -252,10 +252,18 @@ end
 function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
     local index = tonumber(_G[frame:GetName() .. 'EditBox']:GetText())
     if self:IsIndexValid(index) then
-        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
-        self:SetItem(index, nil, data)
-        self:Print(text)
-        LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+        local existingIndex = self:GetTrackedItemIndex(data, index)
+        if existingIndex then
+            local text = L['FARM_BUDDY_ITEM_ALREADY_TRACKED']
+                :gsub('!itemName!', data)
+                :gsub('!position!', existingIndex)
+            self:Print(text)
+        else
+            local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
+            self:SetItem(index, nil, data)
+            self:Print(text)
+            LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+        end
     else
         local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
         self:Print(text)
@@ -1621,13 +1629,22 @@ function TitanFarmBuddy:ChatCommand(input)
     elseif cmd == 'track' then
 
         if value then
+            print(arg1)
             local itemInfo = self:GetItemInfo(arg1)
             if itemInfo then
                 local index = tonumber(value)
                 if self:IsIndexValid(index) then
-                    self:SetItem(index, nil, itemInfo.Name)
-                    local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
-                    self:Print(text)
+                    local existingIndex = self:GetTrackedItemIndex(itemInfo.ItemID, index)
+                    if existingIndex then
+                        local text = L['FARM_BUDDY_ITEM_ALREADY_TRACKED']
+                            :gsub('!itemName!', itemInfo.Link)
+                            :gsub('!position!', existingIndex)
+                        self:Print(text)
+                    else
+                        self:SetItem(index, nil, itemInfo.Name)
+                        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
+                        self:Print(text)
+                    end
                 else
                     local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
                     self:Print(text)
@@ -1699,4 +1716,26 @@ function TitanFarmBuddy:GetNotificationSoundsSorting()
     end)
 
     return sorting
+end
+
+---Checks whether the given item is already tracked in one of the slots.
+---@param item string|number The item link, id or name.
+---@param ignoreIndex number|nil An optional slot index to skip during the check.
+---@return number|nil index The slot index if already tracked, otherwise nil.
+function TitanFarmBuddy:GetTrackedItemIndex(item, ignoreIndex)
+    local itemInfo = self:GetItemInfo(item)
+    if not itemInfo then
+        return nil
+    end
+
+    for i = 1, ITEMS_AVAILABLE do
+        if i ~= ignoreIndex then
+            local trackedInfo = self:GetItemInfo(self:GetItem(i))
+            if trackedInfo and trackedInfo.ItemID == itemInfo.ItemID then
+                return i
+            end
+        end
+    end
+
+    return nil
 end

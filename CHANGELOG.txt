@@ -1,3 +1,7 @@
+NO_RELEASE
+------------------
+- Fixed issue where duplicate items could be added
+
 1.4.9
 ------------------
 - Fixed outdated API version for Classic version
