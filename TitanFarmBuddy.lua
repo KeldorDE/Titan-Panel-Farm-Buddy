@@ -1629,7 +1629,6 @@ function TitanFarmBuddy:ChatCommand(input)
     elseif cmd == 'track' then
 
         if value then
-            print(arg1)
             local itemInfo = self:GetItemInfo(arg1)
             if itemInfo then
                 local index = tonumber(value)
