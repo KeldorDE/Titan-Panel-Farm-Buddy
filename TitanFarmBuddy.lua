@@ -8,6 +8,7 @@ local TITAN_FARM_BUDDY_ID = 'FarmBuddy'
 local ADDON_NAME = 'Titan Farm Buddy'
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0')
+local CONFIG_REG = LibStub('AceConfigRegistry-3.0')
 local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = {}
 local ITEMS_AVAILABLE = 16
@@ -262,7 +263,7 @@ function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
             local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
             self:SetItem(index, nil, data)
             self:Print(text)
-            LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+            TitanFarmBuddy:NotifySettingsChanged()
         end
     else
         local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
@@ -1177,7 +1178,7 @@ function TitanFarmBuddy:SetItem(index, _, input)
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, itemLink or input)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     NOTIFICATION_TRIGGERED[index] = false
-    LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+    TitanFarmBuddy:NotifySettingsChanged()
 end
 
 ---Resets the item with the given index.
@@ -1192,7 +1193,7 @@ function TitanFarmBuddy:ResetItem(index)
 
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     NOTIFICATION_TRIGGERED[index] = false
-    LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+    TitanFarmBuddy:NotifySettingsChanged()
 end
 
 ---Gets the item goal.
@@ -1460,7 +1461,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
     end
 
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-    LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+    TitanFarmBuddy:NotifySettingsChanged()
 end
 
 ---Raises a test notification.
@@ -1598,7 +1599,7 @@ function TitanFarmBuddy:ChatCommand(input)
             TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
             self:Print(text)
             TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-            LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+            TitanFarmBuddy:NotifySettingsChanged()
         else
             local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
             self:Print(text)
@@ -1615,7 +1616,7 @@ function TitanFarmBuddy:ChatCommand(input)
                     self:SetItemQuantity(index, nil, arg1)
                     self:Print(L['FARM_BUDDY_GOAL_SET'])
                     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-                    LibStub('AceConfigRegistry-3.0'):NotifyChange(ADDON_NAME)
+                    TitanFarmBuddy:NotifySettingsChanged()
                 else
                     local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
                     self:Print(text)
@@ -1737,4 +1738,9 @@ function TitanFarmBuddy:GetTrackedItemIndex(item, ignoreIndex)
     end
 
     return nil
+end
+
+---Notifies the settings GUI that a change has been made.
+function TitanFarmBuddy:NotifySettingsChanged()
+    CONFIG_REG:NotifyChange(FARM_BUDDY_ADDON_NAME)
 end
