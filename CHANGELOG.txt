@@ -1,10 +1,11 @@
-1.4.10
-------------------
-- Added the ability to confirm the add item dialog with Enter and close it with ESC
-
 NO_RELEASE
 ------------------
 - Fixed issue where duplicate items could be added
+- Optimized different parts of the code
+
+1.4.10
+------------------
+- Added the ability to confirm the add item dialog with Enter and close it with ESC
 
 1.4.9
 ------------------

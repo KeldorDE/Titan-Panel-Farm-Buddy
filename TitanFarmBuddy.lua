@@ -4,55 +4,22 @@
 -- * By: Keldor
 -- **************************************************************************
 
-local TITAN_FARM_BUDDY_ID = 'FarmBuddy'
-local ADDON_NAME = 'Titan Farm Buddy'
+
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0')
 local CONFIG_REG = LibStub('AceConfigRegistry-3.0')
 local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local OPTION_ORDER = {}
-local ITEMS_AVAILABLE = 16
-local ITEM_DISPLAY_STYLES = {}
+local ITEM_DISPLAY_STYLES = {
+    [1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1'],
+    [2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2'],
+}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
 local ITEM_INFO_CACHE = {}
 local ADDON_SETTING_PANEL
 local ITEM_DATA_INIT_COMPLETE = false
 local PLAYER_IN_COMBAT = false
-local POPUP_KEY_RESET_ALL_CONFIRM = ADDON_NAME .. 'ResetAllConfirm'
-local POPUP_KEY_RESET_ALL_ITEMS_CONFIRM = ADDON_NAME .. 'ResetAllItemsConfirm'
-local POPUP_KEY_SET_ITEM_INDEX = ADDON_NAME .. 'SetItemIndex'
-local CHAT_COMMAND = 'fb'
-local CHAT_COMMANDS = {
-    track = {
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_TRACK_DESC']
-    },
-    quantity = {
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_GOAL_DESC']
-    },
-    primary = {
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '>',
-        Description = L['FARM_BUDDY_COMMAND_PRIMARY_DESC']
-    },
-    reset = {
-        Args = '<' .. L['FARM_BUDDY_COMMAND_RESET_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_RESET_DESC']
-    },
-    settings = {
-        Args = '',
-        Description = L['FARM_BUDDY_COMMAND_SETTINGS_DESC']
-    },
-    version = {
-        Args = '',
-        Description = L['FARM_BUDDY_COMMAND_VERSION_DESC']
-    },
-    help = {
-        Args = '',
-        Description = L['FARM_BUDDY_COMMAND_HELP_DESC']
-    }
-}
 local NOTIFICATION_SOUNDS = {
     [SOUNDKIT.ALARM_CLOCK_WARNING_1]        = L['FARM_BUDDY_SOUND_ALARM_1'],
     [SOUNDKIT.ALARM_CLOCK_WARNING_2]        = L['FARM_BUDDY_SOUND_ALARM_2'],
@@ -86,12 +53,7 @@ function TitanFarmBuddy:OnInitialize()
     ADDON_SETTING_PANEL = category
 
     self:RegisterDialogs()
-
-    ITEM_DISPLAY_STYLES[1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1']
-    ITEM_DISPLAY_STYLES[2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2']
-
-    -- Register chat command
-    self:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand')
+    self:InitChatCommands()
 
     -- Register events
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'PlayerEnteringWorld')
@@ -187,7 +149,7 @@ end
 
 ---Registers the addon's dialog boxes.
 function TitanFarmBuddy:RegisterDialogs()
-    StaticPopupDialogs[POPUP_KEY_RESET_ALL_CONFIRM] = {
+    StaticPopupDialogs[TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM] = {
         text = L['TITAN_FARM_BUDDY_CONFIRM_ALL_RESET'],
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
@@ -200,7 +162,7 @@ function TitanFarmBuddy:RegisterDialogs()
         preferredIndex = 3,
     }
 
-    StaticPopupDialogs[POPUP_KEY_RESET_ALL_ITEMS_CONFIRM] = {
+    StaticPopupDialogs[TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM] = {
         text = L['TITAN_FARM_BUDDY_CONFIRM_RESET'],
         button1 = L['TITAN_FARM_BUDDY_YES'],
         button2 = L['TITAN_FARM_BUDDY_NO'],
@@ -213,7 +175,7 @@ function TitanFarmBuddy:RegisterDialogs()
         preferredIndex = 3,
     }
 
-    StaticPopupDialogs[POPUP_KEY_SET_ITEM_INDEX] = {
+    StaticPopupDialogs[TITAN_FARM_BUDDY_DIALOG_SET_ITEM_INDEX] = {
         text = L['TITAN_FARM_BUDDY_CHOOSE_ITEM_INDEX'],
         button1 = L['TITAN_FARM_BUDDY_OK'],
         button2 = L['TITAN_FARM_BUDDY_CANCEL'],
@@ -595,7 +557,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'execute',
                         name = L['FARM_BUDDY_RESET_ALL_ITEMS'],
                         desc = L['FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
-                        func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end,
+                        func = function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM) end,
                         width = 'double',
                         order = self:GetOptionOrder('actions'),
                     },
@@ -615,7 +577,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'execute',
                         name = L['FARM_BUDDY_RESET_ALL'],
                         desc = L['FARM_BUDDY_RESET_ALL_DESC'],
-                        func = function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end,
+                        func = function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end,
                         width = 'double',
                         order = self:GetOptionOrder('actions'),
                     },
@@ -1060,8 +1022,8 @@ function TitanFarmBuddy:MenuGenerator(_, root)
     local actions = Titan_Menu.AddButton(root, L['FARM_BUDDY_ACTIONS'])
     Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_TEST_NOTIFICATION'], function() self:TestNotification() end)
     Titan_Menu.AddDivider(actions)
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_ITEMS_CONFIRM) end)
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(POPUP_KEY_RESET_ALL_CONFIRM) end)
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM) end)
+    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
 
     -- Reset all settings
     Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() self:ResetConfig() end)
@@ -1510,7 +1472,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
     if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions then
         if itemLink then
-            local dialog = StaticPopup_Show(POPUP_KEY_SET_ITEM_INDEX, ITEMS_AVAILABLE)
+            local dialog = StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_SET_ITEM_INDEX, ITEMS_AVAILABLE)
             if dialog then
                 dialog.data = itemLink
             end
@@ -1571,125 +1533,6 @@ function TitanFarmBuddy:NotificationTask()
             break
         end
     end
-end
-
----Handles AddOn commands.
----@param input string The raw chat command input.
-function TitanFarmBuddy:ChatCommand(input)
-    local cmd, value, arg1 = self:GetArgs(input, 3)
-
-    -- Show help
-    if not cmd or cmd == 'help' then
-
-        self:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n')
-        self:GetChatCommandsHelp(true)
-
-    -- Prints version information
-    elseif cmd == 'version' then
-        self:Print(ADDON_VERSION)
-
-    -- Reset AddOn settings
-    elseif cmd == 'reset' then
-
-        if value == 'all' then
-            self:ResetConfig(false)
-        else
-            self:ResetConfig(true)
-        end
-
-        self:Print(L['FARM_BUDDY_CONFIG_RESET_MSG'])
-
-    elseif cmd == 'primary' then
-
-        local index = tonumber(value)
-
-        if self:IsIndexValid(index) then
-            local text = L['FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', index)
-            TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
-            self:Print(text)
-            TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-            TitanFarmBuddy:NotifySettingsChanged()
-        else
-            local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-            self:Print(text)
-        end
-
-    -- Set goal quantity
-    elseif cmd == 'quantity' then
-
-        if value then
-            local status = self:ValidateNumber(nil, arg1)
-            if status then
-                local index = tonumber(value)
-                if self:IsIndexValid(index) then
-                    self:SetItemQuantity(index, nil, arg1)
-                    self:Print(L['FARM_BUDDY_GOAL_SET'])
-                    TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
-                    TitanFarmBuddy:NotifySettingsChanged()
-                else
-                    local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-                    self:Print(text)
-                end
-            end
-        else
-            self:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
-        end
-
-    -- Set tracked item
-    elseif cmd == 'track' then
-
-        if value then
-            local itemInfo = self:GetItemInfo(arg1)
-            if itemInfo then
-                local index = tonumber(value)
-                if self:IsIndexValid(index) then
-                    local existingIndex = self:GetTrackedItemIndex(itemInfo.ItemID, index)
-                    if existingIndex then
-                        local text = L['FARM_BUDDY_ITEM_ALREADY_TRACKED']
-                            :gsub('!itemName!', itemInfo.Link)
-                            :gsub('!position!', existingIndex)
-                        self:Print(text)
-                    else
-                        self:SetItem(index, nil, itemInfo.Name)
-                        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
-                        self:Print(text)
-                    end
-                else
-                    local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
-                    self:Print(text)
-                end
-            else
-                self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
-            end
-        else
-            self:Print(L['FARM_BUDDY_TRACK_ITEM_PARAM_MISSING'])
-        end
-    elseif cmd == 'settings' then
-        Settings.OpenToCategory(ADDON_SETTING_PANEL)
-    end
-end
-
----Returns the help text of the chat commands.
----@param printOut boolean If true, each line is printed to the chat frame.
----@return string helpText
-function TitanFarmBuddy:GetChatCommandsHelp(printOut)
-    local helpStr = ''
-
-    for command, info in pairs(CHAT_COMMANDS) do
-        helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command)
-        if info.Args ~= '' then
-            helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args)
-        end
-        helpStr = helpStr .. ' - ' .. info.Description
-        if printOut then
-            print(helpStr)
-            helpStr = ''
-        else
-            helpStr = helpStr .. '\n'
-        end
-    end
-
-    return helpStr
 end
 
 ---Returns the index status.
