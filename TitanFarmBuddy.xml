@@ -2,6 +2,7 @@
 ..\FrameXML\UI.xsd">
   <Script file="TitanFarmBuddyConst.lua"/>
   <Script file="TitanFarmBuddy.lua"/>
+  <Script file="TitanFarmBuddySettings.lua"/>
   <Script file="TitanFarmBuddyChatCommands.lua"/>
   <Frame parent="UIParent">
     <Frames>
