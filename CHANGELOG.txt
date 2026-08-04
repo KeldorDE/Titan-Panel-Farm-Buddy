@@ -1,4 +1,4 @@
-NO_RELEASE
+1.4.11
 ------------------
 - Fixed issue where duplicate items could be added
 - Fixed goal notification firing again when setting a goal that was already reached
