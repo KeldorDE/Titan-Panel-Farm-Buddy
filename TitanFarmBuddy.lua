@@ -299,7 +299,7 @@ function TitanFarmBuddy:GetItemString(item, itemQuantity, showIcon, showQuantity
     end
 
     if showLabelText then
-        str = str .. ' ' .. (showColoredText and self:GetNameFromItemLink(item) or itemInfo.Name)
+        str = str .. ' ' .. (showColoredText and self:GetNameFromItemLink(itemInfo.Link) or itemInfo.Name)
     end
 
     return str
@@ -391,13 +391,14 @@ function TitanFarmBuddy:GetTooltipText()
             if itemInfo then
                 local goalValue = L['FARM_BUDDY_NO_GOAL']
                 local goal = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
+                local itemName = self:GetNameFromItemLink(itemInfo.Link) or itemInfo.Name
 
                 if goal > 0 then
                     goalValue = goal
                 end
 
                 strTmp = strTmp .. '\n'
-                strTmp = strTmp .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. TitanUtils_GetHighlightText(itemInfo.Name) .. '\n'
+                strTmp = strTmp .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. itemName .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
@@ -409,7 +410,7 @@ function TitanFarmBuddy:GetTooltipText()
 
     if hasItem then
         str = str .. TitanUtils_GetHighlightText(L['FARM_BUDDY_SUMMARY'])
-        str = str .. '\n------------------------------------'
+        str = str .. '\n'
         str = str .. strTmp
     else
         str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
