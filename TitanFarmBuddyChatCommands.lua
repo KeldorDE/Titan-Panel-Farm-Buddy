@@ -147,6 +147,11 @@ function TitanFarmBuddy:GetChatCommandsHelp(printOut)
     local helpStr = ''
 
     for command, info in pairs(CHAT_COMMANDS) do
+
+        if not printOut then
+            helpStr = helpStr .. '   '
+        end
+
         helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetRedText(command)
         if info.Args ~= '' then
             helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args)

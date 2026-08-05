@@ -1,3 +1,7 @@
+NO_RELEASE
+------------------
+- Updated translations
+
 1.4.11
 ------------------
 - Fixed issue where duplicate items could be added
