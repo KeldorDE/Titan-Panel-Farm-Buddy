@@ -361,21 +361,6 @@ function TitanFarmBuddy:GetItemInfo(item)
     local countBags = C_Item.GetItemCount(static.ItemID)
     local countTotal = C_Item.GetItemCount(static.ItemID, true)
 
-    if static.ItemID == 236776 then
-        countBags = 100
-        countTotal = 100
-    end
-    if static.ItemID == 210939 then
-        countBags = 50
-        countTotal = 50
-    end
-    if static.ItemID == 210796 then
-        countBags = 73
-        countTotal = 73
-    end
-
-    print(static.ItemID)
-
     return {
         ItemID = static.ItemID,
         Name = static.Name,

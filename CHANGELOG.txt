@@ -1,4 +1,4 @@
-NO_RELEASE
+1.4.12
 ------------------
 - Item IDs are now fetched from the server automatically and no longer need to be cached beforehand
 - Fixed tracked item names in the Titan Panel bar staying in the old language after changing the client language
