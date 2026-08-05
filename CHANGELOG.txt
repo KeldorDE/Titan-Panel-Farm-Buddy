@@ -1,5 +1,6 @@
 NO_RELEASE
 ------------------
+- Item IDs are now fetched from the server automatically and no longer need to be cached beforehand
 - Updated translations
 
 1.4.11

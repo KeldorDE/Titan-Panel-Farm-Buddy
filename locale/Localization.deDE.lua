@@ -40,6 +40,7 @@ L["FARM_BUDDY_ITEM_DISPLAY_STYLE"] = "Anzeigetyp für Gegenstände in der Titan 
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_1"] = "Nur den primären Gegenstand anzeigen"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_2"] = "Alle Gegenstände anzeigen"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC"] = "Der Anzeigetyp der für Gegenstände in der Titan Panel Leiste verwendet wird."
+L["FARM_BUDDY_ITEM_LOADING"] = "Wird geladen..."
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "Der Gegenstand wurde nicht gefunden."
 L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "Der Gegenstand auf Position !position! wird nun zur Anzeige verwendet."
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! ist nun dein beobachteter Gegenstand!"

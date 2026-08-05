@@ -10,6 +10,7 @@ local OPTION_ORDER = {}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
 local ITEM_INFO_CACHE = {}
+local ITEM_LOADING = {}
 local ITEM_DATA_INIT_COMPLETE = false
 local PLAYER_IN_COMBAT = false
 
@@ -505,12 +506,24 @@ function TitanFarmBuddy_OnShow(self)
     TitanPanelButton_OnShow(self)
 end
 
----Checks if the entered item name is valid.
----@param input string The item name or link to validate.
+---Checks if the entered item is valid.
+---@param input string The item id, name or link to validate.
 ---@return boolean valid
 function TitanFarmBuddy:ValidateItem(_, input)
-    local _, itemLink = C_Item.GetItemInfo(input)
+    -- Item ids do not need to be cached: validate them instantly here and load
+    -- the full item data asynchronously in SetItem.
+    local itemID = self:GetInputItemID(input)
+    if itemID then
+        if C_Item.GetItemInfoInstant(itemID) then
+            return true
+        end
 
+        self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+        return false
+    end
+
+    -- Item names and links have to be known already (unchanged behavior).
+    local _, itemLink = C_Item.GetItemInfo(input)
     if itemLink then
         return true
     end
@@ -524,6 +537,13 @@ end
 ---@return string item
 function TitanFarmBuddy:GetItem(index)
     return TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index)
+end
+
+---Checks if the item in the given slot is currently being loaded from the server.
+---@param index number The tracked item slot index.
+---@return boolean loading
+function TitanFarmBuddy:IsItemLoading(index)
+    return ITEM_LOADING[index] ~= nil
 end
 
 ---Resolves the given input to an item link. If the input is already an item link
@@ -546,21 +566,75 @@ function TitanFarmBuddy:GetItemLink(input)
     return itemLink
 end
 
+---Returns the numeric item id if the given input is a bare item id (not a name or link).
+---@param input string The item link, id or name.
+---@return number|nil itemID
+function TitanFarmBuddy:GetInputItemID(input)
+    if type(input) == 'string' and input:find('|Hitem:') then
+        return nil
+    end
+
+    return tonumber(input)
+end
+
 ---Sets the item.
 ---@param index number The tracked item slot index.
 ---@param input string The item link, id or name.
 function TitanFarmBuddy:SetItem(index, _, input)
-    local itemLink = self:GetItemLink(input)
+    local itemID = self:GetInputItemID(input)
 
-    TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, itemLink or input)
+    -- Item ids might not be cached yet. If the data is already available apply
+    -- it directly, otherwise fetch it asynchronously while showing a loading state.
+    if itemID then
+        local _, itemLink = C_Item.GetItemInfo(itemID)
+        if itemLink then
+            self:ApplyItem(index, itemLink)
+        else
+            self:LoadItemAsync(index, itemID)
+        end
+
+        return
+    end
+
+    -- Item links and names keep their previous behavior.
+    self:ApplyItem(index, self:GetItemLink(input) or input)
+end
+
+---Applies the resolved item to the given slot and refreshes the UI.
+---@param index number The tracked item slot index.
+---@param value string The resolved item link or the raw input.
+function TitanFarmBuddy:ApplyItem(index, value)
+    ITEM_LOADING[index] = nil
+
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, value)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
     self:SetNotificationTriggered(index, false)
     self:NotifySettingsChanged()
 end
 
+---Asynchronously loads the item data for the given item id and applies it once
+---it is available. While loading, a placeholder is shown in the settings GUI.
+---@param index number The tracked item slot index.
+---@param itemID number The item id to load.
+function TitanFarmBuddy:LoadItemAsync(index, itemID)
+    ITEM_LOADING[index] = itemID
+    self:NotifySettingsChanged()
+
+    local item = Item:CreateFromItemID(itemID)
+    item:ContinueOnItemLoad(function()
+        -- Ignore outdated callbacks if the slot was changed or reset meanwhile.
+        if ITEM_LOADING[index] ~= itemID then
+            return
+        end
+
+        self:ApplyItem(index, item:GetItemLink() or tostring(itemID))
+    end)
+end
+
 ---Resets the item with the given index.
 ---@param index number The tracked item slot index.
 function TitanFarmBuddy:ResetItem(index)
+    ITEM_LOADING[index] = nil
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, '')
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, '0')
 
@@ -601,6 +675,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
 
     -- Reset items
     for i = 1, ITEMS_AVAILABLE do
+        ITEM_LOADING[i] = nil
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i, '')
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i, 0)
         self:SetNotificationTriggered(i, false)

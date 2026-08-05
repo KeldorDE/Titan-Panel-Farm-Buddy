@@ -657,7 +657,13 @@ function TitanFarmBuddy:GetTrackedItemField(index)
         type = 'input',
         name = L['FARM_BUDDY_ITEM'],
         desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
-        get = function() return self:GetItem(index) end,
+        get = function()
+            if self:IsItemLoading(index) then
+                return L['FARM_BUDDY_ITEM_LOADING']
+            end
+
+            return self:GetItem(index)
+        end,
         set = function(info, input) self:SetItem(index, info, input) end,
         validate = 'ValidateItem',
         usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],

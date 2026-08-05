@@ -40,6 +40,7 @@ L["FARM_BUDDY_ITEM_DISPLAY_STYLE"] = "Stile di visualizzazione dell'oggetto nell
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_1"] = "Solo l'oggetto principale"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_2"] = "Mostra tutti gli oggetti"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC"] = "Lo stile di visualizzazione dell'oggetto nella barra di Titan Panel."
+L["FARM_BUDDY_ITEM_LOADING"] = "Caricamento..."
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "L'oggetto non esiste."
 L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "L'oggetto in posizione !position! è ora l'oggetto principale da mostrare."
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! è ora il tuo oggetto monitorato!"

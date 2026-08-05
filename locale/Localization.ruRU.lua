@@ -40,6 +40,7 @@ L["FARM_BUDDY_ITEM_DISPLAY_STYLE"] = "Стиль отображения пред
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_1"] = "Только основной предмет"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_2"] = "Показывать все предметы"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC"] = "Стиль отображения предмета в панели Titan."
+L["FARM_BUDDY_ITEM_LOADING"] = "Загрузка..."
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "Предмет не существует."
 L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "Предмет на позиции !position! теперь является основным для отображения."
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! теперь ваш отслеживаемый предмет!"

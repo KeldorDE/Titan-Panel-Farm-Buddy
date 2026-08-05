@@ -40,6 +40,7 @@ L["FARM_BUDDY_ITEM_DISPLAY_STYLE"] = "Style d'affichage de l'objet dans la barre
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_1"] = "Seulement l'objet principal"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_2"] = "Afficher tous les objets"
 L["FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC"] = "Le style d'affichage de l'objet dans la barre Titan Panel."
+L["FARM_BUDDY_ITEM_LOADING"] = "Chargement..."
 L["FARM_BUDDY_ITEM_NOT_EXISTS"] = "L'objet n'existe pas."
 L["FARM_BUDDY_ITEM_PRIMARY_SET_MSG"] = "L'objet en position !position! est désormais l'objet principal à afficher."
 L["FARM_BUDDY_ITEM_SET_MSG"] = "!itemName! est désormais votre objet suivi !"
