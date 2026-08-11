@@ -1,3 +1,8 @@
+1.4.13
+------------------
+- Added support for counting items in the Warband bank
+- Grouped the counting options under a "Counting" section in the settings
+
 1.4.12
 ------------------
 - Item IDs are now fetched from the server automatically and no longer need to be cached beforehand

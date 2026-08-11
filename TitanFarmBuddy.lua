@@ -65,6 +65,7 @@ function TitanFarmBuddy_OnLoad(button)
             ItemDisplayStyle = 2,
             GoalNotification = true,
             IncludeBank = false,
+            IncludeWarbandBank = false,
             ShowQuantity = true,
             GoalNotificationSound = SOUNDKIT.ALARM_CLOCK_WARNING_3,
             PlayNotificationSound = true,
@@ -358,8 +359,18 @@ function TitanFarmBuddy:GetItemInfo(item)
         ITEM_INFO_CACHE[item] = static
     end
 
+    local countWarbandBank = 0
     local countBags = C_Item.GetItemCount(static.ItemID)
-    local countTotal = C_Item.GetItemCount(static.ItemID, true)
+    local countBank = C_Item.GetItemCount(static.ItemID, true)
+
+    countBank = (countBank - countBags)
+
+    if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+        countWarbandBank = C_Item.GetItemCount(static.ItemID, false, false, false, true)
+        countWarbandBank = (countWarbandBank - countBags)
+    end
+
+    local countTotal = (countBags + countBank + countWarbandBank)
 
     return {
         ItemID = static.ItemID,
@@ -367,8 +378,9 @@ function TitanFarmBuddy:GetItemInfo(item)
         Link = static.Link,
         IconFileDataID = static.IconFileDataID,
         CountBags = countBags,
+        CountWarbandBank = countWarbandBank,
+        CountBank = countBank,
         CountTotal = countTotal,
-        CountBank = (countTotal - countBags),
     }
 end
 
@@ -401,6 +413,11 @@ function TitanFarmBuddy:GetTooltipText()
                 strTmp = strTmp .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. itemName .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
+
+                if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
+                    strTmp = strTmp .. L['FARM_BUDDY_WARBAND_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountWarbandBank) .. '\n'
+                end
+
                 strTmp = strTmp .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
                 strTmp = strTmp .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n'
                 hasItem = true
@@ -430,6 +447,7 @@ function TitanFarmBuddy:MenuGenerator(_, root)
     local options = Titan_Menu.AddButton(root, L['TITAN_PANEL_OPTIONS'])
     Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_SHOW_GOAL'], 'ShowQuantity')
     Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_INCLUDE_BANK'], 'IncludeBank')
+    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_INCLUDE_WARBAND_BANK'], 'IncludeWarbandBank')
 
     -- Notifications
     local notifications = Titan_Menu.AddButton(root, L['FARM_BUDDY_NOTIFICATIONS'])
@@ -489,11 +507,18 @@ end
 ---@param itemInfo table The item info table.
 ---@return number count
 function TitanFarmBuddy:GetCount(itemInfo)
-    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
-        return itemInfo.CountTotal
+
+    local count = itemInfo.CountBags
+
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeWarbandBank') then
+        count = count + itemInfo.CountWarbandBank
     end
 
-    return itemInfo.CountBags
+    if TitanGetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank') then
+        count = count + itemInfo.CountBank
+    end
+
+    return count
 end
 
 ---Displays the button when the plugin is visible.
@@ -655,6 +680,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false)
+        TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeWarbandBank', false)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true)
