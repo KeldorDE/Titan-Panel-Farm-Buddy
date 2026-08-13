@@ -1,0 +1,29 @@
+{
+    "fsdeploy.nodes": [
+        {
+            "name": "Retail",
+            "source": "YOUR_SOURCE_PATH",
+            "target": "YOUR_RETAIL_PATH",
+            "include": "**/*"
+        },
+        {
+            "name": "Classic",
+            "source": "YOUR_SOURCE_PATH",
+            "target": "YOUR_CLASSIC_PATH",
+            "include": "**/*"
+        },
+        {
+            "name": "MoP Classic",
+            "source": "YOUR_SOURCE_PATH",
+            "target": "YOUR_MOP_CLASSIC_PATH",
+            "include": "**/*"
+        },
+        {
+            "name": "BCC Anniversary",
+            "source": "YOUR_SOURCE_PATH",
+            "target": "YOUR_BCC_ANNIVERSARY_PATH",
+            "include": "**/*"
+        }
+    ],
+    "fsdeploy.deployOnSave": true
+}

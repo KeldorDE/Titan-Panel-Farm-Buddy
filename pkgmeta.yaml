@@ -26,6 +26,7 @@ ignore:
   - .gitattributes
   - .editorconfig
   - .idea
+  - .vscode
   - assets
 
 required-dependencies:
