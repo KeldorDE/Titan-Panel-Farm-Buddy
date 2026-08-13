@@ -1,3 +1,8 @@
+1.4.14
+------------------
+- Updated API to Patch 12.1.0
+- Added the option to show a chat notification when a farming goal is reached
+
 1.4.13
 ------------------
 - Added support for counting items in the Warband bank

@@ -40,6 +40,7 @@ end
 function TitanFarmBuddy_OnLoad(button)
     button.registry = {
         id = TITAN_FARM_BUDDY_ID,
+        name = ADDON_NAME,
         category = 'Information',
         version = TITAN_VERSION,
         menuText = ADDON_NAME,
@@ -64,6 +65,7 @@ function TitanFarmBuddy_OnLoad(button)
             ItemShowInBarIndex = 1,
             ItemDisplayStyle = 2,
             GoalNotification = true,
+            ChatGoalNotification = false,
             IncludeBank = false,
             IncludeWarbandBank = false,
             ShowQuantity = true,
@@ -172,6 +174,12 @@ function TitanFarmBuddy:RegisterDialogs()
         hideOnEscape = true,
         preferredIndex = 3,
     }
+end
+
+--- Prints a message to the default chat frame with the addon's prefix.
+--- @param msg string The message to print.
+function TitanFarmBuddy:Print(msg)
+    DEFAULT_CHAT_FRAME:AddMessage("|cffFFD100" .. ADDON_NAME .. ":|r " .. tostring(msg))
 end
 
 ---Callback function for the SetItemIndex OnShow event.
@@ -452,6 +460,7 @@ function TitanFarmBuddy:MenuGenerator(_, root)
     -- Notifications
     local notifications = Titan_Menu.AddButton(root, L['FARM_BUDDY_NOTIFICATIONS'])
     Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION'], 'GoalNotification')
+    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_CHAT_NOTIFICATIONS'], 'ChatGoalNotification')
     Titan_Menu.AddDivider(notifications)
     Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_GLOW'], 'NotificationGlow')
     Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_SHINE'], 'NotificationShine')
@@ -482,7 +491,7 @@ function TitanFarmBuddy:BagUpdateDelayed()
             local itemInfo = self:GetItemInfo(trackedItem)
             if itemInfo then
                 if self:GetCount(itemInfo) >= quantity then
-                    self:QueueNotification(i, itemInfo.Name, itemInfo.IconFileDataID, quantity)
+                    self:QueueNotification(i, itemInfo, quantity)
                 else
                     NOTIFICATION_QUEUE[i] = nil
                 end
@@ -678,6 +687,7 @@ end
 function TitanFarmBuddy:ResetConfig(itemsOnly)
     if not itemsOnly then
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification', true)
+        TitanSetVar(TITAN_FARM_BUDDY_ID, 'ChatGoalNotification', false)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowQuantity', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeBank', false)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'IncludeWarbandBank', false)
@@ -722,7 +732,7 @@ end
 ---Raises a test notification.
 function TitanFarmBuddy:TestNotification()
     local itemInfo = self:GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
-    self:ShowNotification(0, itemInfo.Name, itemInfo.IconFileDataID, 200, true)
+    self:ShowNotification(0, itemInfo, 200, true)
 end
 
 ---Is called when an item is clicked with a modifier key.
@@ -766,25 +776,22 @@ end
 
 ---Queues a notification.
 ---@param index number The tracked item slot index.
----@param itemName string The item name.
----@param itemIconFileDataID number The item icon file data ID.
+---@param itemInfo string|number The item name or icon file data ID.
 ---@param quantity number The reached goal quantity.
-function TitanFarmBuddy:QueueNotification(index, itemName, itemIconFileDataID, quantity)
+function TitanFarmBuddy:QueueNotification(index, itemInfo, quantity)
     NOTIFICATION_QUEUE[index] = {
         Index = index,
-        Name = itemName,
-        Icon = itemIconFileDataID,
+        ItemInfo = itemInfo,
         Quantity = quantity,
     }
 end
 
 ---Raises a notification.
 ---@param index number The tracked item slot index.
----@param name string The item name.
----@param icon number The item icon file data ID.
+---@param itemInfo string|number The item name or icon file data ID.
 ---@param quantity number The reached goal quantity.
 ---@param demo boolean Whether this is a demo/test notification.
-function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
+function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
     if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
 
@@ -792,6 +799,7 @@ function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
         local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
         local notificationGlow = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow')
         local notificationShine = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
+        local chatNotification = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ChatGoalNotification')
         local sound
 
         if playSound then
@@ -802,7 +810,12 @@ function TitanFarmBuddy:ShowNotification(index, name, icon, quantity, demo)
             self:SetNotificationTriggered(index, true)
         end
 
-        TitanFarmBuddyNotification_Show(name, icon, quantity, sound, notificationDisplayDuration, notificationGlow, notificationShine)
+        if chatNotification then
+            local message = L["FARM_BUDDY_CHAT_NOTIFICATION_TEXT"]:gsub('!quantity!', quantity):gsub('!itemLink!', itemInfo.Link)
+            self:Print(message)
+        end
+
+        TitanFarmBuddyNotification_Show(itemInfo.Name, itemInfo.IconFileDataID, quantity, sound, notificationDisplayDuration, notificationGlow, notificationShine)
     end
 end
 
@@ -811,7 +824,7 @@ function TitanFarmBuddy:NotificationTask()
     if not TitanFarmBuddyNotification_Shown() then
         for index, notification in pairs(NOTIFICATION_QUEUE) do
             if not TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat') or not PLAYER_IN_COMBAT then
-                self:ShowNotification(notification.Index, notification.Name, notification.Icon, notification.Quantity, false)
+                self:ShowNotification(notification.Index, notification.ItemInfo, notification.Quantity, false)
             end
             NOTIFICATION_QUEUE[index] = nil
             break

@@ -247,6 +247,21 @@ function TitanFarmBuddy:GetConfigOption()
                         name = '',
                         order = self:GetOptionOrder('notifications'),
                     },
+                    notifications_chat_notification_status = {
+                        arg = { key = 'ChatGoalNotification' },
+                        type = 'toggle',
+                        name = L['FARM_BUDDY_CHAT_NOTIFICATIONS'],
+                        desc = L['FARM_BUDDY_CHAT_NOTIFICATIONS_DESC'],
+                        get = 'GetSettingsValue',
+                        set = 'SetSettingsValue',
+                        width = 'full',
+                        order = self:GetOptionOrder('notifications'),
+                    },
+                    notifications_space_2 = {
+                        type = 'description',
+                        name = '',
+                        order = self:GetOptionOrder('notifications'),
+                    },
                     notifications_hide_in_combat = {
                         arg = { key = 'HideNotificationInCombat' },
                         type = 'toggle',
@@ -257,7 +272,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_2 = {
+                    notifications_space_3 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -273,7 +288,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'double',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_3 = {
+                    notifications_space_4 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -288,7 +303,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_4 = {
+                    notifications_space_5 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -303,7 +318,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_5 = {
+                    notifications_space_6 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -318,7 +333,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'full',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_6 = {
+                    notifications_space_7 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
@@ -335,7 +350,7 @@ function TitanFarmBuddy:GetConfigOption()
                         width = 'double',
                         order = self:GetOptionOrder('notifications'),
                     },
-                    notifications_space_7 = {
+                    notifications_space_8 = {
                         type = 'description',
                         name = '',
                         order = self:GetOptionOrder('notifications'),
