@@ -28,6 +28,7 @@ ignore:
   - .idea
   - .vscode
   - assets
+  - Annotations
 
 required-dependencies:
   - titan-panel
