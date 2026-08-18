@@ -4,8 +4,9 @@
 -- * By: Keldor
 -- **************************************************************************
 
-local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
+---@class TitanFarmBuddy : AceConsole, AceEvent, AceHook, AceTimer
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):NewAddon(TITAN_FARM_BUDDY_ID, 'AceConsole-3.0', 'AceHook-3.0', 'AceTimer-3.0', 'AceEvent-3.0')
+local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local OPTION_ORDER = {}
 local NOTIFICATION_QUEUE = {}
 local NOTIFICATION_TRIGGERED = {}
@@ -113,7 +114,12 @@ function TitanFarmBuddy:PlayerEnteringWorld()
             local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
             local itemInfo = (item and item ~= '') and self:GetItemInfo(item) or nil
 
-            self:SetNotificationTriggered(i, itemInfo and quantity > 0 and self:GetCount(itemInfo) >= quantity)
+            local triggered = false
+            if itemInfo and quantity > 0 then
+                triggered = self:GetCount(itemInfo) >= quantity
+            end
+
+            self:SetNotificationTriggered(i, triggered)
         end
 
         TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
@@ -202,7 +208,7 @@ end
 ---@param frame table The static popup frame.
 ---@param data string The item link passed to the dialog.
 function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
-    local index = tonumber(_G[frame:GetName() .. 'EditBox']:GetText())
+    local index = tonumber(_G[frame:GetName() .. 'EditBox']:GetText()) or 0
     if self:IsIndexValid(index) then
         local existingIndex = self:GetTrackedItemIndex(data, index)
         if existingIndex then
@@ -212,7 +218,7 @@ function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
             self:Print(text)
         else
             local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
-            self:SetItem(index, nil, data)
+            self:SetItem(index, data)
             self:Print(text)
             self:NotifySettingsChanged()
         end
@@ -250,7 +256,7 @@ function TitanFarmBuddy:GetButtonText()
         if (itemDisplayStyle == 1 and activeIndex == i) or itemDisplayStyle > 1 then
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             if item and item ~= '' then
-                local itemQuantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
+                local itemQuantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
                 local itemStr = self:GetItemString(item, itemQuantity, showIcon, showQuantity, showColoredText, showLabelText)
                 if itemStr ~= nil and itemStr ~= '' then
                     if str ~= '' then
@@ -329,7 +335,7 @@ end
 ---@return string|number value
 function TitanFarmBuddy:GetBarValue(value, colored)
     if colored then
-        value = TitanUtils_GetHighlightText(value)
+        value = TitanUtils_GetHighlightText(tostring(value))
     end
     return value
 end
@@ -395,8 +401,10 @@ end
 ---Displays the tooltip text.
 ---@return string text
 function TitanFarmBuddy:GetTooltipText()
+    local shortcut = self:GetFastTrackingShortcutText()
+    local modifierText = L['FARM_BUDDY_TOOLTIP_MODIFIER']:gsub('!shortcut!', shortcut)
     local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
-        TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_MODIFIER']) .. '\n\n'
+        TitanUtils_GetGreenText(modifierText) .. '\n\n'
     local strTmp = ''
     local hasItem = false
 
@@ -414,7 +422,7 @@ function TitanFarmBuddy:GetTooltipText()
                 local itemName = self:GetNameFromItemLink(itemInfo.Link) or itemInfo.Name
 
                 if goal > 0 then
-                    goalValue = goal
+                    goalValue = tostring(goal)
                 end
 
                 strTmp = strTmp .. '\n'
@@ -442,6 +450,36 @@ function TitanFarmBuddy:GetTooltipText()
     end
 
     return str
+end
+
+--- Gets the fast tracking shortcut text for the tooltip.
+--- @return string text
+function TitanFarmBuddy:GetFastTrackingShortcutText()
+    local fastTrackingMouseButton = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingMouseButton')
+    local fastTrackingKeys = TitanGetVar(TITAN_FARM_BUDDY_ID, 'FastTrackingKeys') or {}
+
+    local parts = {}
+
+    if fastTrackingKeys.ctrl then
+        table.insert(parts, L['FARM_BUDDY_KEY_CTRL'])
+    end
+    if fastTrackingKeys.alt then
+        table.insert(parts, L['FARM_BUDDY_KEY_ALT'])
+    end
+    if fastTrackingKeys.shift then
+        table.insert(parts, L['FARM_BUDDY_KEY_SHIFT'])
+    end
+
+    local mouseButtonText = fastTrackingMouseButton
+    if fastTrackingMouseButton == 'LeftButton' then
+        mouseButtonText = L['FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON']
+    elseif fastTrackingMouseButton == 'RightButton' then
+        mouseButtonText = L['FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON']
+    end
+
+    table.insert(parts, mouseButtonText)
+
+    return table.concat(parts, ' + ')
 end
 
 ---Builds the right click menu using the modern Titan_Menu (Blizzard_Menu) API.
@@ -474,7 +512,7 @@ function TitanFarmBuddy:MenuGenerator(_, root)
     Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
 
     -- Reset all settings
-    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() self:ResetConfig() end)
+    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
 end
 
 ---Checks if the item count has reached the goal and triggers a notification if it has.
@@ -615,7 +653,7 @@ end
 ---Sets the item.
 ---@param index number The tracked item slot index.
 ---@param input string The item link, id or name.
-function TitanFarmBuddy:SetItem(index, _, input)
+function TitanFarmBuddy:SetItem(index, input)
     local itemID = self:GetInputItemID(input)
 
     -- Item ids might not be cached yet. If the data is already available apply
@@ -732,7 +770,9 @@ end
 ---Raises a test notification.
 function TitanFarmBuddy:TestNotification()
     local itemInfo = self:GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
-    self:ShowNotification(0, itemInfo, 200, true)
+    if itemInfo then
+        self:ShowNotification(0, itemInfo, 1000, true)
+    end
 end
 
 ---Is called when an item is clicked with a modifier key.
@@ -776,7 +816,7 @@ end
 
 ---Queues a notification.
 ---@param index number The tracked item slot index.
----@param itemInfo string|number The item name or icon file data ID.
+---@param itemInfo table The item info table.
 ---@param quantity number The reached goal quantity.
 function TitanFarmBuddy:QueueNotification(index, itemInfo, quantity)
     NOTIFICATION_QUEUE[index] = {
@@ -788,7 +828,7 @@ end
 
 ---Raises a notification.
 ---@param index number The tracked item slot index.
----@param itemInfo string|number The item name or icon file data ID.
+---@param itemInfo table The item info table.
 ---@param quantity number The reached goal quantity.
 ---@param demo boolean Whether this is a demo/test notification.
 function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
@@ -796,7 +836,7 @@ function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
     if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
 
         local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
-        local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration'))
+        local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration')) or 5
         local notificationGlow = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationGlow')
         local notificationShine = TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationShine')
         local chatNotification = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ChatGoalNotification')
@@ -836,11 +876,15 @@ end
 ---@param index number The tracked item slot index.
 ---@return boolean valid
 function TitanFarmBuddy:IsIndexValid(index)
-    return index and index > 0 and index <= ITEMS_AVAILABLE
+    if type(index) ~= 'number' then
+        return false
+    end
+
+    return index > 0 and index <= ITEMS_AVAILABLE
 end
 
 ---Checks whether the given item is already tracked in one of the slots.
----@param item string|number The item link, id or name.
+---@param item string The item link or name.
 ---@param ignoreIndex number|nil An optional slot index to skip during the check.
 ---@return number|nil index The slot index if already tracked, otherwise nil.
 function TitanFarmBuddy:GetTrackedItemIndex(item, ignoreIndex)

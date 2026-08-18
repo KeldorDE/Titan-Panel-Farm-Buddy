@@ -1,3 +1,10 @@
+1.4.15
+------------------
+- Added testNotification chat command
+- Fixed the tooltip showing a fixed shortcut instead of the configured fast tracking shortcut
+- Fixed the reset menu item not showing a confirm dialog
+- Optimized different parts of the code
+
 1.4.14
 ------------------
 - Updated API to Patch 12.1.0

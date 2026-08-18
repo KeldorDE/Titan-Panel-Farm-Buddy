@@ -46,6 +46,7 @@ An item is usually known after you have seen it in a tooltip, your inventory, or
 *   `/fb quantity <slot 1-16> <quantity>` — Sets the target quantity for a slot
 *   `/fb primary <slot 1-16>` — Sets which tracked item is displayed as the primary Titan Panel entry
 *   `/fb settings` — Opens the AddOn settings
+*   `/fb testNotification` — Shows a test notification
 *   `/fb reset <all | items>` — Resets Farm Buddy settings or tracked items
 *   `/fb version` — Shows the installed Farm Buddy version
 *   `/fb help` — Shows all available chat commands

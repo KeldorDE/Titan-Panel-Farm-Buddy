@@ -4,9 +4,11 @@
 -- * By: Keldor
 -- **************************************************************************
 
-local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
+---@class TitanFarmBuddy : AceConsole, AceEvent, AceHook, AceTimer
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):GetAddon(TITAN_FARM_BUDDY_ID)
+local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local CONFIG_REG = LibStub("AceConfigRegistry-3.0")
+local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
 local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local ADDON_SETTING_PANEL
 local ITEM_DISPLAY_STYLES = {
@@ -703,7 +705,7 @@ function TitanFarmBuddy:GetTrackedItemField(index)
 
             return self:GetItem(index)
         end,
-        set = function(info, input) self:SetItem(index, info, input) end,
+        set = function(info, input) self:SetItem(index, input) end,
         validate = 'ValidateItem',
         usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
         width = 'double',
@@ -720,7 +722,7 @@ function TitanFarmBuddy:GetTrackedItemQuantityField(index)
         name = L['FARM_BUDDY_QUANTITY'],
         desc = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
         get = function() return self:GetItemQuantity(index) end,
-        set = function(info, input) self:SetItemQuantity(index, info, input) end,
+        set = function(info, input) self:SetItemQuantity(index, input) end,
         validate = 'ValidateNumber',
         usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
         width = 'half',
@@ -737,7 +739,7 @@ function TitanFarmBuddy:GetTrackedItemShowBarField(index)
         name = L['FARM_BUDDY_SHOW_IN_BAR'],
         desc = L['FARM_BUDDY_SHOW_IN_BAR_DESC'],
         get = function() return self:GetItemShowInBar(index) end,
-        set = function(info, input) self:SetItemShowInBar(index, info, input) end,
+        set = function(info, input) self:SetItemShowInBar(index) end,
         width = 'half',
         order = self:GetOptionOrder('items'),
     }
@@ -766,15 +768,20 @@ end
 ---Sets the item goal.
 ---@param index number The tracked item slot index.
 ---@param input string|number The goal quantity.
-function TitanFarmBuddy:SetItemQuantity(index, _, input)
-    local quantity = tonumber(input)
+function TitanFarmBuddy:SetItemQuantity(index, input)
+    local quantity = tonumber(input) or 0
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, quantity)
     TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
 
     local item = self:GetItem(index)
     local itemInfo = (item and item ~= '') and self:GetItemInfo(item) or nil
 
-    self:SetNotificationTriggered(index, itemInfo and quantity and quantity > 0 and self:GetCount(itemInfo) >= quantity)
+    local triggered = false
+    if itemInfo and quantity > 0 then
+        triggered = self:GetCount(itemInfo) >= quantity
+    end
+
+    self:SetNotificationTriggered(index, triggered)
 end
 
 ---Gets the item show in bar status.

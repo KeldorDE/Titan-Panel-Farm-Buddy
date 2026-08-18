@@ -28,7 +28,10 @@ function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow
     TitanFarmBuddyNotification_SetIcon(icon)
 
     if sound and sound ~= '' then
-        PlaySound(sound)
+        local soundId = tonumber(sound)
+        if soundId then
+            PlaySound(soundId)
+        end
     end
 
     if glow then
