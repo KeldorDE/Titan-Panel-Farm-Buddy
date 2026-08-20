@@ -1,3 +1,7 @@
+1.4.16
+------------------
+- Fixed missing translations
+
 1.4.15
 ------------------
 - Added testNotification chat command

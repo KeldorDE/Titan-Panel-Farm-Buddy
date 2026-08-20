@@ -183,7 +183,7 @@ end
 
 ---Returns the help text of the chat commands.
 ---@param printOut boolean If true, each line is printed to the chat frame.
----@return string helpText
+---@return string helpText The help text of the chat commands.
 function TitanFarmBuddy:GetChatCommandsHelp(printOut)
     local helpStr = ''
 
