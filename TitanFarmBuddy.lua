@@ -212,18 +212,18 @@ function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
     if self:IsIndexValid(index) then
         local existingIndex = self:GetTrackedItemIndex(data, index)
         if existingIndex then
-            local text = L['FARM_BUDDY_ITEM_ALREADY_TRACKED']
+            local text = L['TITAN_FARM_BUDDY_ITEM_ALREADY_TRACKED']
                 :gsub('!itemName!', data)
                 :gsub('!position!', existingIndex)
             self:Print(text)
         else
-            local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
+            local text = L['TITAN_FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', data)
             self:SetItem(index, data)
             self:Print(text)
             self:NotifySettingsChanged()
         end
     else
-        local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -402,8 +402,8 @@ end
 ---@return string text
 function TitanFarmBuddy:GetTooltipText()
     local shortcut = self:GetFastTrackingShortcutText()
-    local modifierText = L['FARM_BUDDY_TOOLTIP_MODIFIER']:gsub('!shortcut!', shortcut)
-    local str = TitanUtils_GetGreenText(L['FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
+    local modifierText = L['TITAN_FARM_BUDDY_TOOLTIP_MODIFIER']:gsub('!shortcut!', shortcut)
+    local str = TitanUtils_GetGreenText(L['TITAN_FARM_BUDDY_TOOLTIP_DESC']) .. '\n' ..
         TitanUtils_GetGreenText(modifierText) .. '\n\n'
     local strTmp = ''
     local hasItem = false
@@ -417,7 +417,7 @@ function TitanFarmBuddy:GetTooltipText()
 
             -- Invalid item or no item defined
             if itemInfo then
-                local goalValue = L['FARM_BUDDY_NO_GOAL']
+                local goalValue = L['TITAN_FARM_BUDDY_NO_GOAL']
                 local goal = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
                 local itemName = self:GetNameFromItemLink(itemInfo.Link) or itemInfo.Name
 
@@ -426,27 +426,27 @@ function TitanFarmBuddy:GetTooltipText()
                 end
 
                 strTmp = strTmp .. '\n'
-                strTmp = strTmp .. L['FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. itemName .. '\n'
-                strTmp = strTmp .. L['FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
-                strTmp = strTmp .. L['FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
+                strTmp = strTmp .. L['TITAN_FARM_BUDDY_ITEM'] .. ':\t' .. TitanFarmBuddy:GetIconString(itemInfo.IconFileDataID, true) .. itemName .. '\n'
+                strTmp = strTmp .. L['TITAN_FARM_BUDDY_INVENTORY'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBags) .. '\n'
+                strTmp = strTmp .. L['TITAN_FARM_BUDDY_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountBank) .. '\n'
 
                 if WOW_PROJECT_ID == WOW_PROJECT_MAINLINE then
-                    strTmp = strTmp .. L['FARM_BUDDY_WARBAND_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountWarbandBank) .. '\n'
+                    strTmp = strTmp .. L['TITAN_FARM_BUDDY_WARBAND_BANK'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountWarbandBank) .. '\n'
                 end
 
-                strTmp = strTmp .. L['FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
-                strTmp = strTmp .. L['FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n'
+                strTmp = strTmp .. L['TITAN_FARM_BUDDY_TOTAL'] .. ':\t' .. TitanUtils_GetHighlightText(itemInfo.CountTotal) .. '\n'
+                strTmp = strTmp .. L['TITAN_FARM_BUDDY_ALERT_COUNT'] .. ':\t' .. TitanUtils_GetHighlightText(goalValue) .. '\n'
                 hasItem = true
             end
         end
     end
 
     if hasItem then
-        str = str .. TitanUtils_GetHighlightText(L['FARM_BUDDY_SUMMARY'])
+        str = str .. TitanUtils_GetHighlightText(L['TITAN_FARM_BUDDY_SUMMARY'])
         str = str .. '\n'
         str = str .. strTmp
     else
-        str = str .. L['FARM_BUDDY_NO_ITEM_TRACKED']
+        str = str .. L['TITAN_FARM_BUDDY_NO_ITEM_TRACKED']
     end
 
     return str
@@ -461,20 +461,20 @@ function TitanFarmBuddy:GetFastTrackingShortcutText()
     local parts = {}
 
     if fastTrackingKeys.ctrl then
-        table.insert(parts, L['FARM_BUDDY_KEY_CTRL'])
+        table.insert(parts, L['TITAN_FARM_BUDDY_KEY_CTRL'])
     end
     if fastTrackingKeys.alt then
-        table.insert(parts, L['FARM_BUDDY_KEY_ALT'])
+        table.insert(parts, L['TITAN_FARM_BUDDY_KEY_ALT'])
     end
     if fastTrackingKeys.shift then
-        table.insert(parts, L['FARM_BUDDY_KEY_SHIFT'])
+        table.insert(parts, L['TITAN_FARM_BUDDY_KEY_SHIFT'])
     end
 
     local mouseButtonText = fastTrackingMouseButton
     if fastTrackingMouseButton == 'LeftButton' then
-        mouseButtonText = L['FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON']
+        mouseButtonText = L['TITAN_FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON']
     elseif fastTrackingMouseButton == 'RightButton' then
-        mouseButtonText = L['FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON']
+        mouseButtonText = L['TITAN_FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON']
     end
 
     table.insert(parts, mouseButtonText)
@@ -491,28 +491,28 @@ function TitanFarmBuddy:MenuGenerator(_, root)
 
     -- Options
     local options = Titan_Menu.AddButton(root, L['TITAN_PANEL_OPTIONS'])
-    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_SHOW_GOAL'], 'ShowQuantity')
-    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_INCLUDE_BANK'], 'IncludeBank')
-    Titan_Menu.AddSelector(options, id, L['FARM_BUDDY_INCLUDE_WARBAND_BANK'], 'IncludeWarbandBank')
+    Titan_Menu.AddSelector(options, id, L['TITAN_FARM_BUDDY_SHOW_GOAL'], 'ShowQuantity')
+    Titan_Menu.AddSelector(options, id, L['TITAN_FARM_BUDDY_INCLUDE_BANK'], 'IncludeBank')
+    Titan_Menu.AddSelector(options, id, L['TITAN_FARM_BUDDY_INCLUDE_WARBAND_BANK'], 'IncludeWarbandBank')
 
     -- Notifications
-    local notifications = Titan_Menu.AddButton(root, L['FARM_BUDDY_NOTIFICATIONS'])
-    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION'], 'GoalNotification')
-    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_CHAT_NOTIFICATIONS'], 'ChatGoalNotification')
+    local notifications = Titan_Menu.AddButton(root, L['TITAN_FARM_BUDDY_NOTIFICATIONS'])
+    Titan_Menu.AddSelector(notifications, id, L['TITAN_FARM_BUDDY_NOTIFICATION'], 'GoalNotification')
+    Titan_Menu.AddSelector(notifications, id, L['TITAN_FARM_BUDDY_CHAT_NOTIFICATIONS'], 'ChatGoalNotification')
     Titan_Menu.AddDivider(notifications)
-    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_GLOW'], 'NotificationGlow')
-    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_NOTIFICATION_SHINE'], 'NotificationShine')
-    Titan_Menu.AddSelector(notifications, id, L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'], 'PlayNotificationSound')
+    Titan_Menu.AddSelector(notifications, id, L['TITAN_FARM_BUDDY_NOTIFICATION_GLOW'], 'NotificationGlow')
+    Titan_Menu.AddSelector(notifications, id, L['TITAN_FARM_BUDDY_NOTIFICATION_SHINE'], 'NotificationShine')
+    Titan_Menu.AddSelector(notifications, id, L['TITAN_FARM_BUDDY_PLAY_NOTIFICATION_SOUND'], 'PlayNotificationSound')
 
     -- Actions
-    local actions = Titan_Menu.AddButton(root, L['FARM_BUDDY_ACTIONS'])
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_TEST_NOTIFICATION'], function() self:TestNotification() end)
+    local actions = Titan_Menu.AddButton(root, L['TITAN_FARM_BUDDY_ACTIONS'])
+    Titan_Menu.AddCommand(actions, id, L['TITAN_FARM_BUDDY_TEST_NOTIFICATION'], function() self:TestNotification() end)
     Titan_Menu.AddDivider(actions)
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM) end)
-    Titan_Menu.AddCommand(actions, id, L['FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
+    Titan_Menu.AddCommand(actions, id, L['TITAN_FARM_BUDDY_RESET_ALL_ITEMS'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM) end)
+    Titan_Menu.AddCommand(actions, id, L['TITAN_FARM_BUDDY_RESET_ALL'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
 
     -- Reset all settings
-    Titan_Menu.AddCommand(root, id, L['FARM_BUDDY_RESET'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
+    Titan_Menu.AddCommand(root, id, L['TITAN_FARM_BUDDY_RESET'], function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end)
 end
 
 ---Checks if the item count has reached the goal and triggers a notification if it has.
@@ -591,7 +591,7 @@ function TitanFarmBuddy:ValidateItem(_, input)
             return true
         end
 
-        self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+        self:Print(L['TITAN_FARM_BUDDY_ITEM_NOT_EXISTS'])
         return false
     end
 
@@ -601,7 +601,7 @@ function TitanFarmBuddy:ValidateItem(_, input)
         return true
     end
 
-    self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+    self:Print(L['TITAN_FARM_BUDDY_ITEM_NOT_EXISTS'])
     return false
 end
 
@@ -769,7 +769,7 @@ end
 
 ---Raises a test notification.
 function TitanFarmBuddy:TestNotification()
-    local itemInfo = self:GetItemInfo(L['FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
+    local itemInfo = self:GetItemInfo(L['TITAN_FARM_BUDDY_NOTIFICATION_DEMO_ITEM_NAME'])
     if itemInfo then
         self:ShowNotification(0, itemInfo, 1000, true)
     end
@@ -851,7 +851,7 @@ function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
         end
 
         if chatNotification then
-            local message = L["FARM_BUDDY_CHAT_NOTIFICATION_TEXT"]:gsub('!quantity!', quantity):gsub('!itemLink!', itemInfo.Link)
+            local message = L["TITAN_FARM_BUDDY_CHAT_NOTIFICATION_TEXT"]:gsub('!quantity!', quantity):gsub('!itemLink!', itemInfo.Link)
             self:Print(message)
         end
 

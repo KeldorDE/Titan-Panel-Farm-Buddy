@@ -133,7 +133,7 @@ end
 function TitanFarmBuddyNotification_ShowAnchor()
     -- Set Scale for Anchor frame
     TitanFarmBuddyAnchor:SetScale(FRAME:GetEffectiveScale())
-    TitanFarmBuddyAnchor.Name:SetText(L['FARM_BUDDY_ANCHOR_HELP_TEXT'])
+    TitanFarmBuddyAnchor.Name:SetText(L['TITAN_FARM_BUDDY_ANCHOR_HELP_TEXT'])
 
     TitanFarmBuddyAnchor:Show()
 end

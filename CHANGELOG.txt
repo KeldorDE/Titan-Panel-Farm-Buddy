@@ -1,3 +1,7 @@
+1.4.17
+------------------
+- Optimized different parts of the code
+
 1.4.16
 ------------------
 - Fixed missing translations

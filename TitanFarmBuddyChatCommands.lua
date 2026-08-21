@@ -12,50 +12,50 @@ local CHAT_COMMAND = 'fb'
 local CHAT_COMMANDS = {
     {
         Command = 'track',
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_TRACK_DESC'],
+        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['TITAN_FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
+        Description = L['TITAN_FARM_BUDDY_COMMAND_TRACK_DESC'],
         Handler = 'CmdTrackItem',
     },
     {
         Command = 'quantity',
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
+        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['TITAN_FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
+        Description = L['TITAN_FARM_BUDDY_COMMAND_GOAL_DESC'],
         Handler = 'CmdSetQuantity',
     },
     {
         Command = 'primary',
-        Args = '<' .. L['FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '>',
-        Description = L['FARM_BUDDY_COMMAND_PRIMARY_DESC'],
+        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '>',
+        Description = L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_DESC'],
         Handler = 'CmdSetPrimary',
     },
     {
         Command = 'settings',
         Args = '',
-        Description = L['FARM_BUDDY_COMMAND_SETTINGS_DESC'],
+        Description = L['TITAN_FARM_BUDDY_COMMAND_SETTINGS_DESC'],
         Handler = 'CmdOpenSettings',
     },
     {
         Command = 'testNotification',
         Args = '',
-        Description = L['FARM_BUDDY_COMMAND_TEST_NOTIFICATION_DESC'],
+        Description = L['TITAN_FARM_BUDDY_COMMAND_TEST_NOTIFICATION_DESC'],
         Handler = 'CmdTestNotification',
     },
     {
         Command = 'reset',
-        Args = '<' .. L['FARM_BUDDY_COMMAND_RESET_ARGS'] .. '>',
-        Description = L['FARM_BUDDY_COMMAND_RESET_DESC'],
+        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_RESET_ARGS'] .. '>',
+        Description = L['TITAN_FARM_BUDDY_COMMAND_RESET_DESC'],
         Handler = 'CmdReset',
     },
     {
         Command = 'version',
         Args = '',
-        Description = L['FARM_BUDDY_COMMAND_VERSION_DESC'],
+        Description = L['TITAN_FARM_BUDDY_COMMAND_VERSION_DESC'],
         Handler = 'CmdVersion',
     },
     {
         Command = 'help',
         Args = '',
-        Description = L['FARM_BUDDY_COMMAND_HELP_DESC'],
+        Description = L['TITAN_FARM_BUDDY_COMMAND_HELP_DESC'],
         Handler = 'CmdHelp',
     }
 }
@@ -85,26 +85,26 @@ end
 function TitanFarmBuddy:CmdTrackItem(positionIndex, item)
     local index = tonumber(positionIndex) or 0
     if not self:IsIndexValid(index) then
-        local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
         self:Print(text)
         return
     end
 
     local itemInfo = self:GetItemInfo(item)
     if not itemInfo then
-        self:Print(L['FARM_BUDDY_ITEM_NOT_EXISTS'])
+        self:Print(L['TITAN_FARM_BUDDY_ITEM_NOT_EXISTS'])
         return
     end
 
     local existingIndex = self:GetTrackedItemIndex(itemInfo.ItemID, index)
     if existingIndex then
-        local text = L['FARM_BUDDY_ITEM_ALREADY_TRACKED']
+        local text = L['TITAN_FARM_BUDDY_ITEM_ALREADY_TRACKED']
             :gsub('!itemName!', itemInfo.Link)
             :gsub('!position!', existingIndex)
         self:Print(text)
     else
         self:SetItem(index, itemInfo.Name)
-        local text = L['FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_MSG']:gsub('!itemName!', itemInfo.Link)
         self:Print(text)
     end
 end
@@ -121,12 +121,12 @@ function TitanFarmBuddy:CmdSetQuantity(positionIndex, quantity)
             self:SetItemQuantity(index, goalQuantity)
             TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
             self:NotifySettingsChanged()
-            self:Print(L['FARM_BUDDY_GOAL_SET'])
+            self:Print(L['TITAN_FARM_BUDDY_GOAL_SET'])
         else
-            self:Print(L['FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
+            self:Print(L['TITAN_FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
         end
     else
-        local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -137,13 +137,13 @@ function TitanFarmBuddy:CmdSetPrimary(positionIndex)
     local index = tonumber(positionIndex) or 0
 
     if self:IsIndexValid(index) then
-        local text = L['FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', index)
+        local text = L['TITAN_FARM_BUDDY_ITEM_PRIMARY_SET_MSG']:gsub('!position!', index)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', index)
         self:Print(text)
         TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
         self:NotifySettingsChanged()
     else
-        local text = L['FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -167,7 +167,7 @@ function TitanFarmBuddy:CmdReset(resetType)
         self:ResetConfig(true)
     end
 
-    self:Print(L['FARM_BUDDY_CONFIG_RESET_MSG'])
+    self:Print(L['TITAN_FARM_BUDDY_CONFIG_RESET_MSG'])
 end
 
 --- Prints the AddOn version information.
@@ -177,7 +177,7 @@ end
 
 --- Prints the AddOn helptext.
 function TitanFarmBuddy:CmdHelp()
-    self:Print(L['FARM_BUDDY_COMMAND_LIST'] .. '\n')
+    self:Print(L['TITAN_FARM_BUDDY_COMMAND_LIST'] .. '\n')
     self:GetChatCommandsHelp(true)
 end
 

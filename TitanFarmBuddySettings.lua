@@ -12,20 +12,20 @@ local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
 local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local ADDON_SETTING_PANEL
 local ITEM_DISPLAY_STYLES = {
-    [1] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_1'],
-    [2] = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_2'],
+    [1] = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE_1'],
+    [2] = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE_2'],
 }
 local NOTIFICATION_SOUNDS = {
-    [SOUNDKIT.ALARM_CLOCK_WARNING_1]        = L['FARM_BUDDY_SOUND_ALARM_1'],
-    [SOUNDKIT.ALARM_CLOCK_WARNING_2]        = L['FARM_BUDDY_SOUND_ALARM_2'],
-    [SOUNDKIT.ALARM_CLOCK_WARNING_3]        = L['FARM_BUDDY_SOUND_ALARM_3'],
-    [SOUNDKIT.READY_CHECK]                  = L['FARM_BUDDY_SOUND_READY_CHECK'],
-    [SOUNDKIT.RAID_WARNING]                 = L['FARM_BUDDY_SOUND_RAID_WARNING'],
-    [SOUNDKIT.AUCTION_WINDOW_OPEN]          = L['FARM_BUDDY_SOUND_AUCTION'],
-    [SOUNDKIT.IG_QUEST_LIST_COMPLETE]       = L['FARM_BUDDY_SOUND_QUEST_COMPLETE'],
-    [SOUNDKIT.LFG_REWARDS]                  = L['FARM_BUDDY_SOUND_DUNGEON_REWARD'],
-    [SOUNDKIT.UI_EPICLOOT_TOAST]            = L['FARM_BUDDY_SOUND_EPIC_LOOT'],
-    [SOUNDKIT.UI_LEGENDARY_LOOT_TOAST]      = L['FARM_BUDDY_SOUND_LEGENDARY_LOOT'],
+    [SOUNDKIT.ALARM_CLOCK_WARNING_1]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_1'],
+    [SOUNDKIT.ALARM_CLOCK_WARNING_2]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_2'],
+    [SOUNDKIT.ALARM_CLOCK_WARNING_3]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_3'],
+    [SOUNDKIT.READY_CHECK]                  = L['TITAN_FARM_BUDDY_SOUND_READY_CHECK'],
+    [SOUNDKIT.RAID_WARNING]                 = L['TITAN_FARM_BUDDY_SOUND_RAID_WARNING'],
+    [SOUNDKIT.AUCTION_WINDOW_OPEN]          = L['TITAN_FARM_BUDDY_SOUND_AUCTION'],
+    [SOUNDKIT.IG_QUEST_LIST_COMPLETE]       = L['TITAN_FARM_BUDDY_SOUND_QUEST_COMPLETE'],
+    [SOUNDKIT.LFG_REWARDS]                  = L['TITAN_FARM_BUDDY_SOUND_DUNGEON_REWARD'],
+    [SOUNDKIT.UI_EPICLOOT_TOAST]            = L['TITAN_FARM_BUDDY_SOUND_EPIC_LOOT'],
+    [SOUNDKIT.UI_LEGENDARY_LOOT_TOAST]      = L['TITAN_FARM_BUDDY_SOUND_LEGENDARY_LOOT'],
 }
 
 ---Creates the chat commands.
@@ -46,16 +46,16 @@ function TitanFarmBuddy:GetConfigOption()
         args = {
             info_version = {
                 type = 'description',
-                name = L['FARM_BUDDY_VERSION'] .. ': ' .. ADDON_VERSION,
+                name = L['TITAN_FARM_BUDDY_VERSION'] .. ': ' .. ADDON_VERSION,
                 order = self:GetOptionOrder('main'),
             },
             info_author = {
                 type = 'description',
-                name = L['FARM_BUDDY_AUTHOR'] .. ': ' .. C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+                name = L['TITAN_FARM_BUDDY_AUTHOR'] .. ': ' .. C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
                 order = self:GetOptionOrder('main'),
             },
             tab_general = {
-                name = L['FARM_BUDDY_SETTINGS'],
+                name = L['TITAN_FARM_BUDDY_SETTINGS'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
                 args = {
@@ -67,14 +67,14 @@ function TitanFarmBuddy:GetConfigOption()
                     general_display_group = {
                         type = 'group',
                         inline = true,
-                        name = L['FARM_BUDDY_DISPLAY'],
+                        name = L['TITAN_FARM_BUDDY_DISPLAY'],
                         order = self:GetOptionOrder('general'),
                         args = {
                             general_show_item_icon = {
                                 arg = { key = 'ShowIcon' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_SHOW_ICON'],
-                                desc = L['FARM_BUDDY_SHOW_ICON_DESC'],
+                                name = L['TITAN_FARM_BUDDY_SHOW_ICON'],
+                                desc = L['TITAN_FARM_BUDDY_SHOW_ICON_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -88,8 +88,8 @@ function TitanFarmBuddy:GetConfigOption()
                             general_show_item_name = {
                                 arg = { key = 'ShowLabelText' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_SHOW_NAME'],
-                                desc = L['FARM_BUDDY_SHOW_NAME_DESC'],
+                                name = L['TITAN_FARM_BUDDY_SHOW_NAME'],
+                                desc = L['TITAN_FARM_BUDDY_SHOW_NAME_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -103,8 +103,8 @@ function TitanFarmBuddy:GetConfigOption()
                             general_show_colored_text = {
                                 arg = { key = 'ShowColoredText' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_SHOW_COLORED_TEXT'],
-                                desc = L['FARM_BUDDY_SHOW_COLORED_TEXT_DESC'],
+                                name = L['TITAN_FARM_BUDDY_SHOW_COLORED_TEXT'],
+                                desc = L['TITAN_FARM_BUDDY_SHOW_COLORED_TEXT_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -118,8 +118,8 @@ function TitanFarmBuddy:GetConfigOption()
                             general_show_goal = {
                                 arg = { key = 'ShowQuantity' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_SHOW_GOAL'],
-                                desc = L['FARM_BUDDY_SHOW_GOAL_DESC'],
+                                name = L['TITAN_FARM_BUDDY_SHOW_GOAL'],
+                                desc = L['TITAN_FARM_BUDDY_SHOW_GOAL_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -130,14 +130,14 @@ function TitanFarmBuddy:GetConfigOption()
                     general_counting_group = {
                         type = 'group',
                         inline = true,
-                        name = L['FARM_BUDDY_COUNTING'],
+                        name = L['TITAN_FARM_BUDDY_COUNTING'],
                         order = self:GetOptionOrder('general'),
                         args = {
                             general_track_bank = {
                                 arg = { key = 'IncludeBank' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_INCLUDE_BANK'],
-                                desc = L['FARM_BUDDY_INCLUDE_BANK_DESC'],
+                                name = L['TITAN_FARM_BUDDY_INCLUDE_BANK'],
+                                desc = L['TITAN_FARM_BUDDY_INCLUDE_BANK_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -146,8 +146,8 @@ function TitanFarmBuddy:GetConfigOption()
                             general_track_warband_bank = {
                                 arg = { key = 'IncludeWarbandBank' },
                                 type = 'toggle',
-                                name = L['FARM_BUDDY_INCLUDE_WARBAND_BANK'],
-                                desc = L['FARM_BUDDY_INCLUDE_WARBAND_BANK_DESC'],
+                                name = L['TITAN_FARM_BUDDY_INCLUDE_WARBAND_BANK'],
+                                desc = L['TITAN_FARM_BUDDY_INCLUDE_WARBAND_BANK_DESC'],
                                 get = 'GetSettingsValue',
                                 set = 'SetSettingsValue',
                                 width = 'full',
@@ -169,8 +169,8 @@ function TitanFarmBuddy:GetConfigOption()
                         arg = { key = 'ItemDisplayStyle' },
                         type = 'select',
                         style = 'radio',
-                        name = L['FARM_BUDDY_ITEM_DISPLAY_STYLE'],
-                        desc = L['FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC'],
+                        name = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE'],
+                        desc = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -184,20 +184,20 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     general_shortcuts_heading = {
                         type = 'header',
-                        name = L['FARM_BUDDY_SHORTCUTS'],
+                        name = L['TITAN_FARM_BUDDY_SHORTCUTS'],
                         order = self:GetOptionOrder('general'),
                     },
                     general_fast_tracking_shortcut_mouse_button = {
                         arg = { key = 'FastTrackingMouseButton' },
                         type = 'select',
                         style = 'radio',
-                        name = L['FARM_BUDDY_FAST_TRACKING_MOUSE_BUTTON'],
+                        name = L['TITAN_FARM_BUDDY_FAST_TRACKING_MOUSE_BUTTON'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
                         values = {
-                            LeftButton = L['FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON'],
-                            RightButton = L['FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON'],
+                            LeftButton = L['TITAN_FARM_BUDDY_KEY_LEFT_MOUSE_BUTTON'],
+                            RightButton = L['TITAN_FARM_BUDDY_KEY_RIGHT_MOUSE_BUTTON'],
                         },
                         order = self:GetOptionOrder('general'),
                     },
@@ -209,14 +209,14 @@ function TitanFarmBuddy:GetConfigOption()
                     general_fast_tracking_shortcut_keys = {
                         arg = { key = 'FastTrackingKeys' },
                         type = 'multiselect',
-                        name = L['FARM_BUDDY_FAST_TRACKING_SHORTCUTS'],
-                        desc = L['FARM_BUDDY_FAST_TRACKING_SHORTCUTS_DESC'],
+                        name = L['TITAN_FARM_BUDDY_FAST_TRACKING_SHORTCUTS'],
+                        desc = L['TITAN_FARM_BUDDY_FAST_TRACKING_SHORTCUTS_DESC'],
                         set = 'SetKeySetting',
                         get = 'GetKeySetting',
                         values = {
-                            alt = L['FARM_BUDDY_KEY_ALT'],
-                            ctrl = L['FARM_BUDDY_KEY_CTRL'],
-                            shift = L['FARM_BUDDY_KEY_SHIFT'],
+                            alt = L['TITAN_FARM_BUDDY_KEY_ALT'],
+                            ctrl = L['TITAN_FARM_BUDDY_KEY_CTRL'],
+                            shift = L['TITAN_FARM_BUDDY_KEY_SHIFT'],
                         },
                         width = 'full',
                         order = self:GetOptionOrder('general'),
@@ -224,21 +224,21 @@ function TitanFarmBuddy:GetConfigOption()
                 },
             },
             tab_items = {
-                name = L['FARM_BUDDY_ITEMS'],
+                name = L['TITAN_FARM_BUDDY_ITEMS'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
                 args = self:GetTrackedItemsArgs(),
             },
             tab_notifications = {
-                name = L['FARM_BUDDY_NOTIFICATIONS'],
+                name = L['TITAN_FARM_BUDDY_NOTIFICATIONS'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
                 args = {
                     notifications_notification_status = {
                         arg = { key = 'GoalNotification' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_NOTIFICATION'],
-                        desc = L['FARM_BUDDY_NOTIFICATION_DESC'],
+                        name = L['TITAN_FARM_BUDDY_NOTIFICATION'],
+                        desc = L['TITAN_FARM_BUDDY_NOTIFICATION_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -252,8 +252,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_chat_notification_status = {
                         arg = { key = 'ChatGoalNotification' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_CHAT_NOTIFICATIONS'],
-                        desc = L['FARM_BUDDY_CHAT_NOTIFICATIONS_DESC'],
+                        name = L['TITAN_FARM_BUDDY_CHAT_NOTIFICATIONS'],
+                        desc = L['TITAN_FARM_BUDDY_CHAT_NOTIFICATIONS_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -267,8 +267,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_hide_in_combat = {
                         arg = { key = 'HideNotificationInCombat' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT'],
-                        desc = L['FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC'],
+                        name = L['TITAN_FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT'],
+                        desc = L['TITAN_FARM_BUDDY_HIDE_NOTIFICATIONS_IN_COMBAT_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -282,8 +282,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_notification_display_duration = {
                         arg = { key = 'NotificationDisplayDuration', numeric = true },
                         type = 'input',
-                        name = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
-                        desc = L['FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION_DESC'],
+                        name = L['TITAN_FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION'],
+                        desc = L['TITAN_FARM_BUDDY_PLAY_NOTIFICATION_DISPLAY_DURATION_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         validate = 'ValidateNumber',
@@ -298,8 +298,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_notification_glow = {
                         arg = { key = 'NotificationGlow' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_NOTIFICATION_GLOW'],
-                        desc = L['FARM_BUDDY_NOTIFICATION_GLOW_DESC'],
+                        name = L['TITAN_FARM_BUDDY_NOTIFICATION_GLOW'],
+                        desc = L['TITAN_FARM_BUDDY_NOTIFICATION_GLOW_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -313,8 +313,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_notification_shine = {
                         arg = { key = 'NotificationShine' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_NOTIFICATION_SHINE'],
-                        desc = L['FARM_BUDDY_NOTIFICATION_SHINE_DESC'],
+                        name = L['TITAN_FARM_BUDDY_NOTIFICATION_SHINE'],
+                        desc = L['TITAN_FARM_BUDDY_NOTIFICATION_SHINE_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -328,8 +328,8 @@ function TitanFarmBuddy:GetConfigOption()
                     notifications_play_notification_sound = {
                         arg = { key = 'PlayNotificationSound' },
                         type = 'toggle',
-                        name = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
-                        desc = L['FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
+                        name = L['TITAN_FARM_BUDDY_PLAY_NOTIFICATION_SOUND'],
+                        desc = L['TITAN_FARM_BUDDY_PLAY_NOTIFICATION_SOUND_DESC'],
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
@@ -359,8 +359,8 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     notifications_move_notification = {
                         type = 'execute',
-                        name = L['FARM_BUDDY_MOVE_NOTIFICATION'],
-                        desc = L['FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
+                        name = L['TITAN_FARM_BUDDY_MOVE_NOTIFICATION'],
+                        desc = L['TITAN_FARM_BUDDY_MOVE_NOTIFICATION_DESC'],
                         func = function() TitanFarmBuddyNotification_ShowAnchor() end,
                         width = 'double',
                         order = self:GetOptionOrder('notifications'),
@@ -368,7 +368,7 @@ function TitanFarmBuddy:GetConfigOption()
                 }
             },
             tab_actions = {
-                name = L['FARM_BUDDY_ACTIONS'],
+                name = L['TITAN_FARM_BUDDY_ACTIONS'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
                 args = {
@@ -386,13 +386,13 @@ function TitanFarmBuddy:GetConfigOption()
                     general_actions_group = {
                         type = 'group',
                         inline = true,
-                        name = L['FARM_BUDDY_ACTIONS'],
+                        name = L['TITAN_FARM_BUDDY_ACTIONS'],
                         order = self:GetOptionOrder('actions'),
                         args = {
                             actions_test_alert = {
                                 type = 'execute',
-                                name = L['FARM_BUDDY_TEST_NOTIFICATION'],
-                                desc = L['FARM_BUDDY_TEST_NOTIFICATION_DESC'],
+                                name = L['TITAN_FARM_BUDDY_TEST_NOTIFICATION'],
+                                desc = L['TITAN_FARM_BUDDY_TEST_NOTIFICATION_DESC'],
                                 func = 'TestNotification',
                                 width = 'full',
                                 order = self:GetOptionOrder('actions'),
@@ -402,13 +402,13 @@ function TitanFarmBuddy:GetConfigOption()
                     general_danger_zone_group = {
                         type = 'group',
                         inline = true,
-                        name = L['FARM_BUDDY_DANGER_ZONE'],
+                        name = L['TITAN_FARM_BUDDY_DANGER_ZONE'],
                         order = self:GetOptionOrder('actions'),
                         args = {
                             actions_reset_items = {
                                 type = 'execute',
-                                name = L['FARM_BUDDY_RESET_ALL_ITEMS'],
-                                desc = L['FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
+                                name = L['TITAN_FARM_BUDDY_RESET_ALL_ITEMS'],
+                                desc = L['TITAN_FARM_BUDDY_RESET_ALL_ITEMS_DESC'],
                                 func = function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_ITEMS_CONFIRM) end,
                                 width = 'full',
                                 order = self:GetOptionOrder('actions'),
@@ -420,8 +420,8 @@ function TitanFarmBuddy:GetConfigOption()
                             },
                             actions_reset_all = {
                                 type = 'execute',
-                                name = L['FARM_BUDDY_RESET_ALL'],
-                                desc = L['FARM_BUDDY_RESET_ALL_DESC'],
+                                name = L['TITAN_FARM_BUDDY_RESET_ALL'],
+                                desc = L['TITAN_FARM_BUDDY_RESET_ALL_DESC'],
                                 func = function() StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_RESET_ALL_CONFIRM) end,
                                 width = 'full',
                                 order = self:GetOptionOrder('actions'),
@@ -431,7 +431,7 @@ function TitanFarmBuddy:GetConfigOption()
                 }
             },
             tab_about = {
-                name = L['FARM_BUDDY_ABOUT'],
+                name = L['TITAN_FARM_BUDDY_ABOUT'],
                 type = 'group',
                 order = self:GetOptionOrder('main'),
                 args = {
@@ -442,7 +442,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_version_title = {
                         type = 'description',
-                        name = L['FARM_BUDDY_VERSION'],
+                        name = L['TITAN_FARM_BUDDY_VERSION'],
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'half',
@@ -461,7 +461,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_author_title = {
                         type = 'description',
-                        name = L['FARM_BUDDY_AUTHOR'],
+                        name = L['TITAN_FARM_BUDDY_AUTHOR'],
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'half',
@@ -480,7 +480,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_localization_title = {
                         type = 'description',
-                        name = TitanUtils_GetGoldText(L['FARM_BUDDY_LOCALIZATION']),
+                        name = TitanUtils_GetGoldText(L['TITAN_FARM_BUDDY_LOCALIZATION']),
                         fontSize = 'large',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -492,7 +492,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_localization_deDE = {
                         type = 'description',
-                        name = TitanUtils_GetGreenText(L['FARM_BUDDY_GERMAN']),
+                        name = TitanUtils_GetGreenText(L['TITAN_FARM_BUDDY_GERMAN']),
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -511,7 +511,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_localization_enUS = {
                         type = 'description',
-                        name = TitanUtils_GetGreenText(L['FARM_BUDDY_ENGLISH']),
+                        name = TitanUtils_GetGreenText(L['TITAN_FARM_BUDDY_ENGLISH']),
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -530,7 +530,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_localization_ruRU = {
                         type = 'description',
-                        name = TitanUtils_GetGreenText(L['FARM_BUDDY_RUSSIAN']),
+                        name = TitanUtils_GetGreenText(L['TITAN_FARM_BUDDY_RUSSIAN']),
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -549,14 +549,14 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_support_title = {
                         type = 'description',
-                        name = TitanUtils_GetGoldText(L['FARM_BUDDY_SUPPORT']),
+                        name = TitanUtils_GetGoldText(L['TITAN_FARM_BUDDY_SUPPORT']),
                         fontSize = 'large',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
                     },
                     about_info_support_text = {
                         type = 'description',
-                        name = '   • ' .. L['FARM_BUDDY_SUPPORT_TEXT'],
+                        name = '   • ' .. L['TITAN_FARM_BUDDY_SUPPORT_TEXT'],
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -568,7 +568,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_chat_commands_title = {
                         type = 'description',
-                        name = TitanUtils_GetGoldText(L['FARM_BUDDY_CHAT_COMMANDS']),
+                        name = TitanUtils_GetGoldText(L['TITAN_FARM_BUDDY_CHAT_COMMANDS']),
                         fontSize = 'large',
                         order = self:GetOptionOrder('about'),
                         width = 'full',
@@ -650,7 +650,7 @@ function TitanFarmBuddy:GetTrackedItemsArgs()
     local args = {
         items_tracking_description = {
             type = 'description',
-            name = string.gsub(L['FARM_BUDDY_TRACKING_DESC'], '!amount!', ITEMS_AVAILABLE),
+            name = string.gsub(L['TITAN_FARM_BUDDY_TRACKING_DESC'], '!amount!', ITEMS_AVAILABLE),
             fontSize = 'medium',
             order = self:GetOptionOrder('items'),
         },
@@ -661,7 +661,7 @@ function TitanFarmBuddy:GetTrackedItemsArgs()
         },
         tracking_cache_warning = {
             type = 'description',
-            name = '|cffffd100' .. L['FARM_BUDDY_TRACKING_CACHE_WARNING'] .. '|r',
+            name = '|cffffd100' .. L['TITAN_FARM_BUDDY_TRACKING_CACHE_WARNING'] .. '|r',
             fontSize = 'medium',
             image = 'Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew',
             imageWidth = 20,
@@ -696,18 +696,18 @@ end
 function TitanFarmBuddy:GetTrackedItemField(index)
     return {
         type = 'input',
-        name = L['FARM_BUDDY_ITEM'],
-        desc = L['FARM_BUDDY_ITEM_TO_TRACK_DESC'],
+        name = L['TITAN_FARM_BUDDY_ITEM'],
+        desc = L['TITAN_FARM_BUDDY_ITEM_TO_TRACK_DESC'],
         get = function()
             if self:IsItemLoading(index) then
-                return L['FARM_BUDDY_ITEM_LOADING']
+                return L['TITAN_FARM_BUDDY_ITEM_LOADING']
             end
 
             return self:GetItem(index)
         end,
         set = function(info, input) self:SetItem(index, input) end,
         validate = 'ValidateItem',
-        usage = L['FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
+        usage = L['TITAN_FARM_BUDDY_ITEM_TO_TRACK_USAGE'],
         width = 'double',
         order = self:GetOptionOrder('items'),
     }
@@ -719,12 +719,12 @@ end
 function TitanFarmBuddy:GetTrackedItemQuantityField(index)
     return {
         type = 'input',
-        name = L['FARM_BUDDY_QUANTITY'],
-        desc = L['FARM_BUDDY_COMMAND_GOAL_DESC'],
+        name = L['TITAN_FARM_BUDDY_QUANTITY'],
+        desc = L['TITAN_FARM_BUDDY_COMMAND_GOAL_DESC'],
         get = function() return self:GetItemQuantity(index) end,
         set = function(info, input) self:SetItemQuantity(index, input) end,
         validate = 'ValidateNumber',
-        usage = L['FARM_BUDDY_ALERT_COUNT_USAGE'],
+        usage = L['TITAN_FARM_BUDDY_ALERT_COUNT_USAGE'],
         width = 'half',
         order = self:GetOptionOrder('items'),
     }
@@ -736,8 +736,8 @@ end
 function TitanFarmBuddy:GetTrackedItemShowBarField(index)
     return {
         type = 'toggle',
-        name = L['FARM_BUDDY_SHOW_IN_BAR'],
-        desc = L['FARM_BUDDY_SHOW_IN_BAR_DESC'],
+        name = L['TITAN_FARM_BUDDY_SHOW_IN_BAR'],
+        desc = L['TITAN_FARM_BUDDY_SHOW_IN_BAR_DESC'],
         get = function() return self:GetItemShowInBar(index) end,
         set = function(info, input) self:SetItemShowInBar(index) end,
         width = 'half',
@@ -751,8 +751,8 @@ end
 function TitanFarmBuddy:GetTrackedItemClearButton(index)
     return {
         type = 'execute',
-        name = L['FARM_BUDDY_RESET'],
-        desc = L['FARM_BUDDY_RESET_DESC'],
+        name = L['TITAN_FARM_BUDDY_RESET'],
+        desc = L['TITAN_FARM_BUDDY_RESET_DESC'],
         func = function() self:ResetItem(index) end,
         order = self:GetOptionOrder('items'),
     }
@@ -829,7 +829,7 @@ end
 function TitanFarmBuddy:ValidateNumber(_, input)
     local number = tonumber(input)
     if not number or number < 0 then
-        self:Print(L['FARM_BUDDY_INVALID_NUMBER'])
+        self:Print(L['TITAN_FARM_BUDDY_INVALID_NUMBER'])
         return false
     end
 
