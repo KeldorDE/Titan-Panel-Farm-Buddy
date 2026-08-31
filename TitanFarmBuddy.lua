@@ -532,6 +532,7 @@ function TitanFarmBuddy:BagUpdateDelayed()
                     self:QueueNotification(i, itemInfo, quantity)
                 else
                     NOTIFICATION_QUEUE[i] = nil
+                    NOTIFICATION_TRIGGERED[i] = nil
                 end
             end
         end
