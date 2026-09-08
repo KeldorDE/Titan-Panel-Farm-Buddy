@@ -1,3 +1,9 @@
+1.4.18
+------------------
+- Fixed the notification not being raised again after the item count dropped below the goal and reached it once more (Thanks Malivil)
+- Fixed wrong addon name display for chat commands
+- Optimized different parts of the code
+
 1.4.17
 ------------------
 - Optimized different parts of the code

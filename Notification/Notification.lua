@@ -7,7 +7,6 @@
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local FRAME_NAME = 'TitanFarmBuddyAlertFrameTemplate'
 local FRAME = CreateFrame('Button', FRAME_NAME, UIParent, FRAME_NAME)
-local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
 local FRAME_HIDDEN = true
 
 
@@ -22,7 +21,7 @@ local FRAME_HIDDEN = true
 function TitanFarmBuddyNotification_Show(name, icon, goal, sound, duration, glow, shine)
     TitanFarmBuddyNotification_HideNotification(false)
 
-    TitanFarmBuddyNotification_SetTitle(ADDON_NAME)
+    TitanFarmBuddyNotification_SetTitle(TITAN_FARM_BUDDY_ADDON_NAME)
     TitanFarmBuddyNotification_SetWidth(400)
     TitanFarmBuddyNotification_SetText(goal .. ' ' .. name)
     TitanFarmBuddyNotification_SetIcon(icon)

@@ -1,7 +1,6 @@
-local L = LibStub('AceLocale-3.0'):NewLocale('Titan', 'ruRU', false)
-if not L then return end
+local L = LibStub('AceLocale-3.0'):NewLocale('Titan', 'ruRU', false) or {}
+
 -- Translator ZamestoTV
-L = L or {}
 L["TITAN_FARM_BUDDY_ABOUT"] = "О аддоне"
 L["TITAN_FARM_BUDDY_ACTIONS"] = "Действия"
 L["TITAN_FARM_BUDDY_ALERT_COUNT"] = "Количество для уведомления"

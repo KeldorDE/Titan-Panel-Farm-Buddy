@@ -8,67 +8,16 @@
 ---@class TitanFarmBuddy : AceConsole, AceEvent, AceHook, AceTimer
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):GetAddon(TITAN_FARM_BUDDY_ID)
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
-local CHAT_COMMAND = 'fb'
-local CHAT_COMMANDS = {
-    {
-        Command = 'track',
-        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['TITAN_FARM_BUDDY_COMMAND_TRACK_ARGS'] .. '>',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_TRACK_DESC'],
-        Handler = 'CmdTrackItem',
-    },
-    {
-        Command = 'quantity',
-        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '> <' .. L['TITAN_FARM_BUDDY_COMMAND_GOAL_ARGS'] .. '>',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_GOAL_DESC'],
-        Handler = 'CmdSetQuantity',
-    },
-    {
-        Command = 'primary',
-        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_ARGS']:gsub('!max!', ITEMS_AVAILABLE) .. '>',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_PRIMARY_DESC'],
-        Handler = 'CmdSetPrimary',
-    },
-    {
-        Command = 'settings',
-        Args = '',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_SETTINGS_DESC'],
-        Handler = 'CmdOpenSettings',
-    },
-    {
-        Command = 'testNotification',
-        Args = '',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_TEST_NOTIFICATION_DESC'],
-        Handler = 'CmdTestNotification',
-    },
-    {
-        Command = 'reset',
-        Args = '<' .. L['TITAN_FARM_BUDDY_COMMAND_RESET_ARGS'] .. '>',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_RESET_DESC'],
-        Handler = 'CmdReset',
-    },
-    {
-        Command = 'version',
-        Args = '',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_VERSION_DESC'],
-        Handler = 'CmdVersion',
-    },
-    {
-        Command = 'help',
-        Args = '',
-        Description = L['TITAN_FARM_BUDDY_COMMAND_HELP_DESC'],
-        Handler = 'CmdHelp',
-    }
-}
 
--- Maps command names to their entry for quick lookup, derived from the ordered CHAT_COMMANDS list.
+-- Maps command names to their entry for quick lookup, derived from the ordered TITAN_FARM_BUDDY_CHAT_COMMANDS list.
 local CHAT_COMMANDS_BY_NAME = {}
-for _, entry in ipairs(CHAT_COMMANDS) do
+for _, entry in ipairs(TITAN_FARM_BUDDY_CHAT_COMMANDS) do
     CHAT_COMMANDS_BY_NAME[entry.Command] = entry
 end
 
 ---Creates the chat commands.
 function TitanFarmBuddy:InitChatCommands()
-    self:RegisterChatCommand(CHAT_COMMAND, 'ChatCommand')
+    self:RegisterChatCommand(TITAN_FARM_BUDDY_CHAT_COMMAND, 'ChatCommand')
 end
 
 ---Handles AddOn commands.
@@ -85,7 +34,7 @@ end
 function TitanFarmBuddy:CmdTrackItem(positionIndex, item)
     local index = tonumber(positionIndex) or 0
     if not self:IsIndexValid(index) then
-        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', TITAN_FARM_BUDDY_ITEMS_AVAILABLE)
         self:Print(text)
         return
     end
@@ -126,7 +75,7 @@ function TitanFarmBuddy:CmdSetQuantity(positionIndex, quantity)
             self:Print(L['TITAN_FARM_BUDDY_COMMAND_GOAL_PARAM_MISSING'])
         end
     else
-        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', TITAN_FARM_BUDDY_ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -143,7 +92,7 @@ function TitanFarmBuddy:CmdSetPrimary(positionIndex)
         TitanPanelButton_UpdateButton(TITAN_FARM_BUDDY_ID)
         self:NotifySettingsChanged()
     else
-        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', TITAN_FARM_BUDDY_ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -187,13 +136,13 @@ end
 function TitanFarmBuddy:GetChatCommandsHelp(printOut)
     local helpStr = ''
 
-    for _, info in ipairs(CHAT_COMMANDS) do
+    for _, info in ipairs(TITAN_FARM_BUDDY_CHAT_COMMANDS) do
 
         if not printOut then
             helpStr = helpStr .. '   '
         end
 
-        helpStr = helpStr .. TitanUtils_GetGreenText('/' .. CHAT_COMMAND) .. ' ' .. TitanUtils_GetHexText(info.Command, '4fbcd5')
+        helpStr = helpStr .. TitanUtils_GetGreenText('/' .. TITAN_FARM_BUDDY_CHAT_COMMAND) .. ' ' .. TitanUtils_GetHexText(info.Command, '4fbcd5')
         if info.Args ~= '' then
             helpStr = helpStr .. ' ' .. TitanUtils_GetGoldText(info.Args)
         end

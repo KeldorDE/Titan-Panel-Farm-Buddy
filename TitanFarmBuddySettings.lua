@@ -8,45 +8,28 @@
 local TitanFarmBuddy = LibStub('AceAddon-3.0'):GetAddon(TITAN_FARM_BUDDY_ID)
 local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 local CONFIG_REG = LibStub("AceConfigRegistry-3.0")
-local ADDON_NAME = TitanFarmBuddy_GetAddOnName()
-local ADDON_VERSION = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
 local ADDON_SETTING_PANEL
-local ITEM_DISPLAY_STYLES = {
-    [1] = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE_1'],
-    [2] = L['TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLE_2'],
-}
-local NOTIFICATION_SOUNDS = {
-    [SOUNDKIT.ALARM_CLOCK_WARNING_1]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_1'],
-    [SOUNDKIT.ALARM_CLOCK_WARNING_2]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_2'],
-    [SOUNDKIT.ALARM_CLOCK_WARNING_3]        = L['TITAN_FARM_BUDDY_SOUND_ALARM_3'],
-    [SOUNDKIT.READY_CHECK]                  = L['TITAN_FARM_BUDDY_SOUND_READY_CHECK'],
-    [SOUNDKIT.RAID_WARNING]                 = L['TITAN_FARM_BUDDY_SOUND_RAID_WARNING'],
-    [SOUNDKIT.AUCTION_WINDOW_OPEN]          = L['TITAN_FARM_BUDDY_SOUND_AUCTION'],
-    [SOUNDKIT.IG_QUEST_LIST_COMPLETE]       = L['TITAN_FARM_BUDDY_SOUND_QUEST_COMPLETE'],
-    [SOUNDKIT.LFG_REWARDS]                  = L['TITAN_FARM_BUDDY_SOUND_DUNGEON_REWARD'],
-    [SOUNDKIT.UI_EPICLOOT_TOAST]            = L['TITAN_FARM_BUDDY_SOUND_EPIC_LOOT'],
-    [SOUNDKIT.UI_LEGENDARY_LOOT_TOAST]      = L['TITAN_FARM_BUDDY_SOUND_LEGENDARY_LOOT'],
-}
 
 ---Creates the chat commands.
 function TitanFarmBuddy:InitSettings()
-    LibStub('AceConfig-3.0'):RegisterOptionsTable(ADDON_NAME, self:GetConfigOption())
-    local _, category = LibStub('AceConfigDialog-3.0'):AddToBlizOptions(ADDON_NAME)
+    LibStub('AceConfig-3.0'):RegisterOptionsTable(TITAN_FARM_BUDDY_ADDON_NAME, self:GetConfigOption())
+    local _, category = LibStub('AceConfigDialog-3.0'):AddToBlizOptions(TITAN_FARM_BUDDY_ADDON_NAME)
     ADDON_SETTING_PANEL = category
 end
 
 ---Gets the configuration table for the AceConfig lib.
 ---@return table options
 function TitanFarmBuddy:GetConfigOption()
+    local addonVersion = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
     return {
-        name = ADDON_NAME,
+        name = TITAN_FARM_BUDDY_ADDON_NAME,
         handler = TitanFarmBuddy,
         childGroups = 'tab',
         type = 'group',
         args = {
             info_version = {
                 type = 'description',
-                name = L['TITAN_FARM_BUDDY_VERSION'] .. ': ' .. ADDON_VERSION,
+                name = L['TITAN_FARM_BUDDY_VERSION'] .. ': ' .. addonVersion,
                 order = self:GetOptionOrder('main'),
             },
             info_author = {
@@ -174,7 +157,7 @@ function TitanFarmBuddy:GetConfigOption()
                         get = 'GetSettingsValue',
                         set = 'SetSettingsValue',
                         width = 'full',
-                        values = ITEM_DISPLAY_STYLES,
+                        values = TITAN_FARM_BUDDY_ITEM_DISPLAY_STYLES,
                         order = self:GetOptionOrder('general'),
                     },
                     general_space_7 = {
@@ -345,7 +328,7 @@ function TitanFarmBuddy:GetConfigOption()
                         type = 'select',
                         name = L['TITAN_BUDDY_NOTIFICATION_SOUND'],
                         style = 'dropdown',
-                        values = NOTIFICATION_SOUNDS,
+                        values = TITAN_FARM_BUDDY_NOTIFICATION_SOUNDS,
                         sorting = self:GetNotificationSoundsSorting(),
                         set = 'SetNotificationSound',
                         get = 'GetNotificationSound',
@@ -449,7 +432,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_version = {
                         type = 'description',
-                        name = ADDON_VERSION,
+                        name = addonVersion,
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'double',
@@ -598,7 +581,7 @@ end
 ---@return number sound
 function TitanFarmBuddy:GetNotificationSound(info)
     local sound = TitanGetVar(TITAN_FARM_BUDDY_ID, info.arg.key)
-    if not sound or not NOTIFICATION_SOUNDS[sound] then
+    if not sound or not TITAN_FARM_BUDDY_NOTIFICATION_SOUNDS[sound] then
         return SOUNDKIT.ALARM_CLOCK_WARNING_3
     end
 
@@ -610,12 +593,12 @@ end
 function TitanFarmBuddy:GetNotificationSoundsSorting()
     local sorting = {}
 
-    for k in pairs(NOTIFICATION_SOUNDS) do
+    for k in pairs(TITAN_FARM_BUDDY_NOTIFICATION_SOUNDS) do
         table.insert(sorting, k)
     end
 
     table.sort(sorting, function(a, b)
-        return NOTIFICATION_SOUNDS[a] < NOTIFICATION_SOUNDS[b]
+        return TITAN_FARM_BUDDY_NOTIFICATION_SOUNDS[a] < TITAN_FARM_BUDDY_NOTIFICATION_SOUNDS[b]
     end)
 
     return sorting
@@ -644,13 +627,13 @@ function TitanFarmBuddy:GetKeySetting(info, key)
     return options[key] or false
 end
 
----Dynamically builds the tracked item option fields based on ITEMS_AVAILABLE.
+---Dynamically builds the tracked item option fields based on TITAN_FARM_BUDDY_ITEMS_AVAILABLE.
 ---@return table args
 function TitanFarmBuddy:GetTrackedItemsArgs()
     local args = {
         items_tracking_description = {
             type = 'description',
-            name = string.gsub(L['TITAN_FARM_BUDDY_TRACKING_DESC'], '!amount!', ITEMS_AVAILABLE),
+            name = string.gsub(L['TITAN_FARM_BUDDY_TRACKING_DESC'], '!amount!', TITAN_FARM_BUDDY_ITEMS_AVAILABLE),
             fontSize = 'medium',
             order = self:GetOptionOrder('items'),
         },
@@ -675,7 +658,7 @@ function TitanFarmBuddy:GetTrackedItemsArgs()
         },
     }
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         args['items_space_' .. i] = {
             type = 'description',
             name = '',
@@ -838,7 +821,7 @@ end
 
 ---Notifies the settings GUI that a change has been made.
 function TitanFarmBuddy:NotifySettingsChanged()
-    CONFIG_REG:NotifyChange(ADDON_NAME)
+    CONFIG_REG:NotifyChange(TITAN_FARM_BUDDY_ADDON_NAME)
 end
 
 ---Gets the Titan Plugin AddOn settings panel.

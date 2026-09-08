@@ -1,7 +1,5 @@
-local L = LibStub('AceLocale-3.0'):NewLocale('Titan', 'enUS', true)
-if not L then return end
+local L = LibStub('AceLocale-3.0'):NewLocale('Titan', 'enUS', true) or {}
 
-L = L or {}
 L["TITAN_FARM_BUDDY_ABOUT"] = "About"
 L["TITAN_FARM_BUDDY_ACTIONS"] = "Actions"
 L["TITAN_FARM_BUDDY_ALERT_COUNT"] = "Quantity for Alert"

@@ -15,12 +15,6 @@ local ITEM_LOADING = {}
 local ITEM_DATA_INIT_COMPLETE = false
 local PLAYER_IN_COMBAT = false
 
----Gets the Titan Plugin AddOn name.
----@return string name
-function TitanFarmBuddy_GetAddOnName()
-    return ADDON_NAME
-end
-
 ---Is called by AceAddon when the addon is first loaded.
 function TitanFarmBuddy:OnInitialize()
     self:RegisterDialogs()
@@ -41,13 +35,13 @@ end
 function TitanFarmBuddy_OnLoad(button)
     button.registry = {
         id = TITAN_FARM_BUDDY_ID,
-        name = ADDON_NAME,
+        name = TITAN_FARM_BUDDY_ADDON_NAME,
         category = 'Information',
         version = TITAN_VERSION,
-        menuText = ADDON_NAME,
+        menuText = TITAN_FARM_BUDDY_ADDON_NAME,
         menuContextFunction = function(_, root) return TitanFarmBuddy:MenuGenerator(_, root) end,
         buttonTextFunction = function() return TitanFarmBuddy:GetButtonText() end,
-        tooltipTitle = ADDON_NAME,
+        tooltipTitle = TITAN_FARM_BUDDY_ADDON_NAME,
         tooltipTextFunction = function() return TitanFarmBuddy:GetTooltipText() end,
         icon = 'Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy',
         iconWidth = 0,
@@ -85,7 +79,7 @@ function TitanFarmBuddy_OnLoad(button)
         }
     }
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         button.registry.savedVariables['Item' .. i] = ''
         button.registry.savedVariables['ItemQuantity' .. i] = 0
     end
@@ -109,7 +103,7 @@ function TitanFarmBuddy:PlayerEnteringWorld()
 
     -- Delayed data fetching to prevent login timing issues
     C_Timer.After(4, function()
-        for i = 1, ITEMS_AVAILABLE do
+        for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i)) or 0
             local itemInfo = (item and item ~= '') and self:GetItemInfo(item) or nil
@@ -185,7 +179,7 @@ end
 --- Prints a message to the default chat frame with the addon's prefix.
 --- @param msg string The message to print.
 function TitanFarmBuddy:Print(msg)
-    DEFAULT_CHAT_FRAME:AddMessage("|cffFFD100" .. ADDON_NAME .. ":|r " .. tostring(msg))
+    DEFAULT_CHAT_FRAME:AddMessage("|cffFFD100" .. TITAN_FARM_BUDDY_ADDON_NAME .. ":|r " .. tostring(msg))
 end
 
 ---Callback function for the SetItemIndex OnShow event.
@@ -193,7 +187,7 @@ end
 function TitanFarmBuddy:SetItemIndexOnShow(frame)
     -- Get first position without an item as preferred default value
     local defaultIndex = 1
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         if TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i) == '' then
             defaultIndex = i
             break
@@ -223,7 +217,7 @@ function TitanFarmBuddy:SetItemIndexOnAccept(frame, data)
             self:NotifySettingsChanged()
         end
     else
-        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', ITEMS_AVAILABLE)
+        local text = L['TITAN_FARM_BUDDY_ITEM_SET_POSITION_MSG']:gsub('!max!', TITAN_FARM_BUDDY_ITEMS_AVAILABLE)
         self:Print(text)
     end
 end
@@ -252,7 +246,7 @@ function TitanFarmBuddy:GetButtonText()
     local showColoredText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText')
     local showLabelText = TitanGetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText')
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         if (itemDisplayStyle == 1 and activeIndex == i) or itemDisplayStyle > 1 then
             local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
             if item and item ~= '' then
@@ -274,7 +268,7 @@ function TitanFarmBuddy:GetButtonText()
             str = str .. self:GetIconString('Interface\\AddOns\\TitanFarmBuddy\\TitanFarmBuddy', true)
         end
 
-        str = str .. ADDON_NAME
+        str = str .. TITAN_FARM_BUDDY_ADDON_NAME
     end
 
     return str
@@ -408,7 +402,7 @@ function TitanFarmBuddy:GetTooltipText()
     local strTmp = ''
     local hasItem = false
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         local item = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
 
         -- No item set for this index
@@ -521,7 +515,7 @@ function TitanFarmBuddy:BagUpdateDelayed()
         return
     end
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         local trackedItem = TitanGetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i)
         local quantity = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i))
 
@@ -529,10 +523,13 @@ function TitanFarmBuddy:BagUpdateDelayed()
             local itemInfo = self:GetItemInfo(trackedItem)
             if itemInfo then
                 if self:GetCount(itemInfo) >= quantity then
-                    self:QueueNotification(i, itemInfo, quantity)
+                    if not NOTIFICATION_TRIGGERED[i] then
+                        self:SetNotificationTriggered(i, true)
+                        self:QueueNotification(i, itemInfo, quantity)
+                    end
                 else
                     NOTIFICATION_QUEUE[i] = nil
-                    NOTIFICATION_TRIGGERED[i] = nil
+                    self:SetNotificationTriggered(i, false)
                 end
             end
         end
@@ -710,7 +707,7 @@ end
 function TitanFarmBuddy:ResetItem(index)
     ITEM_LOADING[index] = nil
     TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. index, '')
-    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, '0')
+    TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. index, 0)
 
     if TitanGetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex') == index then
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1)
@@ -733,7 +730,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowIcon', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowLabelText', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ShowColoredText', true)
-        TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', 'ALARM_CLOCK_WARNING_3')
+        TitanSetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound', SOUNDKIT.ALARM_CLOCK_WARNING_3)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound', true)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration', 5)
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemShowInBarIndex', 1)
@@ -750,7 +747,7 @@ function TitanFarmBuddy:ResetConfig(itemsOnly)
     end
 
     -- Reset items
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         ITEM_LOADING[i] = nil
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'Item' .. i, '')
         TitanSetVar(TITAN_FARM_BUDDY_ID, 'ItemQuantity' .. i, 0)
@@ -807,7 +804,7 @@ function TitanFarmBuddy:ModifiedClick(itemLink, itemLocation)
 
     if GetMouseButtonClicked() == fastTrackingMouseButton and not CursorHasItem() and conditions then
         if itemLink then
-            local dialog = StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_SET_ITEM_INDEX, ITEMS_AVAILABLE)
+            local dialog = StaticPopup_Show(TITAN_FARM_BUDDY_DIALOG_SET_ITEM_INDEX, TITAN_FARM_BUDDY_ITEMS_AVAILABLE)
             if dialog then
                 dialog.data = itemLink
             end
@@ -834,7 +831,7 @@ end
 ---@param demo boolean Whether this is a demo/test notification.
 function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
     local notificationEnabled = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotification')
-    if (notificationEnabled and not NOTIFICATION_TRIGGERED[index]) or demo then
+    if notificationEnabled or demo then
 
         local playSound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'PlayNotificationSound')
         local notificationDisplayDuration = tonumber(TitanGetVar(TITAN_FARM_BUDDY_ID, 'NotificationDisplayDuration')) or 5
@@ -845,10 +842,6 @@ function TitanFarmBuddy:ShowNotification(index, itemInfo, quantity, demo)
 
         if playSound then
             sound = TitanGetVar(TITAN_FARM_BUDDY_ID, 'GoalNotificationSound')
-        end
-
-        if not demo then
-            self:SetNotificationTriggered(index, true)
         end
 
         if chatNotification then
@@ -863,12 +856,14 @@ end
 ---Is called by the timer to handle the next notification.
 function TitanFarmBuddy:NotificationTask()
     if not TitanFarmBuddyNotification_Shown() then
+        -- Keep the queue intact while notifications are suppressed in combat
+        if TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat') and PLAYER_IN_COMBAT then
+            return
+        end
+
         for index, notification in pairs(NOTIFICATION_QUEUE) do
-            if not TitanGetVar(TITAN_FARM_BUDDY_ID, 'HideNotificationInCombat') or not PLAYER_IN_COMBAT then
-                self:ShowNotification(notification.Index, notification.ItemInfo, notification.Quantity, false)
-            end
+            self:ShowNotification(notification.Index, notification.ItemInfo, notification.Quantity, false)
             NOTIFICATION_QUEUE[index] = nil
-            break
         end
     end
 end
@@ -881,7 +876,7 @@ function TitanFarmBuddy:IsIndexValid(index)
         return false
     end
 
-    return index > 0 and index <= ITEMS_AVAILABLE
+    return index > 0 and index <= TITAN_FARM_BUDDY_ITEMS_AVAILABLE
 end
 
 ---Checks whether the given item is already tracked in one of the slots.
@@ -894,7 +889,7 @@ function TitanFarmBuddy:GetTrackedItemIndex(item, ignoreIndex)
         return nil
     end
 
-    for i = 1, ITEMS_AVAILABLE do
+    for i = 1, TITAN_FARM_BUDDY_ITEMS_AVAILABLE do
         if i ~= ignoreIndex then
             local trackedInfo = self:GetItemInfo(self:GetItem(i))
             if trackedInfo and trackedInfo.ItemID == itemInfo.ItemID then
