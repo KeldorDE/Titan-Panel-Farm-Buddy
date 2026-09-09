@@ -9,6 +9,8 @@ local L = LibStub('AceLocale-3.0'):GetLocale('Titan', true)
 -- Addon information
 TITAN_FARM_BUDDY_ID = 'FarmBuddy'
 TITAN_FARM_BUDDY_ADDON_NAME = 'Titan Farm Buddy'
+-- Chunk vararg: the addon's folder name, as expected by C_AddOns.* APIs
+TITAN_FARM_BUDDY_FOLDER = ...
 
 -- Settings
 TITAN_FARM_BUDDY_ITEMS_AVAILABLE = 16

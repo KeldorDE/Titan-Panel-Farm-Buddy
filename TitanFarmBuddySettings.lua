@@ -20,7 +20,7 @@ end
 ---Gets the configuration table for the AceConfig lib.
 ---@return table options
 function TitanFarmBuddy:GetConfigOption()
-    local addonVersion = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version')
+    local addonVersion = C_AddOns.GetAddOnMetadata(TITAN_FARM_BUDDY_FOLDER, 'Version')
     return {
         name = TITAN_FARM_BUDDY_ADDON_NAME,
         handler = TitanFarmBuddy,
@@ -34,7 +34,7 @@ function TitanFarmBuddy:GetConfigOption()
             },
             info_author = {
                 type = 'description',
-                name = L['TITAN_FARM_BUDDY_AUTHOR'] .. ': ' .. C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+                name = L['TITAN_FARM_BUDDY_AUTHOR'] .. ': ' .. C_AddOns.GetAddOnMetadata(TITAN_FARM_BUDDY_FOLDER, 'Author'),
                 order = self:GetOptionOrder('main'),
             },
             tab_general = {
@@ -451,7 +451,7 @@ function TitanFarmBuddy:GetConfigOption()
                     },
                     about_info_author = {
                         type = 'description',
-                        name = C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Author'),
+                        name = C_AddOns.GetAddOnMetadata(TITAN_FARM_BUDDY_FOLDER, 'Author'),
                         fontSize = 'medium',
                         order = self:GetOptionOrder('about'),
                         width = 'double',

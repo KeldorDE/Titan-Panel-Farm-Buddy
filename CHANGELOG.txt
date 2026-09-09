@@ -1,3 +1,8 @@
+1.4.19
+------------------
+- Optimized different parts of the code
+- Fixed an issue where multiple notifications at the same time were discarded
+
 1.4.18
 ------------------
 - Fixed the notification not being raised again after the item count dropped below the goal and reached it once more (Thanks Malivil)

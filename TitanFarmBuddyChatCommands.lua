@@ -121,7 +121,7 @@ end
 
 --- Prints the AddOn version information.
 function TitanFarmBuddy:CmdVersion()
-    self:Print(C_AddOns.GetAddOnMetadata('TitanFarmBuddy', 'Version'))
+    self:Print(C_AddOns.GetAddOnMetadata(TITAN_FARM_BUDDY_FOLDER, 'Version'))
 end
 
 --- Prints the AddOn helptext.

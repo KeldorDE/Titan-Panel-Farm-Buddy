@@ -864,6 +864,7 @@ function TitanFarmBuddy:NotificationTask()
         for index, notification in pairs(NOTIFICATION_QUEUE) do
             self:ShowNotification(notification.Index, notification.ItemInfo, notification.Quantity, false)
             NOTIFICATION_QUEUE[index] = nil
+            break
         end
     end
 end
