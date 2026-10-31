@@ -1,3 +1,7 @@
+1.4.20
+------------------
+- Updated API to Patch 12.1.5
+
 1.4.19
 ------------------
 - Optimized different parts of the code
