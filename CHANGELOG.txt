@@ -1,3 +1,7 @@
+1.4.21
+------------------
+- Added support for WoW Forever
+
 1.4.20
 ------------------
 - Updated API to Patch 12.1.5
